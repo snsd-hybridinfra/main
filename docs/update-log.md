@@ -131,6 +131,15 @@
 - 바로 다음 Epoch는 Cache Hit 8건, Hub 요청 0건, 무결성 실패 0건으로 돌아왔다. 이 복구 절차는 내 실험 설계이며 AWS·Qumulo 기능 검증이 아니다.
 - 실제 AWS Region, Qumulo, NFS, HyperPod, WAN 성능과 비용은 계속 미검증 범위다. 전체 상태는 로컬 검증 13개·설계 0개로 유지했다.
 
+## 2026-10-06 — 10월 3~6일 브리핑 검토와 IaC 보안 검증
+
+- 10월 3~6일 브리핑을 다시 읽고 공식 원문을 확인했다. 반복된 Cloud Security·Agent Identity·AIDC 전력·광 네트워크 주제는 기존 흐름에 합쳤다.
+- CISA KEV의 FortiMail CVE-2026-104286을 기존 [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 추가했다. 합성 FortiMail 자산은 115점 P0였고 전체 8개 자산의 순서·등급·출처 일치 검사가 통과했다.
+- Dell DSA-2026-448은 기존 [13 Kubernetes RBAC](../labs/13-kubernetes-rbac/README.md)의 다음 검증 범위로만 연결했다. Dell CSM은 배포하거나 공격하지 않았다.
+- 기존 랩에 없던 IaC 변경의 탐지·수정·재검증 질문은 [14 Terraform Security Validation](../labs/14-terraform-security-validation/README.md)으로 추가했다. Terraform Validate는 Before·After 모두 통과했고, Checkov `CKV_AWS_24`는 공개 SSH Before 1건 실패·수정 After 1건 통과였다.
+- 첫 14번 실행은 Checkov `--quiet`의 통과 상세 생략을 검증식이 고려하지 못해 전체 판정만 실패했다. 파서를 고친 재실행은 네 조건 모두 통과했다.
+- AWS 자격증명과 Apply를 사용하지 않았다. AWS Continuum·Google Agent, 실제 Security Group, CI Merge 차단은 미검증이다. 전체 상태는 로컬 검증 14개·설계 0개다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD

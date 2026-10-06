@@ -14,6 +14,8 @@
 
 기사의 OperTraitor, IBM Turbonomic, Datadog Operator를 실행한 것은 아니다. 실제 Operator가 아니라 내가 만든 ServiceAccount·Role·RoleBinding으로 최소 권한 경계를 확인했다.
 
+10월 4일 브리핑에서 다룬 [Dell CSM 보안 권고 DSA-2026-448](https://www.dell.com/support/kbdoc/en-us/000515771/dsa-2026-448-security-update-for-dell-container-storage-modules-multiple-vulnerabilities)(2026-10-01)는 Storage Operator와 Authorization 계층이 Cluster Node·Secret·Storage 관리자 자격증명까지 영향을 줄 수 있음을 보여 준다. 이 권고는 기존 최소 권한 질문과 연결했지만 Dell CSM은 배포하지 않았다.
+
 ## 권한 구조
 
 ```text
@@ -64,7 +66,7 @@ cd F:\main\labs\13-kubernetes-rbac
 
 ## 남은 점
 
-- 실제 Operator, CRD, Controller Image, Helm Chart는 배포하지 않았다.
+- 실제 Operator, CRD, Controller Image, Helm Chart와 Dell CSM은 배포하지 않았다.
 - Admission Policy, NetworkPolicy, Audit Log, ServiceAccount Token 회전은 확인하지 않았다.
 - `kubectl --as`를 사용할 수 있는 로컬 관리자 자격으로 권한을 질의했다. 운영 클러스터 사용자의 권한 모델을 검증한 결과는 아니다.
 - 이 결과는 임시 kind 클러스터의 로컬 런타임 검증이다. `snsd-multicloud-ops`의 k3s PaaS에 적용되었다는 뜻은 아니다.

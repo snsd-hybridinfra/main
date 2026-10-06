@@ -12,8 +12,8 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 전체 실습 | 13 | 뉴스에서 도출한 독립 기술 질문 |
-| 로컬 검증 | 13 | 코드·컨테이너·합성 모델과 임시 로컬 클러스터에서 직접 실행하고 증적 저장 |
+| 전체 실습 | 14 | 뉴스에서 도출한 독립 기술 질문 |
+| 로컬 검증 | 14 | 코드·컨테이너·합성 모델과 임시 로컬 클러스터에서 직접 실행하고 증적 저장 |
 | 설계 | 0 | 실행 증적 없이 설계만 남은 실습 없음 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
@@ -44,8 +44,9 @@
 |---|---|---|
 | [06 AAA/RADIUS](labs/06-aaa-radius/README.md) | 로컬 검증 | 승인 1건, 거부 2건 |
 | [07 AI Agent Security](labs/07-ai-agent-security/README.md) | 로컬 검증 | 도구·통신·예산·합성 승인 경계의 허용·거부 |
-| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | CISA KEV 2건과 Cisco·Zimbra 실제 악용 2건을 합성 자산 맥락으로 우선순위 판정 |
+| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | CISA KEV 3건과 Cisco·Zimbra 실제 악용 2건을 합성 자산 맥락으로 우선순위 판정 |
 | [13 Kubernetes RBAC](labs/13-kubernetes-rbac/README.md) | 로컬 검증 | ServiceAccount 읽기 허용 2개와 Secret·삭제·Namespace 밖·ClusterRole 거부 4개 |
+| [14 Terraform Security Validation](labs/14-terraform-security-validation/README.md) | 로컬 검증 | 공개 SSH 1건 탐지, CIDR 수정 후 같은 Checkov 규칙 통과 |
 
 ## 문서 구조
 
