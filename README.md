@@ -36,7 +36,7 @@
 | [03 RESTCONF/Python](labs/03-restconf-python/README.md) | 로컬 검증 | 합성 장비 RESTCONF·SSH CLI 인터페이스 3개 일치, 인증 실패 거부 |
 | [04 IAM/STS](labs/04-iam-sts/README.md) | 로컬 검증 | 신뢰 관계·세션 축소·명시적 거부 7개 정책 판정; AWS/Azure 런타임 대기 |
 | [05 Backup & Recovery](labs/05-backup-recovery/README.md) | 로컬 검증 | 합성 서비스 RTO 1.627초, 손실 2건 |
-| [12 AI Multi-Region Data Path](labs/12-ai-multiregion-data-path/README.md) | 로컬 검증 | Cold Miss 8건, Warm Hit 8건, Hub 재요청 0건, Cache 훼손 감지 |
+| [12 AI Multi-Region Data Path](labs/12-ai-multiregion-data-path/README.md) | 로컬 검증 | Cold Miss 8건, Warm Hit 8건, Cache 훼손 감지·단일 파일 복구·재검증 |
 
 ### Security & Operations
 

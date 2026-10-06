@@ -32,16 +32,20 @@ Hub directory ── 60 ms/파일 지연 ──> Spoke cache directory ──> R
 
 ## 직접 확인한 결과
 
-2026-09-29 실행의 [JSON 증적](evidence/2026-09-29.json):
+2026-10-06 재실행의 [JSON 증적](evidence/2026-10-06.json):
 
-| 단계 | Cache Hit | Cache Miss | Hub 요청 | 해시 확인 |
-|---|---:|---:|---:|---:|
-| Cold Epoch | 0 | 8 | 8 | 8/8 |
-| Warm Epoch | 8 | 0 | 0 | 8/8 |
+| 단계 | Cache Hit | Cache Miss | Hub 요청 | 무결성 실패 | 복구 | 해시 확인 |
+|---|---:|---:|---:|---:|---:|---:|
+| Cold Epoch | 0 | 8 | 8 | 0 | 0 | 8/8 |
+| Warm Epoch | 8 | 0 | 0 | 0 | 0 | 8/8 |
+| 손상 복구 | 7 | 0 | 1 | 1 | 1 | 8/8 |
+| 복구 후 재확인 | 8 | 0 | 0 | 0 | 0 | 8/8 |
 
 Cold Epoch는 파일마다 모델링한 지연과 Hub 복사를 거쳤고, Warm Epoch는 Hub를 다시 호출하지 않았다. Warm Epoch가 Cold Epoch보다 빨랐으며 이 차이는 실제 WAN·NFS 처리량이 아니라 로컬 캐시와 주입한 지연의 결과다.
 
-거부·실패 경로로 캐시 파일 하나를 고의로 바꿨고 SHA-256 불일치를 감지했다. 손상 파일의 자동 제거·재가져오기는 아직 구현하지 않았다.
+실패 경로에서는 캐시의 첫 Shard를 고의로 바꿨다. 읽기 전에 SHA-256 불일치를 찾았고, 그 파일만 Hub에서 다시 가져왔다. 같은 Epoch의 8개 파일이 모두 원본 해시와 일치했으며, 바로 다음 Epoch에서는 8개 전부 Cache Hit로 돌아와 Hub 요청이 0건이었다.
+
+이전 [2026-09-29 증적](evidence/2026-09-29.json)은 손상 감지만 확인한 최초 실행 기록으로 남겼다.
 
 ## 기사 수치와 내 결과 구분
 
@@ -53,6 +57,8 @@ AWS 글은 별도 환경에서 Cold Cache Warm-up, 94~96% Cache Hit Rate와 115~
 - Warm 읽기에서 Hub 요청 없이 Cache Hit가 발생하는 흐름
 - 원본과 캐시의 파일 해시 일치
 - 캐시 훼손을 해시로 감지하는 실패 경로
+- 손상된 파일 하나만 Hub에서 다시 가져오는 복구 경로
+- 복구 후 전체 Cache Hit와 Hub 요청 0건으로 돌아오는 재검증
 
 ## 확인하지 않은 범위
 
@@ -60,5 +66,6 @@ AWS 글은 별도 환경에서 Cold Cache Warm-up, 94~96% Cache Hit Rate와 115~
 - Qumulo Hub·Spoke, Cloud Data Fabric, NVMe Cache
 - NFS TCP 2049와 SageMaker HyperPod
 - 실제 WAN RTT·처리량, Prefetch, GPU Utilization과 비용
+- 동시 Reader, 부분 쓰기, 복구 중 Hub 장애
 
 다음 단계는 비용 한도를 정한 AWS 테스트 계정에서 작은 Dataset과 CPU Reader로 VPC 경로와 NFS를 먼저 확인한 뒤, 별도 승인을 거쳐 Qumulo·HyperPod 검증으로 확장하는 것이다.

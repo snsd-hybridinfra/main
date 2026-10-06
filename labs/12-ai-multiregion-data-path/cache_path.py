@@ -21,24 +21,40 @@ def write_dataset(hub: Path, file_count: int, file_size: int):
     return manifest
 
 
-def read_epoch(hub: Path, cache: Path, manifest, latency_seconds: float):
+def fetch_from_hub(hub: Path, cached: Path, latency_seconds: float):
+    time.sleep(latency_seconds)
+    shutil.copyfile(hub / cached.name, cached)
+    return cached.stat().st_size
+
+
+def read_epoch(hub: Path, cache: Path, manifest, latency_seconds: float, repair_corrupt=False):
     hits = 0
     misses = 0
     origin_requests = 0
     origin_bytes = 0
     verified = 0
+    integrity_failures = 0
+    repaired_files = 0
     started = time.perf_counter()
 
     for name, expected_hash in sorted(manifest.items()):
         cached = cache / name
-        if cached.exists():
-            hits += 1
-        else:
+        if not cached.exists():
             misses += 1
             origin_requests += 1
-            time.sleep(latency_seconds)
-            shutil.copyfile(hub / name, cached)
-            origin_bytes += cached.stat().st_size
+            origin_bytes += fetch_from_hub(hub, cached, latency_seconds)
+        else:
+            actual_hash = hashlib.sha256(cached.read_bytes()).hexdigest()
+            if actual_hash == expected_hash:
+                hits += 1
+                verified += 1
+                continue
+            integrity_failures += 1
+            if repair_corrupt:
+                origin_requests += 1
+                origin_bytes += fetch_from_hub(hub, cached, latency_seconds)
+                repaired_files += 1
+
         actual_hash = hashlib.sha256(cached.read_bytes()).hexdigest()
         if actual_hash == expected_hash:
             verified += 1
@@ -55,6 +71,8 @@ def read_epoch(hub: Path, cache: Path, manifest, latency_seconds: float):
         "origin_bytes": origin_bytes,
         "verified_hashes": verified,
         "total_files": len(manifest),
+        "integrity_failures": integrity_failures,
+        "repaired_files": repaired_files,
     }
 
 
@@ -84,6 +102,8 @@ def main():
         corrupt_path.write_bytes(b"corrupt" + original[7:])
         corrupted_hash = hashlib.sha256(corrupt_path.read_bytes()).hexdigest()
         integrity_failure_detected = corrupted_hash != manifest[corrupt_path.name]
+        recovery = read_epoch(hub, cache, manifest, args.wan_latency_ms / 1000, repair_corrupt=True)
+        post_recovery = read_epoch(hub, cache, manifest, args.wan_latency_ms / 1000)
 
         assertions = {
             "cold_epoch_fetches_every_file_from_hub": (
@@ -102,6 +122,18 @@ def main():
             ),
             "warm_epoch_is_faster_than_cold_epoch": warm["duration_ms"] < cold["duration_ms"],
             "cache_corruption_is_detected": integrity_failure_detected,
+            "corrupt_file_is_refetched_once": (
+                recovery["integrity_failures"] == 1
+                and recovery["repaired_files"] == 1
+                and recovery["origin_requests"] == 1
+                and recovery["verified_hashes"] == args.files
+            ),
+            "repaired_cache_returns_to_warm_state": (
+                post_recovery["cache_hits"] == args.files
+                and post_recovery["origin_requests"] == 0
+                and post_recovery["integrity_failures"] == 0
+                and post_recovery["verified_hashes"] == args.files
+            ),
         }
         passed = all(assertions.values())
 
@@ -121,9 +153,11 @@ def main():
             },
             "cold_epoch": cold,
             "warm_epoch": warm,
-            "failure_path": {
+            "corruption_and_recovery": {
                 "corrupted_file": corrupt_path.name,
                 "integrity_failure_detected": integrity_failure_detected,
+                "recovery_epoch": recovery,
+                "post_recovery_epoch": post_recovery,
             },
             "assertions": assertions,
             "passed": passed,
@@ -132,6 +166,7 @@ def main():
                 "Qumulo Hub, Spoke, Cloud Data Fabric, or NVMe cache",
                 "NFS TCP 2049 or SageMaker HyperPod",
                 "Actual WAN latency, cache prefetch, GPU utilization, throughput, or cost",
+                "Concurrent readers, partial writes, or origin outage during repair",
             ],
         }
         rendered = json.dumps(result, ensure_ascii=False, indent=2)

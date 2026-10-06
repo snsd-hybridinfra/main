@@ -123,6 +123,14 @@
 - 합성 Control Plane에서 Public·Private·On-Prem API 경로가 각각 1개 존재함을 확인했다. Private Cloud API를 비활성화한 시나리오에서는 Public·On-Prem 경로는 유지되고 Private 경로만 0개로 판정됐다. 전체 기존·추가 시나리오가 통과했다.
 - 이는 기사 기업의 제품을 실행한 결과가 아니다. GPU Scheduling, 실제 Cloud API, Monitoring, 장애 복구와 서비스 성능은 검증하지 않았다.
 - 새 랩을 만들지 않아 전체 상태는 로컬 검증 13개·설계 0개다.
+
+## 2026-10-06 — 손상된 Spoke Cache 복구 재실행
+
+- 새 랩을 만들지 않고 [12 AI Multi-Region Data Path](../labs/12-ai-multiregion-data-path/README.md)의 기존 무결성 실패 경로를 복구까지 확장했다.
+- 4 MiB 합성 Dataset의 Cache 파일 1개를 고의로 훼손했다. SHA-256 불일치를 찾은 뒤 해당 파일만 Hub에서 다시 가져왔고, 같은 Epoch에서 8/8 해시 일치를 확인했다.
+- 바로 다음 Epoch는 Cache Hit 8건, Hub 요청 0건, 무결성 실패 0건으로 돌아왔다. 이 복구 절차는 내 실험 설계이며 AWS·Qumulo 기능 검증이 아니다.
+- 실제 AWS Region, Qumulo, NFS, HyperPod, WAN 성능과 비용은 계속 미검증 범위다. 전체 상태는 로컬 검증 13개·설계 0개로 유지했다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD

@@ -1,5 +1,5 @@
 param(
-    [string]$EvidencePath = (Join-Path $PSScriptRoot 'evidence\2026-09-29.json')
+    [string]$EvidencePath = (Join-Path $PSScriptRoot 'evidence\2026-10-06.json')
 )
 
 $ErrorActionPreference = 'Stop'

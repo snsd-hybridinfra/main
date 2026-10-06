@@ -1,0 +1,88 @@
+{
+  "tested_at": "2026-10-06T01:18:03.372586+00:00",
+  "scope": "local-filesystem-hub-spoke-cache-emulation",
+  "source": {
+    "article": "https://aws.amazon.com/blogs/machine-learning/multi-region-training-with-amazon-sagemaker-hyperpod-and-qumulo/",
+    "published": "2026-09-25"
+  },
+  "environment": {
+    "runtime": "local Python filesystem experiment",
+    "dataset_files": 8,
+    "file_size_kib": 512,
+    "dataset_mib": 4.0,
+    "modeled_latency_ms_per_cold_fetch": 60.0
+  },
+  "cold_epoch": {
+    "duration_ms": 740.088,
+    "throughput_mib_s": 5.405,
+    "cache_hits": 0,
+    "cache_misses": 8,
+    "cache_hit_rate": 0.0,
+    "origin_requests": 8,
+    "origin_bytes": 4194304,
+    "verified_hashes": 8,
+    "total_files": 8,
+    "integrity_failures": 0,
+    "repaired_files": 0
+  },
+  "warm_epoch": {
+    "duration_ms": 4.106,
+    "throughput_mib_s": 974.184,
+    "cache_hits": 8,
+    "cache_misses": 0,
+    "cache_hit_rate": 1.0,
+    "origin_requests": 0,
+    "origin_bytes": 0,
+    "verified_hashes": 8,
+    "total_files": 8,
+    "integrity_failures": 0,
+    "repaired_files": 0
+  },
+  "corruption_and_recovery": {
+    "corrupted_file": "shard-00.bin",
+    "integrity_failure_detected": true,
+    "recovery_epoch": {
+      "duration_ms": 70.954,
+      "throughput_mib_s": 56.374,
+      "cache_hits": 7,
+      "cache_misses": 0,
+      "cache_hit_rate": 0.875,
+      "origin_requests": 1,
+      "origin_bytes": 524288,
+      "verified_hashes": 8,
+      "total_files": 8,
+      "integrity_failures": 1,
+      "repaired_files": 1
+    },
+    "post_recovery_epoch": {
+      "duration_ms": 4.037,
+      "throughput_mib_s": 990.958,
+      "cache_hits": 8,
+      "cache_misses": 0,
+      "cache_hit_rate": 1.0,
+      "origin_requests": 0,
+      "origin_bytes": 0,
+      "verified_hashes": 8,
+      "total_files": 8,
+      "integrity_failures": 0,
+      "repaired_files": 0
+    }
+  },
+  "assertions": {
+    "cold_epoch_fetches_every_file_from_hub": true,
+    "warm_epoch_reads_every_file_from_cache": true,
+    "all_cold_and_warm_hashes_match": true,
+    "warm_epoch_is_faster_than_cold_epoch": true,
+    "cache_corruption_is_detected": true,
+    "corrupt_file_is_refetched_once": true,
+    "repaired_cache_returns_to_warm_state": true
+  },
+  "passed": true,
+  "not_validated": [
+    "AWS Regions, VPC Peering, route tables, or security groups",
+    "Qumulo Hub, Spoke, Cloud Data Fabric, or NVMe cache",
+    "NFS TCP 2049 or SageMaker HyperPod",
+    "Actual WAN latency, cache prefetch, GPU utilization, throughput, or cost",
+    "Concurrent readers, partial writes, or origin outage during repair"
+  ]
+}
