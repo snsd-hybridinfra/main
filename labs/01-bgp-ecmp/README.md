@@ -4,6 +4,8 @@
 
 [Cisco의 AI 네트워크 글(2026-09-21)](https://blogs.cisco.com/news/the-ai-era-demands-more-than-speed-building-secure-intelligent-networks-from-silicon-to-optics)을 읽다가 복원력이라는 말을 실제 경로로 확인해 보고 싶었다. 내가 잡은 질문은 단순했다. **Spine 하나가 멈춰도 Leaf 사이 통신이 계속될까?** 기사에 나온 상용망을 흉내 내기보다 FRR로 가장 작은 BGP/ECMP 토폴로지를 직접 만들었다.
 
+2026-10-07 [KT클라우드 청라 AI 데이터센터 보도](https://www.yna.co.kr/view/AKR20261007049600017)는 기존 가산·목동 데이터센터와의 연계 및 거점 간 연속성을 언급했다. 이 내용은 새 랩으로 만들지 않고 기존 BGP/ECMP 장애 전환 질문에 DCI 관점을 연결했다. 기사 속 KT클라우드 망이나 DCI를 재현한 것은 아니다.
+
 2026-09-22 첫 실행 뒤 2026-09-29에 WSL2 Ubuntu와 FRR 컨테이너로 다시 실행했다. 경로와 ping은 확인했지만 EVE-NG나 물리 장비에서는 아직 돌리지 않았다.
 
 ## 확인하려던 것

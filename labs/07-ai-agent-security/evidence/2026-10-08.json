@@ -1,0 +1,77 @@
+{
+  "status": "pass",
+  "results": {
+    "read": "allow",
+    "wrong_identity": "identity_denied",
+    "unknown_tool": "tool_denied",
+    "path_escape": "path_denied",
+    "external_http": "network_denied",
+    "wrong_local_path": "network_denied",
+    "local_http": "allow",
+    "wrong_write_target": "path_denied",
+    "write_without_approval": "approval_required",
+    "write_after_approval": "allow",
+    "over_budget": "budget_exceeded"
+  },
+  "report_absent_before_approval": true,
+  "cost_units_spent": 4,
+  "cost_units_limit": 4,
+  "audit": [
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "read_artifact",
+      "decision": "allow"
+    },
+    {
+      "agent_id": "unknown-agent",
+      "tool": "read_artifact",
+      "decision": "identity_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "shell",
+      "decision": "tool_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "read_artifact",
+      "decision": "path_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "http_get",
+      "decision": "network_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "http_get",
+      "decision": "network_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "http_get",
+      "decision": "allow"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "write_report",
+      "decision": "path_denied"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "write_report",
+      "decision": "approval_required"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "write_report",
+      "decision": "allow"
+    },
+    {
+      "agent_id": "analyst-agent-01",
+      "tool": "read_artifact",
+      "decision": "budget_exceeded"
+    }
+  ],
+  "runtime": "deterministic local harness; no LLM or external request"
+}

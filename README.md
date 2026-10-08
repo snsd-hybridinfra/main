@@ -43,8 +43,8 @@
 | 실습 | 상태 | 확인한 결과 |
 |---|---|---|
 | [06 AAA/RADIUS](labs/06-aaa-radius/README.md) | 로컬 검증 | 승인 1건, 거부 2건 |
-| [07 AI Agent Security](labs/07-ai-agent-security/README.md) | 로컬 검증 | 도구·통신·예산·합성 승인 경계의 허용·거부 |
-| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | CISA KEV 3건과 Cisco·Zimbra 실제 악용 2건을 합성 자산 맥락으로 우선순위 판정 |
+| [07 AI Agent Security](labs/07-ai-agent-security/README.md) | 로컬 검증 | Agent ID·도구·파일·통신·예산·합성 승인 경계의 허용·거부 |
+| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | KEV·공식 실제 악용·패치 권고를 합성 자산 맥락으로 구분해 우선순위 판정 |
 | [13 Kubernetes RBAC](labs/13-kubernetes-rbac/README.md) | 로컬 검증 | ServiceAccount 읽기 허용 2개와 Secret·삭제·Namespace 밖·ClusterRole 거부 4개 |
 | [14 Terraform Security Validation](labs/14-terraform-security-validation/README.md) | 로컬 검증 | 공개 SSH 1건 탐지, CIDR 수정 후 같은 Checkov 규칙 통과 |
 

@@ -140,6 +140,15 @@
 - 첫 14번 실행은 Checkov `--quiet`의 통과 상세 생략을 검증식이 고려하지 못해 전체 판정만 실패했다. 파서를 고친 재실행은 네 조건 모두 통과했다.
 - AWS 자격증명과 Apply를 사용하지 않았다. AWS Continuum·Google Agent, 실제 Security Group, CI Merge 차단은 미검증이다. 전체 상태는 로컬 검증 14개·설계 0개다.
 
+
+## 2026-10-08 — 10월 7~8일 브리핑을 기존 랩에 통합
+
+- 10월 7~8일 브리핑에서 KT클라우드 청라 AIDC, Microsoft MXC, Exchange Server 보안 업데이트를 원문으로 다시 확인했다.
+- 청라 AIDC의 거점 간 연속성은 새 랩을 만들지 않고 [01 BGP/ECMP](../labs/01-bgp-ecmp/README.md)의 DCI 관점에 연결했다. 기존 FRR 증적을 KT클라우드 실제 망 검증으로 해석하지 않았다.
+- [07 AI Agent Security](../labs/07-ai-agent-security/README.md)에 허용 Agent ID와 정확한 루프백·보고서 경로 검사를 추가했다. 허용 3개와 거부 8개가 기대와 일치했고, 외부 요청은 실행되지 않았다.
+- [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 Exchange Server CVE-2026-96940을 추가했다. Microsoft 패치 권고만 확인돼 KEV·실제 악용 점수를 주지 않았고, 합성 Exchange 자산은 40점 P2였다. 전체 9개 자산의 순서·등급·출처 일치 검사가 통과했다.
+- MXC·Exchange Server·KT클라우드 DCI는 배포하거나 공격하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD

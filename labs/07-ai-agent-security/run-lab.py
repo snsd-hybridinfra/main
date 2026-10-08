@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Run a deterministic local tool gateway experiment; no LLM or external API."""
+from __future__ import annotations
+
+import argparse
 import json
 import tempfile
 import threading
@@ -35,7 +38,9 @@ class Gate:
         self.approved = set()
         self.audit = []
 
-    def decide(self, tool, target):
+    def decide(self, agent_id, tool, target):
+        if agent_id != POLICY["allowed_agent_id"]:
+            return "identity_denied"
         if tool not in POLICY["allowed_tools"]:
             return "tool_denied"
         cost = POLICY["cost_units"][tool]
@@ -61,8 +66,8 @@ class Gate:
             return "approval_required"
         return "allow"
 
-    def execute(self, tool, target, value=None):
-        decision = self.decide(tool, target)
+    def execute(self, agent_id, tool, target, value=None):
+        decision = self.decide(agent_id, tool, target)
         if decision == "allow":
             if tool == "read_artifact":
                 Path(target).read_text(encoding="utf-8")
@@ -72,11 +77,16 @@ class Gate:
             elif tool == "write_report":
                 Path(target).write_text(value, encoding="utf-8")
             self.spent += POLICY["cost_units"][tool]
-        self.audit.append({"tool": tool, "decision": decision})
+        self.audit.append({"agent_id": agent_id, "tool": tool, "decision": decision})
         return decision
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--evidence")
+    args = parser.parse_args()
+    allowed_agent = POLICY["allowed_agent_id"]
+
     with tempfile.TemporaryDirectory(prefix="lab07-agent-") as work:
         root = Path(work)
         artifact = root / "facts.txt"
@@ -89,30 +99,40 @@ def main():
             port = server.server_port
             gate = Gate(root, port)
             outcomes = {
-                "read": gate.execute("read_artifact", artifact),
-                "unknown_tool": gate.execute("shell", "echo test"),
-                "path_escape": gate.execute("read_artifact", root.parent / "outside.txt"),
-                "external_http": gate.execute("http_get", "https://example.com/facts"),
-                "local_http": gate.execute("http_get", f"http://127.0.0.1:{port}/facts"),
-                "write_without_approval": gate.execute("write_report", report, "synthetic report"),
+                "read": gate.execute(allowed_agent, "read_artifact", artifact),
+                "wrong_identity": gate.execute("unknown-agent", "read_artifact", artifact),
+                "unknown_tool": gate.execute(allowed_agent, "shell", "echo test"),
+                "path_escape": gate.execute(allowed_agent, "read_artifact", root.parent / "outside.txt"),
+                "external_http": gate.execute(allowed_agent, "http_get", "https://example.com/facts"),
+                "wrong_local_path": gate.execute(allowed_agent, "http_get", f"http://127.0.0.1:{port}/admin"),
+                "local_http": gate.execute(allowed_agent, "http_get", f"http://127.0.0.1:{port}/facts"),
+                "wrong_write_target": gate.execute(allowed_agent, "write_report", root / "other.txt", "blocked"),
+                "write_without_approval": gate.execute(allowed_agent, "write_report", report, "synthetic report"),
             }
             report_absent_before_approval = not report.exists()
             gate.approved.add("write_report")  # Synthetic approval in test harness.
             outcomes["write_after_approval"] = gate.execute(
-                "write_report", report, "synthetic report"
+                allowed_agent, "write_report", report, "synthetic report"
             )
-            outcomes["over_budget"] = gate.execute("read_artifact", artifact)
+            outcomes["over_budget"] = gate.execute(allowed_agent, "read_artifact", artifact)
             expected = {
-                "read": "allow", "unknown_tool": "tool_denied",
-                "path_escape": "path_denied", "external_http": "network_denied",
-                "local_http": "allow", "write_without_approval": "approval_required",
-                "write_after_approval": "allow", "over_budget": "budget_exceeded",
+                "read": "allow",
+                "wrong_identity": "identity_denied",
+                "unknown_tool": "tool_denied",
+                "path_escape": "path_denied",
+                "external_http": "network_denied",
+                "wrong_local_path": "network_denied",
+                "local_http": "allow",
+                "wrong_write_target": "path_denied",
+                "write_without_approval": "approval_required",
+                "write_after_approval": "allow",
+                "over_budget": "budget_exceeded",
             }
             if (outcomes != expected or not report_absent_before_approval
                     or report.read_text(encoding="utf-8") != "synthetic report"
                     or gate.spent != 4):
                 raise AssertionError("unexpected policy enforcement result")
-            print(json.dumps({
+            result = {
                 "status": "pass",
                 "results": outcomes,
                 "report_absent_before_approval": report_absent_before_approval,
@@ -120,7 +140,11 @@ def main():
                 "cost_units_limit": POLICY["max_cost_units"],
                 "audit": gate.audit,
                 "runtime": "deterministic local harness; no LLM or external request",
-            }, ensure_ascii=False, indent=2))
+            }
+            rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+            if args.evidence:
+                Path(args.evidence).write_text(rendered, encoding="utf-8", newline="\n")
+            print(rendered, end="")
         finally:
             server.shutdown()
             server.server_close()

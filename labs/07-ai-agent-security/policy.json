@@ -1,5 +1,10 @@
 {
-  "allowed_tools": ["read_artifact", "http_get", "write_report"],
+  "allowed_agent_id": "analyst-agent-01",
+  "allowed_tools": [
+    "read_artifact",
+    "http_get",
+    "write_report"
+  ],
   "max_cost_units": 4,
   "cost_units": {
     "read_artifact": 1,
@@ -11,5 +16,7 @@
     "host": "127.0.0.1",
     "path": "/facts"
   },
-  "approval_required": ["write_report"]
+  "approval_required": [
+    "write_report"
+  ]
 }
