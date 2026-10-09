@@ -1,6 +1,6 @@
 # IT·보안 브리핑에서 추린 기술 흐름
 
-기준: 2026년 10월 8일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
+기준: 2026년 10월 9일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
 
 ## 1. AI 인프라 전체 스택
 
@@ -10,9 +10,9 @@
 
 ## 2. 데이터센터 네트워크
 
-반복 주제는 BGP, ECMP, Spine-Leaf, EVPN/VXLAN, 고속 Ethernet, RoCEv2, 혼잡 제어와 광 연결입니다. 모든 기술을 한 번에 구현했다고 주장하지 않고, 라우팅과 장애 수렴부터 순차적으로 검증합니다.
+반복 주제는 BGP, ECMP, Spine-Leaf, EVPN/VXLAN, 고속 Ethernet, RoCEv2, 혼잡 제어와 광 연결입니다. [Upscale Token Fabric 발표](https://upscale.com/blogs/upscale-introduces-token-fabric-the-industrys-most-comprehensive-standards-based-networking-portfolio-for-ai-factories)(2026-10-08)는 이기종 XPU의 Scale-up·Scale-out과 운영 소프트웨어를 한 구조로 묶는 제품 방향을 제시했습니다. 모든 기술을 한 번에 구현했다고 주장하지 않고, 라우팅과 장애 수렴부터 순차적으로 검증합니다.
 
-**첫 실습:** 2 Spine / 2 Leaf BGP ECMP 토폴로지와 링크 장애 전후의 경로 확인.
+**첫 실습:** 2 Spine / 2 Leaf BGP ECMP 토폴로지와 링크 장애 전후의 경로 확인. 08번 랩의 20 Mbit/s 공유 병목 측정은 AI Fabric을 보기 전 기초 관측이며 Token Fabric 제품 성능 검증이 아닙니다.
 
 ## 3. Hybrid·Private·Sovereign Cloud
 
@@ -22,13 +22,13 @@
 
 ## 4. AI Agent Security와 보안 기본기
 
-Agent가 API·셸·저장소·클라우드 권한을 사용할 때는 최소 권한, 단기 자격증명, 격리, 외부 통신 제한, 사람 승인, 감사가 중요합니다. 동시에 Credential 관리, 패치, 네트워크 분리, 취약점 우선순위와 공급망 검증도 계속 필요합니다. [AWS Continuum 발표](https://aws.amazon.com/blogs/security/aws-continuum-sets-a-new-standard-in-autonomous-code-security/)(2026-10-05)와 [Google의 인프라 코드 보안 사례](https://cloud.google.com/blog/topics/systems/using-ai-agents-to-secure-google-infrastructure)(2026-09-18)는 Agent를 쓰더라도 수정 뒤 기능·정책 재검증과 사람 검토가 남아 있음을 보여 줍니다. [Microsoft MXC 발표](https://blogs.windows.com/windowsdeveloper/2026/10/07/microsoft-execution-containers-policy-driven-containment-for-ai-agents/)(2026-10-07)는 파일·네트워크 접근을 런타임 정책으로 제한하고 Agent 행위를 사용자와 구분하는 흐름을 더했습니다.
+Agent가 API·셸·저장소·클라우드 권한을 사용할 때는 최소 권한, 단기 자격증명, 격리, 외부 통신 제한, 사람 승인, 감사가 중요합니다. 동시에 Credential 관리, 패치, 네트워크 분리, 취약점 우선순위와 공급망 검증도 계속 필요합니다. [AWS Continuum 발표](https://aws.amazon.com/blogs/security/aws-continuum-sets-a-new-standard-in-autonomous-code-security/)(2026-10-05)와 [Google의 인프라 코드 보안 사례](https://cloud.google.com/blog/topics/systems/using-ai-agents-to-secure-google-infrastructure)(2026-09-18)는 Agent를 쓰더라도 수정 뒤 기능·정책 재검증과 사람 검토가 남아 있음을 보여 줍니다. [Microsoft MXC 발표](https://blogs.windows.com/windowsdeveloper/2026/10/07/microsoft-execution-containers-policy-driven-containment-for-ai-agents/)(2026-10-07)는 파일·네트워크 접근을 런타임 정책으로 제한하고 Agent 행위를 사용자와 구분하는 흐름을 더했습니다. [Google Gemini at Work 발표](https://cloud.google.com/blog/products/ai-machine-learning/welcome-to-gemini-at-work-2026)(2026-10-08)는 팀 Agent가 자체 Workspace 계정과 Identity로 동작하는 구조를 소개했습니다. 같은 날 금융권 공격 조사 보도는 AI 도구가 공격 자동화에도 쓰일 수 있음을 보여 주지만, 공격자 신원과 귀속은 확정 사실로 기록하지 않습니다.
 
 **프로젝트 연결:** `snsd-multicloud-ops`의 AI Agent Sandbox 계약과 Zero Trust 검증. 07번 랩에서는 허용 Agent ID, 파일·네트워크·승인·예산 경계를 로컬 게이트에서 확인했습니다. 14번 랩에서는 Terraform 공개 SSH 규칙을 Checkov로 탐지하고 수정본을 같은 규칙으로 재검증했습니다. 계약·로컬 테스트와 통합 런타임 검증은 별도 상태입니다.
 
 ## 5. 복구와 운영
 
-HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. 현재 개인 프로젝트 범위에서는 합성 서비스의 백업·복원·선언적 재구축이 우선이며, Multi-Region DR은 별도 학습 주제입니다.
+HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터센터 피격 보도](https://www.reuters.com/world/drones-hit-yandex-data-centre-first-major-attack-russian-data-hub-2026-10-08/)(발생·보도 2026-10-08)는 장비 장애를 넘어 물리 사이트와 전력 손상이 서비스에 미치는 영향을 보여 줍니다. 05번 랩은 같은 노트북의 두 임시 디렉터리와 포트로만 사이트 전환을 모델링했고, 실제 장애 도메인·DNS·회선·클라우드 DR은 검증하지 않았습니다.
 
 ## 6. Kubernetes·자동화·관측
 

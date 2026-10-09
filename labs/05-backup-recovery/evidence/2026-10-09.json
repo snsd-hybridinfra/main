@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "at_utc": "2026-10-09T05:46:15.128881+00:00",
+  "baseline_events": 3,
+  "events_before_failure": 5,
+  "events_after_restore": 3,
+  "lost_events": 2,
+  "backup_to_failure_seconds": 0.045,
+  "site_recovery_rto_seconds": 1.633,
+  "primary_outage_observed": true,
+  "primary_endpoint_still_down": true,
+  "recovery_endpoint_healthy": true,
+  "endpoint_changed": true,
+  "missing_backup_rejected": true,
+  "isolated_local_paths": true,
+  "storage": "temporary local directories and SQLite; deleted after run",
+  "scope": "local site model only; no cloud region, physical data center, replication, or traffic manager"
+}

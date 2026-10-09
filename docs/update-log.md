@@ -149,6 +149,14 @@
 - [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 Exchange Server CVE-2026-96940을 추가했다. Microsoft 패치 권고만 확인돼 KEV·실제 악용 점수를 주지 않았고, 합성 Exchange 자산은 40점 P2였다. 전체 9개 자산의 순서·등급·출처 일치 검사가 통과했다.
 - MXC·Exchange Server·KT클라우드 DCI는 배포하거나 공격하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
 
+## 2026-10-09 — 사이트 장애 복구를 기존 랩에 통합
+
+- 10월 9일 브리핑에서 Upscale Token Fabric, Google Gemini Agent, 금융권 AI 도구 악용 조사, Yandex 데이터센터 물리 장애를 확인했다.
+- Token Fabric은 기존 [08 AI DC Network](../labs/08-ai-dc-network/README.md)의 병목 관측 질문에, Gemini와 금융권 조사는 기존 [07 AI Agent Security](../labs/07-ai-agent-security/README.md)의 비인간 Identity·최소 권한 질문에 연결했다. 제품이나 공격을 실행했다고 기록하지 않았다.
+- 새 랩을 만들지 않고 [05 Backup & Recovery](../labs/05-backup-recovery/README.md)를 확장했다. 로컬 `site-a` 서비스와 DB를 제거한 뒤 격리 백업을 `site-b`에 복원해 새 엔드포인트가 정상 응답하는지 확인했다.
+- 최종 실행은 스냅샷 3건 복원·2건 손실, 새 엔드포인트 RTO 1.633초, 기존 엔드포인트 중단 유지, 없는 백업 거부를 모두 통과했다.
+- 두 사이트는 같은 노트북의 임시 디렉터리다. Yandex, 물리 전력·회선, 실제 장애 도메인, DNS·트래픽 매니저, 복제는 미검증이다. 전체 상태는 로컬 검증 14개·설계 0개로 유지했다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD

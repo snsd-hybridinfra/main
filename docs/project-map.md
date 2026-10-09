@@ -32,7 +32,7 @@
 | 01 BGP/ECMP, 02 EVPN/VXLAN | 금융 네트워크 언더레이의 경로 이중화와 세그멘테이션 | 독립 실습 완료, 서브 프로젝트 Network Fabric은 `DESIGN_ONLY` |
 | 03 RESTCONF/Python | 장비 상태 수집과 운영 자동화 | 합성 RESTCONF·SSH CLI 로컬 검증; 실제 장비 대조 대기 |
 | 04 IAM/STS | 향후 퍼블릭 클라우드 어댑터와 Agent Workload Identity | 합성 정책 판정 로컬 검증; 실제 STS/Azure와 어댑터는 `DEFERRED` |
-| 05 Backup & Recovery | 플랫폼 수명주기와 복구 증적 | 합성 서비스 로컬 검증; 통합 복구는 `PARTIAL` |
+| 05 Backup & Recovery | 플랫폼 수명주기와 사이트 장애 복구 증적 | 로컬 두 디렉터리·엔드포인트 복구 검증; 실제 사이트·트래픽 전환과 통합 복구는 `PARTIAL` |
 | 06 AAA/RADIUS | 관리망 접근 제어 | 독립 로컬 검증; 금융망 적용 미검증 |
 | 07 AI Agent Security | AI Agent Sandbox의 Identity·파일·통신·예산·승인 경계 | 독립 게이트 검증; 서브 프로젝트는 `PARTIALLY_IMPLEMENTED_LOCAL / NOT_VALIDATED` |
 | 08 AI DC Network | 향후 GPU 워크로드의 병목과 관측 | 제한된 가상 링크 검증; GPU/RDMA 미검증 |

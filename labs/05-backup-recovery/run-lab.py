@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Measure restore time and data loss for a synthetic SQLite HTTP service."""
+"""Measure restore time, data loss, and endpoint failover for a synthetic service."""
+from __future__ import annotations
+
+import argparse
 import json
 from contextlib import closing
 import shutil
@@ -34,6 +37,12 @@ def request(port, path, value=None):
         return json.load(response)
 
 
+def free_port():
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        return sock.getsockname()[1]
+
+
 def start(db, port):
     process = subprocess.Popen(
         [sys.executable, str(SERVICE), "--db", str(db), "--port", str(port)],
@@ -64,52 +73,82 @@ def stop(process):
             process.wait(timeout=3)
 
 
+def endpoint_down(port):
+    try:
+        request(port, "/health")
+    except (URLError, TimeoutError, HTTPException):
+        return True
+    return False
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--evidence")
+    args = parser.parse_args()
+
     with tempfile.TemporaryDirectory(prefix="lab05-recovery-") as work:
         root = Path(work)
-        db = root / "primary.sqlite3"
-        backup = root / "snapshot.sqlite3"
-        with socket.socket() as sock:
-            sock.bind(("127.0.0.1", 0))
-            port = sock.getsockname()[1]
-        process = None
+        primary_site = root / "site-a"
+        recovery_site = root / "site-b"
+        backup_store = root / "isolated-backup"
+        primary_site.mkdir()
+        recovery_site.mkdir()
+        backup_store.mkdir()
+        primary_db = primary_site / "service.sqlite3"
+        recovery_db = recovery_site / "service.sqlite3"
+        backup = backup_store / "snapshot.sqlite3"
+        primary_port = free_port()
+        recovery_port = free_port()
+        while recovery_port == primary_port:
+            recovery_port = free_port()
+        primary_process = None
+        recovery_process = None
         try:
-            process = start(db, port)
+            primary_process = start(primary_db, primary_port)
             for n in range(1, 4):
-                assert request(port, "/events", f"baseline-{n}")["seq"] == n
-            before = request(port, "/health")
-            with closing(sqlite3.connect(db)) as source, closing(sqlite3.connect(backup)) as target:
+                assert request(primary_port, "/events", f"baseline-{n}")["seq"] == n
+            before = request(primary_port, "/health")
+            with closing(sqlite3.connect(primary_db)) as source, closing(sqlite3.connect(backup)) as target:
                 source.backup(target)
             backup_at = utc()
             for n in range(4, 6):
-                assert request(port, "/events", f"after-backup-{n}")["seq"] == n
-            pre_failure = request(port, "/health")
+                assert request(primary_port, "/events", f"after-backup-{n}")["seq"] == n
+            pre_failure = request(primary_port, "/health")
             failure_at = utc()
             failure_start = time.monotonic()
-            stop(process)
-            process = None
-            db.unlink()
-            outage_confirmed = False
-            try:
-                request(port, "/health")
-            except (URLError, TimeoutError, HTTPException):
-                outage_confirmed = True
+            stop(primary_process)
+            primary_process = None
+            primary_db.unlink()
+            outage_confirmed = endpoint_down(primary_port)
             if not outage_confirmed:
-                raise AssertionError("service outage was not observed")
+                raise AssertionError("primary-site outage was not observed")
             bad_restore_rejected = False
             try:
-                shutil.copyfile(root / "missing-snapshot.sqlite3", db)
+                shutil.copyfile(backup_store / "missing-snapshot.sqlite3", recovery_db)
             except FileNotFoundError:
                 bad_restore_rejected = True
-            shutil.copyfile(backup, db)
-            process = start(db, port)
-            after = request(port, "/health")
+            shutil.copyfile(backup, recovery_db)
+            recovery_process = start(recovery_db, recovery_port)
+            after = request(recovery_port, "/health")
             rto_seconds = round(time.monotonic() - failure_start, 3)
+            primary_endpoint_still_down = endpoint_down(primary_port)
             lost_events = pre_failure["count"] - after["count"]
-            if not (before["count"] == 3 and pre_failure["count"] == 5
-                    and after["count"] == 3 and after["last_seq"] == 3
-                    and lost_events == 2 and outage_confirmed and bad_restore_rejected):
-                raise AssertionError("unexpected backup or recovery result")
+            isolated_paths = (
+                primary_site != recovery_site
+                and backup.parent not in (primary_site, recovery_site)
+            )
+            if not (
+                before["count"] == 3
+                and pre_failure["count"] == 5
+                and after["count"] == 3
+                and after["last_seq"] == 3
+                and lost_events == 2
+                and outage_confirmed
+                and bad_restore_rejected
+                and primary_endpoint_still_down
+                and isolated_paths
+            ):
+                raise AssertionError("unexpected backup or site-recovery result")
             result = {
                 "status": "pass",
                 "at_utc": utc().isoformat(),
@@ -118,14 +157,23 @@ def main():
                 "events_after_restore": after["count"],
                 "lost_events": lost_events,
                 "backup_to_failure_seconds": round((failure_at - backup_at).total_seconds(), 3),
-                "rto_seconds": rto_seconds,
-                "outage_observed": outage_confirmed,
+                "site_recovery_rto_seconds": rto_seconds,
+                "primary_outage_observed": outage_confirmed,
+                "primary_endpoint_still_down": primary_endpoint_still_down,
+                "recovery_endpoint_healthy": after["ok"],
+                "endpoint_changed": primary_port != recovery_port,
                 "missing_backup_rejected": bad_restore_rejected,
-                "storage": "temporary local SQLite; deleted after run",
+                "isolated_local_paths": isolated_paths,
+                "storage": "temporary local directories and SQLite; deleted after run",
+                "scope": "local site model only; no cloud region, physical data center, replication, or traffic manager",
             }
-            print(json.dumps(result, ensure_ascii=False, indent=2))
+            rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+            if args.evidence:
+                Path(args.evidence).write_text(rendered, encoding="utf-8", newline="\n")
+            print(rendered, end="")
         finally:
-            stop(process)
+            stop(primary_process)
+            stop(recovery_process)
 
 
 if __name__ == "__main__":
