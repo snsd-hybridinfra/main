@@ -1,0 +1,132 @@
+{
+  "tested_at": "2026-10-15T07:48:19.0842424Z",
+  "scope": "local-container-management-data-ot-separation-and-backend-failover",
+  "source": {
+    "citrix_security_bulletin": "https://support.citrix.com/external/article/CTX697096",
+    "citrix_security_bulletin_published": "2026-09-27",
+    "cisco_sdwan_advisory": "https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-webauth-xr8beuuU",
+    "cisco_sdwan_advisory_published": "2026-09-30",
+    "management_data_separation": "https://docs.netscaler.com/en-us/citrix-adc/current-release/networking/mgmt-and-data-plane-separation.html",
+    "cert_fr_ot_alert": "https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-012/",
+    "cert_fr_ot_alert_published": "2026-10-12",
+    "ap_refrigeration_incident": "https://apnews.com/article/france-supermarkets-hacked-cybercrime-81c2d5721f4df77f601f71741ef7c291",
+    "ap_report_published": "2026-10-14",
+    "incident_date": "2026-10-12"
+  },
+  "environment": {
+    "runtime": "Docker Desktop",
+    "edge_image_id": "sha256:a3194b8da9aadc82fabfef2d749369497d599bfb1a6cba593fb2b548c3fc57e8",
+    "management_network": "172.31.10.0/24",
+    "data_network": "172.31.20.0/24",
+    "ot_network": "172.31.30.0/24",
+    "management_ssh": "172.31.10.10:22",
+    "data_http": "172.31.20.10:80"
+  },
+  "access_tests": {
+    "admin_to_management_ssh": {
+      "exit_code": 0,
+      "output": "management-ssh-ok"
+    },
+    "data_client_to_data_ip_ssh": {
+      "exit_code": 255,
+      "expected": "non-zero because SSH is not bound to the data-plane address"
+    },
+    "ot_operator_to_controller": {
+      "exit_code": 0,
+      "output": "ot-controller-ok"
+    },
+    "data_client_to_ot_controller": {
+      "exit_code": 7,
+      "expected": "non-zero because the data container is not attached to the OT network"
+    },
+    "management_admin_to_ot_controller": {
+      "exit_code": 7,
+      "expected": "non-zero because the management container is not attached to the OT network"
+    }
+  },
+  "http_tests": {
+    "normal": {
+      "samples": [
+        "web02",
+        "web02",
+        "web02",
+        "web01",
+        "web02",
+        "web02",
+        "web01",
+        "web01"
+      ],
+      "counts": [
+        {
+          "backend": "web01",
+          "requests": 3
+        },
+        {
+          "backend": "web02",
+          "requests": 5
+        }
+      ]
+    },
+    "web01_stopped": {
+      "samples": [
+        "web02",
+        "web02",
+        "web02",
+        "web02",
+        "web02",
+        "web02",
+        "web02",
+        "web02"
+      ],
+      "counts": [
+        {
+          "backend": "web02",
+          "requests": 8
+        }
+      ]
+    },
+    "web01_restarted": {
+      "samples": [
+        "web01",
+        "web02",
+        "web02",
+        "web01",
+        "web02",
+        "web02",
+        "web01",
+        "web01"
+      ],
+      "counts": [
+        {
+          "backend": "web01",
+          "requests": 4
+        },
+        {
+          "backend": "web02",
+          "requests": 4
+        }
+      ]
+    }
+  },
+  "assertions": {
+    "admin_to_management_ssh_allowed": true,
+    "data_network_to_ssh_denied": true,
+    "ot_operator_to_controller_allowed": true,
+    "data_network_to_ot_controller_denied": true,
+    "management_network_to_ot_controller_denied": true,
+    "both_backends_seen_before_failure": true,
+    "only_web02_seen_during_web01_failure": true,
+    "both_backends_seen_after_recovery": true
+  },
+  "passed": true,
+  "not_validated": [
+    "Citrix NetScaler ADC or Gateway",
+    "CVE-2026-88771 through CVE-2026-88778",
+    "Cisco Catalyst SD-WAN Manager or CVE-2026-76504",
+    "HTTPS/API authentication bypass, compromise hunting, or fixed software upgrade",
+    "NetScaler NSIP, SNIP, VIP, ACL, secure management routing tables, or HA pair",
+    "Danfoss, Copeland, or any refrigeration controller, firmware, protocol, or exploit",
+    "Production firewall, VPN, jump host, identity-aware proxy, OT monitoring, or emergency local control",
+    "Internet exposure, TLS, WAF, VPN, AAA, exploit, or performance"
+  ]
+}

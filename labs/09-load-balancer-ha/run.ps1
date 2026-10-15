@@ -1,5 +1,5 @@
 param(
-    [string]$EvidencePath = (Join-Path $PSScriptRoot 'evidence\2026-10-01.json')
+    [string]$EvidencePath = (Join-Path $PSScriptRoot 'evidence\2026-10-15.json')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -69,6 +69,22 @@ try {
     $null = & docker compose -p $project -f $compose exec -T client ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=3 lab@172.31.20.10 true 2>$null
     $dataSshExit = $LASTEXITCODE
 
+    $otOperatorOutput = ''
+    $otOperatorExit = 1
+    1..20 | ForEach-Object {
+        if ($otOperatorExit -ne 0) {
+            $otOperatorOutput = & docker compose -p $project -f $compose exec -T ot-operator curl -fsS --max-time 2 http://172.31.30.30/ 2>$null
+            $otOperatorExit = $LASTEXITCODE
+            if ($otOperatorExit -ne 0) { Start-Sleep -Milliseconds 250 }
+        }
+    }
+    $otOperatorText = "$otOperatorOutput".Trim()
+
+    $null = & docker compose -p $project -f $compose exec -T client curl -fsS --max-time 2 http://172.31.30.30/ 2>$null
+    $dataToOtExit = $LASTEXITCODE
+    $null = & docker compose -p $project -f $compose exec -T admin curl -fsS --max-time 2 http://172.31.30.30/ 2>$null
+    $managementToOtExit = $LASTEXITCODE
+
     $normal = @(Sample 8)
     Compose stop web01
     $duringFailure = @(Sample 8)
@@ -91,6 +107,9 @@ try {
     $assertions = [ordered]@{
         admin_to_management_ssh_allowed = (($managementExit -eq 0) -and ($managementText -eq 'management-ssh-ok'))
         data_network_to_ssh_denied = ($dataSshExit -ne 0)
+        ot_operator_to_controller_allowed = (($otOperatorExit -eq 0) -and ($otOperatorText -eq 'ot-controller-ok'))
+        data_network_to_ot_controller_denied = ($dataToOtExit -ne 0)
+        management_network_to_ot_controller_denied = ($managementToOtExit -ne 0)
         both_backends_seen_before_failure = ($normalNames.Count -eq 2)
         only_web02_seen_during_web01_failure = (($failureNames.Count -eq 1) -and ($failureNames[0] -eq 'web02'))
         both_backends_seen_after_recovery = ($recoveryNames.Count -eq 2)
@@ -99,25 +118,34 @@ try {
 
     $result = [ordered]@{
         tested_at = (Get-Date).ToUniversalTime().ToString('o')
-        scope = 'local-container-management-data-separation-and-backend-failover'
+        scope = 'local-container-management-data-ot-separation-and-backend-failover'
         source = [ordered]@{
             citrix_security_bulletin = 'https://support.citrix.com/external/article/CTX697096'
             citrix_security_bulletin_published = '2026-09-27'
             cisco_sdwan_advisory = 'https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-webauth-xr8beuuU'
             cisco_sdwan_advisory_published = '2026-09-30'
             management_data_separation = 'https://docs.netscaler.com/en-us/citrix-adc/current-release/networking/mgmt-and-data-plane-separation.html'
+            cert_fr_ot_alert = 'https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-012/'
+            cert_fr_ot_alert_published = '2026-10-12'
+            ap_refrigeration_incident = 'https://apnews.com/article/france-supermarkets-hacked-cybercrime-81c2d5721f4df77f601f71741ef7c291'
+            ap_report_published = '2026-10-14'
+            incident_date = '2026-10-12'
         }
         environment = [ordered]@{
             runtime = 'Docker Desktop'
             edge_image_id = (& docker inspect -f '{{.Image}}' $edgeId).Trim()
             management_network = '172.31.10.0/24'
             data_network = '172.31.20.0/24'
+            ot_network = '172.31.30.0/24'
             management_ssh = '172.31.10.10:22'
             data_http = '172.31.20.10:80'
         }
         access_tests = [ordered]@{
             admin_to_management_ssh = [ordered]@{ exit_code = $managementExit; output = $managementText }
             data_client_to_data_ip_ssh = [ordered]@{ exit_code = $dataSshExit; expected = 'non-zero because SSH is not bound to the data-plane address' }
+            ot_operator_to_controller = [ordered]@{ exit_code = $otOperatorExit; output = $otOperatorText }
+            data_client_to_ot_controller = [ordered]@{ exit_code = $dataToOtExit; expected = 'non-zero because the data container is not attached to the OT network' }
+            management_admin_to_ot_controller = [ordered]@{ exit_code = $managementToOtExit; expected = 'non-zero because the management container is not attached to the OT network' }
         }
         http_tests = [ordered]@{
             normal = [ordered]@{ samples = $normal; counts = @(Counts $normal) }
@@ -132,6 +160,8 @@ try {
             'Cisco Catalyst SD-WAN Manager or CVE-2026-76504',
             'HTTPS/API authentication bypass, compromise hunting, or fixed software upgrade',
             'NetScaler NSIP, SNIP, VIP, ACL, secure management routing tables, or HA pair',
+            'Danfoss, Copeland, or any refrigeration controller, firmware, protocol, or exploit'
+            'Production firewall, VPN, jump host, identity-aware proxy, OT monitoring, or emergency local control'
             'Internet exposure, TLS, WAF, VPN, AAA, exploit, or performance'
         )
     }

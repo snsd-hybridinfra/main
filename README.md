@@ -26,7 +26,7 @@
 | [01 BGP/ECMP](labs/01-bgp-ecmp/README.md) | 로컬 검증 | 정상 경로 2개, Spine 장애 후 대체 경로 1개와 ping 3/3 |
 | [02 EVPN/VXLAN](labs/02-evpn-vxlan/README.md) | 로컬 검증 | VNI 100·200 내부 통신과 VNI 간 격리 |
 | [08 AI DC Network](labs/08-ai-dc-network/README.md) | 로컬 검증 | 20 Mbit/s 가상 병목의 처리량과 부하 중 지연 |
-| [09 Edge Load Balancer HA](labs/09-load-balancer-ha/README.md) | 로컬 검증 | 관리망 SSH 허용, 데이터망 SSH 거부, 백엔드 장애 중 HTTP 유지 |
+| [09 Edge Load Balancer HA](labs/09-load-balancer-ha/README.md) | 로컬 검증 | 관리망 SSH 허용, 사용자망의 OT 직접 접근 거부, 백엔드 장애 중 HTTP 유지 |
 | [10 Network Digital Twin](labs/10-network-digital-twin/README.md) | 로컬 검증 | Fabric·Sovereign 경로와 AIDC 통합 Control Plane의 환경별 관측 사각지대 계산 |
 
 ### Cloud & Automation
@@ -44,7 +44,7 @@
 |---|---|---|
 | [06 AAA/RADIUS](labs/06-aaa-radius/README.md) | 로컬 검증 | 승인 1건, 거부 2건 |
 | [07 AI Agent Security](labs/07-ai-agent-security/README.md) | 로컬 검증 | Agent ID·도구·파일·통신·예산·합성 승인 경계의 허용·거부 |
-| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | KEV·공식 실제 악용·패치 권고를 합성 자산 맥락으로 구분해 우선순위 판정 |
+| [11 Vulnerability Prioritization](labs/11-vulnerability-prioritization/README.md) | 로컬 검증 | KEV·실제 악용·패치 권고와 백업 관리 서버 맥락을 구분해 우선순위 판정 |
 | [13 Kubernetes RBAC](labs/13-kubernetes-rbac/README.md) | 로컬 검증 | ServiceAccount 읽기 허용 2개와 Secret·삭제·Namespace 밖·ClusterRole 거부 4개 |
 | [14 Terraform Security Validation](labs/14-terraform-security-validation/README.md) | 로컬 검증 | 공개 SSH 1건 탐지, CIDR 수정 후 같은 Checkov 규칙 통과 |
 

@@ -157,6 +157,15 @@
 - 최종 실행은 스냅샷 3건 복원·2건 손실, 새 엔드포인트 RTO 1.633초, 기존 엔드포인트 중단 유지, 없는 백업 거부를 모두 통과했다.
 - 두 사이트는 같은 노트북의 임시 디렉터리다. Yandex, 물리 전력·회선, 실제 장애 도메인, DNS·트래픽 매니저, 복제는 미검증이다. 전체 상태는 로컬 검증 14개·설계 0개로 유지했다.
 
+
+## 2026-10-15 — 10월 10~15일 브리핑을 기존 랩에 통합
+
+- 10월 10~15일 브리핑을 다시 읽고 Ahsay 제조사 공지·Huntress 사고 분석, 프랑스 CERT 경보·AP 후속 보도, OCP의 Arista·UALink 행사 원문을 확인했다.
+- 프랑스 냉장 제어기 사고의 네트워크 분리 질문은 새 랩을 만들지 않고 [09 Edge Load Balancer HA](../labs/09-load-balancer-ha/README.md)에 합쳤다. OT망 내부 HTTP는 성공하고 관리망·사용자망에서 OT 주소로 직접 접근하는 경로는 실패했으며, 기존 관리 SSH 분리와 백엔드 장애 복구도 함께 재검증했다.
+- [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 실제 악용이 관측된 AhsayCBS CVE-2026-105133·CVE-2026-105134와 합성 백업 관리 서버를 추가했다. `BACKUP-MGR01`은 95점 P0였고 전체 10개 자산의 순서·등급·출처 일치 검사가 통과했다.
+- Arista의 SRv6·MRC·다중 Plane과 UALink Scale-up 발표는 기존 01 BGP/ECMP·08 AI DC Network의 학습 흐름에 합쳤다. 행사 페이지에 게시일이 없어 행사일만 기록했고, 실제 제품·ASIC·광 모듈·AI Job을 검증했다고 쓰지 않았다.
+- 실제 냉장 장비·AhsayCBS를 공격하거나 패치하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD

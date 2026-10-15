@@ -1,6 +1,6 @@
 # IT·보안 브리핑에서 추린 기술 흐름
 
-기준: 2026년 10월 9일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
+기준: 2026년 10월 15일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
 
 ## 1. AI 인프라 전체 스택
 
@@ -10,7 +10,7 @@
 
 ## 2. 데이터센터 네트워크
 
-반복 주제는 BGP, ECMP, Spine-Leaf, EVPN/VXLAN, 고속 Ethernet, RoCEv2, 혼잡 제어와 광 연결입니다. [Upscale Token Fabric 발표](https://upscale.com/blogs/upscale-introduces-token-fabric-the-industrys-most-comprehensive-standards-based-networking-portfolio-for-ai-factories)(2026-10-08)는 이기종 XPU의 Scale-up·Scale-out과 운영 소프트웨어를 한 구조로 묶는 제품 방향을 제시했습니다. 모든 기술을 한 번에 구현했다고 주장하지 않고, 라우팅과 장애 수렴부터 순차적으로 검증합니다.
+반복 주제는 BGP, ECMP, Spine-Leaf, EVPN/VXLAN, 고속 Ethernet, RoCEv2, 혼잡 제어와 광 연결입니다. [Upscale Token Fabric 발표](https://upscale.com/blogs/upscale-introduces-token-fabric-the-industrys-most-comprehensive-standards-based-networking-portfolio-for-ai-factories)(2026-10-08)는 이기종 XPU의 Scale-up·Scale-out과 운영 소프트웨어를 한 구조로 묶는 제품 방향을 제시했습니다. 모든 기술을 한 번에 구현했다고 주장하지 않고, 라우팅과 장애 수렴부터 순차적으로 검증합니다. 2026 OCP 행사(10월 12~15일)의 [Arista 세션 목록](https://events.arista.com/2026-10-12-15-arista-networks-at-ocp)은 SRv6·MRC·다중 Plane과 광 상호운용 시험을, [UALink 행사 안내](https://ualinkconsortium.org/event/ocp-global-summit-2026/)는 가속기 Scale-up Interconnect 생태계를 다뤘습니다. 게시일은 두 페이지에 표시되지 않아 행사일만 기록하며, 제품 성능을 내 실습 결과로 사용하지 않습니다.
 
 **첫 실습:** 2 Spine / 2 Leaf BGP ECMP 토폴로지와 링크 장애 전후의 경로 확인. 08번 랩의 20 Mbit/s 공유 병목 측정은 AI Fabric을 보기 전 기초 관측이며 Token Fabric 제품 성능 검증이 아닙니다.
 
@@ -52,7 +52,7 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 
 9월 26일 브리핑의 RouterOS·SharePoint 이슈를 [CISA KEV 공식 JSON](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json)으로 확인했습니다. 10월 1일에는 [Cisco CVE-2026-76504 권고](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-webauth-xr8beuuU)와 [Microsoft의 Zimbra CVE-2026-73570 분석](https://www.microsoft.com/en-us/security/blog/2026/09/30/unauthenticated-command-injection-on-internet-facing-mail-servers-tracking-cve-2026-73570/)에서 실제 악용을 확인했습니다. 10월 6일에는 CISA KEV에서 FortiMail CVE-2026-104286의 추가일 2026-10-01과 조치 기한 2026-10-04를 확인했습니다. 10월 8일에는 Microsoft KB5129955에서 Exchange Server CVE-2026-96940의 패치 대상을 확인했지만 실제 악용 근거는 확인하지 못했습니다. 실제 악용 여부와 조치 기한은 단순 CVSS보다 패치 우선순위를 크게 바꿀 수 있고, 인터넷에 노출된 관리 Plane과 핵심 경계 장비는 자산 맥락까지 함께 봐야 합니다.
 
-**실습 연결:** 공격을 재현하지 않고 CISA KEV 3건, Cisco·Microsoft가 확인한 실제 악용 2건, Microsoft 패치 권고 1건을 합성 자산 맥락과 결합해 우선순위를 계산했습니다. 패치 권고만 확인된 Exchange 합성 자산에는 악용 점수를 주지 않았습니다. 실제 버전 식별, 패치, 침해 조사와 서비스 검증은 수행하지 않았습니다.
+**실습 연결:** 공격을 재현하지 않고 CISA KEV 3건, Cisco·Microsoft가 확인한 실제 악용 2건, Huntress가 직접 관측한 AhsayCBS 악용 2개 CVE, Microsoft 패치 권고 1건을 합성 자산 맥락과 결합해 우선순위를 계산했습니다. 패치 권고만 확인된 Exchange 합성 자산에는 악용 점수를 주지 않았고, AhsayCBS 합성 백업 관리 서버는 95점 P0로 올라왔습니다. 실제 버전 식별, 패치, 침해 조사와 서비스 검증은 수행하지 않았습니다.
 
 ## 10. Workload Identity와 독립 Guardrail
 
@@ -65,6 +65,12 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 [AWS의 HyperPod·Qumulo 글](https://aws.amazon.com/blogs/machine-learning/multi-region-training-with-amazon-sagemaker-hyperpod-and-qumulo/)(2026-09-25)은 GPU Compute와 원본 Dataset이 다른 Region에 있을 때 전체 복제와 반복 WAN 읽기 사이의 선택을 다룹니다. Hub 원본, Region 간 VPC Peering, Spoke의 예측 Cache, 로컬 NFS Mount를 함께 설계하면 데이터 이동 비용과 GPU 대기 시간을 분리해 볼 수 있습니다.
 
 **실습 연결:** 기사 구조를 로컬 Hub·Spoke 디렉터리로 줄여 Cold Miss 8건, Warm Hit 8건, Warm Hub 요청 0건, Cache 훼손 1건 감지·단일 파일 복구와 복구 후 전체 Hit를 확인했습니다. AWS·Qumulo·HyperPod는 실행하지 않았으며 기사 처리량과 Cache Hit Rate를 내 결과로 사용하지 않습니다.
+
+## 12. OT 원격 관리와 업무망 분리
+
+[프랑스 CERT 경보](https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-012/)(2026-10-12)와 [AP 후속 보도](https://apnews.com/article/france-supermarkets-hacked-cybercrime-81c2d5721f4df77f601f71741ef7c291)(2026-10-14, 사고일 2026-10-12)는 인터넷에 연결된 냉장 설비 원격 제어가 실제 식품 폐기와 운영 중단으로 이어질 수 있음을 보여 줍니다. 원격 관리가 필요하더라도 사용자망의 직접 경로를 없애고, 보호된 관리 경로와 현장 비상 제어를 따로 검증해야 합니다.
+
+**실습 연결:** 09번 랩에 합성 OT망을 추가했습니다. OT망 내부 작업자는 제어기 HTTP에 접근했고 관리망·사용자망 컨테이너의 직접 접근은 실패했습니다. Docker 네트워크 분리만 확인했으며 실제 OT 장비, 방화벽, VPN, Jump Host, 장비 프로토콜과 비상 수동 제어는 검증하지 않았습니다.
 
 ## 새 브리핑을 반영하는 기준
 
