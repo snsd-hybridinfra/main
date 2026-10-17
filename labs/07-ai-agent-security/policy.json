@@ -18,5 +18,9 @@
   },
   "approval_required": [
     "write_report"
+  ],
+  "passport_key_id": "lab-hmac-01",
+  "revoked_agent_ids": [
+    "revoked-agent-01"
   ]
 }

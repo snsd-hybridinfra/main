@@ -166,6 +166,13 @@
 - Arista의 SRv6·MRC·다중 Plane과 UALink Scale-up 발표는 기존 01 BGP/ECMP·08 AI DC Network의 학습 흐름에 합쳤다. 행사 페이지에 게시일이 없어 행사일만 기록했고, 실제 제품·ASIC·광 모듈·AI Job을 검증했다고 쓰지 않았다.
 - 실제 냉장 장비·AhsayCBS를 공격하거나 패치하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
 
+## 2026-10-18 — KVM 적용 범위와 서명된 Agent Scope 검증
+
+- 10월 16~17일 브리핑을 확인하고 AWS 2026-137-AWS와 ServiceNow AI Passport의 2026-10-15 공식 원문을 대조했다.
+- AWS 공지는 새 랩 대신 [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 통합했다. 합성 자체 관리 KVM은 Patch/Reboot, AWS 관리형 Compute는 공지상 고객 조치 없음, 수정 Kernel은 Reboot·서비스 확인으로 3/3 판정이 일치했다.
+- ServiceNow 발표는 기존 [07 AI Agent Security](../labs/07-ai-agent-security/README.md)를 확장했다. 로컬 HMAC Passport 없음·서명 변조·폐기·도구 Scope 초과와 기존 파일·통신·승인·예산 경계를 포함한 15개 판정이 모두 기대와 일치했다.
+- 실제 KVM Host·Kernel·virtio-net/TAP을 점검하거나 패치하지 않았고, ServiceNow·NVIDIA 제품과 실제 Agent/MCP를 실행하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
+
 ## 이후 갱신 양식
 
 ### YYYY-MM-DD
