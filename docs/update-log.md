@@ -172,6 +172,8 @@
 - AWS 공지는 새 랩 대신 [11 Vulnerability Prioritization](../labs/11-vulnerability-prioritization/README.md)에 통합했다. 합성 자체 관리 KVM은 Patch/Reboot, AWS 관리형 Compute는 공지상 고객 조치 없음, 수정 Kernel은 Reboot·서비스 확인으로 3/3 판정이 일치했다.
 - ServiceNow 발표는 기존 [07 AI Agent Security](../labs/07-ai-agent-security/README.md)를 확장했다. 로컬 HMAC Passport 없음·서명 변조·폐기·도구 Scope 초과와 기존 파일·통신·승인·예산 경계를 포함한 15개 판정이 모두 기대와 일치했다.
 - 실제 KVM Host·Kernel·virtio-net/TAP을 점검하거나 패치하지 않았고, ServiceNow·NVIDIA 제품과 실제 Agent/MCP를 실행하지 않았다. 랩 수는 로컬 검증 14개·설계 0개로 유지했다.
+- 같은 날 오전 8시 22분 브리핑에서 새로 확인된 PAN-OS CVE-2026-0322와 BeyondTrust CVE-2026-102764를 공식 원문과 대조했다. 기존 11번 랩에 합성 관리 Plane 자산 두 개를 추가해 둘 다 95점 P0, 전체 12개 자산의 순서·등급·출처 일치가 통과했다.
+- PAN-OS 공지의 관리 인터페이스 제한 권고는 기존 09번 랩의 관리망 SSH 허용·사용자망 SSH 거부 증적과 연결했다. 실제 제품·CVE·패치·침해 조사는 수행하지 않았다.
 
 ## 이후 갱신 양식
 

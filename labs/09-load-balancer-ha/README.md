@@ -6,6 +6,8 @@
 
 그다음 [Citrix NetScaler 보안 공지 CTX697096](https://support.citrix.com/external/article/CTX697096)(2026-09-27), [관리·데이터 Plane 분리 문서](https://docs.netscaler.com/en-us/citrix-adc/current-release/networking/mgmt-and-data-plane-separation.html)(2026-09-08), [Cisco Catalyst SD-WAN Manager 권고](https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-webauth-xr8beuuU)(2026-09-30)를 보며 관리 SSH를 사용자 트래픽과 분리했다.
 
+[Palo Alto Networks CVE-2026-0322 공지](https://security.paloaltonetworks.com/CVE-2026-0322)(2026-10-14 게시·10-15 갱신)는 인터넷에서 접근 가능한 PAN-OS 관리 인터페이스의 위험이 가장 높고, 신뢰할 수 있는 내부 주소나 Jump Box로 접근을 제한하라고 권고한다. 10월 15일에 이미 실행한 이 랩의 관리망 전용 SSH와 사용자망 SSH 거부 결과를 이 문제와 연결했다. PAN-OS 장비나 해당 CVE를 실행한 것은 아니다.
+
 2026-10-12 프랑스 CERT는 냉장 설비 원격 제어기 침해 경보를 냈다. [AP의 2026-10-14 후속 보도](https://apnews.com/article/france-supermarkets-hacked-cybercrime-81c2d5721f4df77f601f71741ef7c291)는 10월 12일 프랑스 슈퍼마켓 약 700곳에 영향이 있었고, 당국이 VPN 또는 보호된 네트워크를 통해서만 재연결하라고 권고했다고 전했다. 원격 제어기가 업무용 사용자망과 같은 경로에 놓여 있으면 피해 범위가 커질 수 있다는 문제로 읽었다.
 
 로드밸런서, 관리면, OT 격리는 모두 서비스 경계의 접근 경로를 확인하는 질문이라 새 랩을 만들지 않았다. 이 실습은 실제 냉장 장비나 공개된 취약점을 공격하지 않는다. Docker 네트워크 세 개로 다음만 확인한다.

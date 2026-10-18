@@ -1,6 +1,6 @@
 # IT·보안 브리핑에서 추린 기술 흐름
 
-기준: 2026년 10월 17일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
+기준: 2026년 10월 18일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
 
 ## 1. AI 인프라 전체 스택
 
@@ -56,7 +56,9 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 
 [AWS 보안 공지 2026-137-AWS](https://aws.amazon.com/security/security-bulletins/2026-137-aws/)(2026-10-15)는 같은 CVE라도 자체 관리 KVM과 AWS 관리형 Compute의 운영 책임이 다름을 보여 줍니다. 11번 랩은 합성 적용 범위 사례 세 개로 Patch/Reboot 대상과 공지상 고객 조치가 없는 대상을 분리했습니다.
 
-**실습 연결:** 공격을 재현하지 않고 CISA KEV 3건, Cisco·Microsoft가 확인한 실제 악용 2건, Huntress가 직접 관측한 AhsayCBS 악용 2개 CVE, Microsoft 패치 권고 1건을 합성 자산 맥락과 결합해 우선순위를 계산했습니다. 패치 권고만 확인된 Exchange 합성 자산에는 악용 점수를 주지 않았고, AhsayCBS 합성 백업 관리 서버는 95점 P0로 올라왔습니다. 실제 버전 식별, 패치, 침해 조사와 서비스 검증은 수행하지 않았습니다.
+[Palo Alto Networks CVE-2026-0322 공지](https://security.paloaltonetworks.com/CVE-2026-0322)(2026-10-14 게시·10-15 갱신)와 [Google/Mandiant의 BeyondTrust CVE-2026-102764 분석](https://cloud.google.com/blog/topics/threat-intelligence/armory-castle-exploits-beyondtrust/)(2026-10-15)은 관리 인터페이스와 원격지원 장비가 침해되면 저장된 자격증명과 내부 접근 경로까지 위험해질 수 있음을 보여 줍니다. 11번 랩에는 두 합성 자산의 우선순위를, 09번 랩에는 기존 관리망 분리 증적을 연결했습니다.
+
+**실습 연결:** 공격을 재현하지 않고 CISA KEV 3건, Cisco·Microsoft·Huntress·Palo Alto Networks·Google/Mandiant가 확인한 실제 악용 6개 CVE, Microsoft 패치 권고 1건을 합성 자산 맥락과 결합해 우선순위를 계산했습니다. 패치 권고만 확인된 Exchange 합성 자산에는 악용 점수를 주지 않았고, AhsayCBS 합성 백업 관리 서버는 95점 P0로 올라왔습니다. 실제 버전 식별, 패치, 침해 조사와 서비스 검증은 수행하지 않았습니다.
 
 ## 10. Workload Identity와 독립 Guardrail
 
