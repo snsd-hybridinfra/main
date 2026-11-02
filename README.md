@@ -8,6 +8,17 @@
 
 기사에 나온 사실과 내가 만든 구현을 분리합니다. 실행하지 않은 구성은 성공으로 적지 않으며, 합성 환경과 실제 런타임을 같은 상태로 표시하지 않습니다.
 
+## 누적 브리핑 — 2026년 11월 2일 (월) 정리
+
+[브리핑 모음](docs/briefings/README.md)에 2026-09-08~11-02를 대상으로 한 분야별 종합, 10월 말 후속 이슈, 컨퍼런스 기술자료와 다음 실습을 정리했습니다. 전체 날짜의 기사 원문을 모두 확보한 것은 아니며 [확보 범위](docs/briefings/source-register.md)에 누락 구간을 표시했습니다.
+
+- [누적 핵심 정리](docs/briefings/cumulative-summary.md): 네트워크·클라우드·보안·자동화·AI 인프라·커리어와 기존 14개 랩 연결
+- [10월 말 후속 정리](docs/briefings/latest-updates.md): 공식 자료로 확인한 SD-WAN·PAN-OS·SSL VPN 이슈
+- [컨퍼런스 노트](docs/briefings/conference-notes.md): Cisco Live·OpenStack 기술과 데이터센터코리아 사전 선별
+- [다음 학습·실습](docs/briefings/next-actions.md): 경로 설명 → 변경 검증 → 관리 경계 보안의 우선순위
+
+이번 업데이트는 문서 정리입니다. 기존 랩을 새로 실행하거나 검증 상태를 변경하지 않았습니다.
+
 ## 현재 상태
 
 | 구분 | 수량 | 의미 |
@@ -52,6 +63,7 @@
 
 | 문서 | 역할 |
 |---|---|
+| [누적 브리핑 모음](docs/briefings/README.md) | 분야별 종합·최근 후속·컨퍼런스·출처와 다음 학습 |
 | [뉴스 → 기술 실습](docs/news-to-labs.md) | 원문, 발행일, 내 질문, 실행 증적, 미검증 범위의 권위 기록 |
 | [기술 흐름](docs/industry-trends.md) | 브리핑에서 반복되는 산업·운영 문제의 분류 |
 | [실습 로드맵](docs/lab-roadmap.md) | 실습 순서, 상태, 완료 기준 |
@@ -70,7 +82,7 @@ snsd-multicloud-ops
 └─ 가상 증권사 Hybrid-Ready Private Cloud IDP 구현
 ```
 
-이 저장소는 학습·실험의 주 저장소입니다. [snsd-multicloud-ops](https://github.com/snsd-hybirdinfra/snsd-multicloud-ops)는 연결된 구현 프로젝트이며, 실제 상태는 그 저장소의 권위 문서를 따릅니다. 현재 퍼블릭 클라우드 어댑터는 `DEFERRED`, 금융 네트워크는 `DESIGN_ONLY`, 플랫폼 종단 간 런타임은 `NOT_VALIDATED`입니다.
+이 저장소는 학습·실험의 주 저장소입니다. [snsd-multicloud-ops](https://github.com/snsd-hybridinfra/snsd-multicloud-ops)는 연결된 구현 프로젝트이며, 실제 상태는 그 저장소의 권위 문서를 따릅니다. 현재 퍼블릭 클라우드 어댑터는 `DEFERRED`, 금융 네트워크는 `DESIGN_ONLY`, 플랫폼 종단 간 런타임은 `NOT_VALIDATED`입니다.
 
 ## 기록 원칙
 
@@ -79,3 +91,4 @@ snsd-multicloud-ops
 - 합성 데이터·계정·자산은 실제 데이터와 구분합니다.
 - 실제 자격증명, 계정 식별자, 고객 정보, 원시 운영 로그는 저장하지 않습니다.
 - 서브 프로젝트의 구현 상태를 이 저장소에서 임의로 승격하지 않습니다.
+
