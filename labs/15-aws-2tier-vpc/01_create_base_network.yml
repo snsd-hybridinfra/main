@@ -12,7 +12,7 @@
     project: ansible-vpc-lab
     managed_by: ansible
     vpc_name: ansible-jjh-vpc
-    output_dir: {{ playbook_dir }}/output
+    output_dir: "{{ playbook_dir }}/output"
 
   tasks:
     - name: create vpc

@@ -7,7 +7,7 @@
 
   vars:
     ansible_python_interpreter: /usr/bin/python3.12
-    example_dir: {{ playbook_dir }}/output/example
+    example_dir: "{{ playbook_dir }}/output/example"
 
   tasks:
     - name: ensure example output directory exists

@@ -7,14 +7,14 @@
 
   vars:
     ansible_python_interpreter: /usr/bin/python3.12
-    output_dir: {{ playbook_dir }}/output
+    output_dir: "{{ playbook_dir }}/output"
     alb_name: ansible-jjh-alb
     target_group_name: ansible-jjh-tg
 
   vars_files:
-    - {{ playbook_dir }}/output/base_network.yml
-    - {{ playbook_dir }}/output/security_groups.yml
-    - {{ playbook_dir }}/output/compute.yml
+    - "{{ playbook_dir }}/output/base_network.yml"
+    - "{{ playbook_dir }}/output/security_groups.yml"
+    - "{{ playbook_dir }}/output/compute.yml"
 
   tasks:
     - name: create target group

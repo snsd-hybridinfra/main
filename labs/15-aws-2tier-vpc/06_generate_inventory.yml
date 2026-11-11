@@ -7,12 +7,12 @@
 
   vars:
     ansible_python_interpreter: /usr/bin/python3.12
-    output_dir: {{ playbook_dir }}/output
-    key_path: {{ playbook_dir }}/ansible-jjh-key
-    inventory_path: {{ playbook_dir }}/inventory.ini
+    output_dir: "{{ playbook_dir }}/output"
+    key_path: "{{ playbook_dir }}/ansible-jjh-key"
+    inventory_path: "{{ playbook_dir }}/inventory.ini"
 
   vars_files:
-    - {{ playbook_dir }}/output/compute.yml
+    - "{{ playbook_dir }}/output/compute.yml"
 
   tasks:
     - name: generate inventory file
