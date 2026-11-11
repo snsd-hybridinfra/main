@@ -23,4 +23,4 @@
 4. 실제 출력과 예상이 달랐던 부분은 무엇인가?
 5. 결과를 대표 프로젝트에 적용할 수 있는 범위와 한계는 무엇인가?
 
-[snsd-multicloud-ops](https://github.com/snsd-hybirdinfra/snsd-multicloud-ops)는 이 로드맵의 연결된 서브 프로젝트입니다. 해당 저장소의 설계·로컬 검증·실제 런타임 상태는 그 저장소의 권위 문서에 따릅니다.
+[snsd-multicloud-ops](https://github.com/snsd-hybridinfra/snsd-multicloud-ops)는 이 로드맵의 연결된 서브 프로젝트입니다. 해당 저장소의 설계·로컬 검증·실제 런타임 상태는 그 저장소의 권위 문서에 따릅니다.
