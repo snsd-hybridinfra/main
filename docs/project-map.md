@@ -4,14 +4,15 @@
 
 | 저장소 | 역할 | 상태 권위 |
 |---|---|---|
-| `F:\main` | 뉴스 원문에서 기술 질문을 도출하고 독립 실습과 증적을 축적 | 이 저장소의 `README`, `docs/news-to-labs.md`, 각 실습 README |
-| [snsd-multicloud-ops](https://github.com/snsd-hybirdinfra/snsd-multicloud-ops) | 가상 증권사 Hybrid-Ready Private Cloud IDP 구현 | 서브 프로젝트의 플랫폼 기준선·구현 로드맵·Zero Trust 권위 문서 |
+| [snsd-hybridinfra/main](https://github.com/snsd-hybridinfra/main) | 뉴스·컨퍼런스 이슈를 독립 실습으로 재현하고 증적을 축적하는 주 저장소 | 이 저장소의 `README`, `docs/news-to-labs.md`, 각 실습 README |
+| [snsd-multicloud-ops](https://github.com/snsd-hybridinfra/snsd-multicloud-ops) | 가상 증권사 Hybrid-Ready Private Cloud IDP 구현 | 해당 저장소의 플랫폼 기준선·구현 로드맵·Zero Trust 권위 문서 |
+| [dandelion-cloud-automation](https://github.com/snsd-hybridinfra/dandelion-cloud-automation) | OpenStack·Ansible·모니터링·백업/복구를 다룬 별도 팀 프로젝트 이력 | 해당 저장소의 `README` 및 `docs/current-status.md` |
 
 독립 실습의 통과가 서브 프로젝트 통합 완료를 뜻하지 않습니다. 서브 프로젝트의 파일이 존재한다는 사실도 배포·런타임 검증을 뜻하지 않습니다.
 
 ## 서브 프로젝트 현재 상태
 
-2026-09-28에 서브 프로젝트의 `README`, `docs/platform/implementation-roadmap.md`, `docs/platform/architecture-baseline.yaml`을 대조했습니다.
+아래 상태는 `snsd-multicloud-ops`의 2026-10-02 진행도 문서와 README에 공개된 범위를 요약한 것입니다. 2026-11-11에 문서 연결 관계를 재점검했지만 실제 런타임을 재실행하거나 상태를 승격하지는 않았습니다.
 
 | 영역 | 현재 상태 |
 |---|---|
@@ -52,3 +53,13 @@
 3. 정상·거부·장애·복구 검증을 수행합니다.
 4. 정제 증적을 해당 프로젝트의 승인된 증적 위치에 저장합니다.
 5. 상태 결정 문서가 구현과 증적을 근거로 승격합니다.
+
+## 차기 핵심 실습: IDC Network Operations & Resilience Lab (계획)
+
+- **배치 원칙:** 우선 이 `main` 저장소 안에 독립 프로젝트 영역(제안 경로: `projects/idc-network-operations-resilience/`)을 두고 실습을 확장합니다. 해당 디렉터리는 아직 생성·검증되지 않았습니다.
+- **기반:** 기존 [01 BGP/ECMP](../labs/01-bgp-ecmp/README.md), [02 EVPN/VXLAN](../labs/02-evpn-vxlan/README.md), [10 Network Digital Twin](../labs/10-network-digital-twin/README.md)의 검증 기록을 참고하지만, 이것이 IDC 통합 실습의 검증을 의미하지는 않습니다.
+- **단계:** (1) 2 Spine·2 Leaf·2 Host 기반 eBGP underlay와 ECMP, (2) EVPN/VXLAN overlay, (3) 장애 주입·수렴·관측, (4) 자동화·구성 백업·변경 전후 검증.
+- **상태:** `PLANNED / NOT_VALIDATED`. 실습 단계별 구성·실행 명령·장애 증적·한계를 남긴 후에만 상태를 변경합니다.
+- **보안 경계:** 합성 주소·호스트명·로그만 사용하며 고객사 구성, 운영 접근정보, 실장비 식별정보는 반입하지 않습니다.
+
+별도 저장소 분리는 프로젝트가 독립 배포·테스트·버전 관리가 필요할 만큼 커졌을 때 검토합니다. 기존 팀 프로젝트의 이력은 임의로 통합하거나 덮어쓰지 않습니다.
