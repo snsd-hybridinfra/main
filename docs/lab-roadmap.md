@@ -2,7 +2,7 @@
 
 각 주제를 선택한 뉴스 원문, 내가 도출한 질문, 실제 증적과 한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 있습니다.
 
-상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 현재 14개 실습 모두 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
+상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 기존 01~14번 실습만 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 새 15~17번은 프로젝트 저장소에서 선별 이관했지만 **아직 실행 재검증 전**입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
 
 | 순서 | 주제 | 직접 확인할 질문 | 남길 증적 |
 |---|---|---|---|
@@ -32,3 +32,13 @@
 7. 결과·한계·개인 프로젝트와의 연결
 
 증적이 없으면 `Result`에 성공 문장을 먼저 채우지 않습니다. 장비 이미지·버전에 따라 명령이 다르면 사용 환경을 명시합니다.
+
+## 기존 실험 저장소에서 이관한 랩 (실행 재검증 대기)
+
+| 번호 | 랩 | 소스/상태 | 다음 검증 |
+|---|---|---|---|
+| 15 | [AWS 2-Tier VPC with Ansible](../labs/15-aws-2tier-vpc/README.md) | `test`에서 이관 / `NOT_REVALIDATED` | Bastion 접근 제한, ALB, 2AZ 통신, 비용·정리 확인 |
+| 16 | [OpenStack Ansible Operations](../labs/16-openstack-ansible-operations/README.md) | `dandelion-cloud-automation`에서 선별 이관 / `NOT_REVALIDATED` | 프로비저닝 멱등성, 접근 거부, 서비스 관측, 백업·복구 독립 검증 |
+| 17 | [Cloud Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md) | `snsd-multicloud-ops`에서 선별 이관 / `NOT_REVALIDATED` | Terraform 네트워크 정책·Kubernetes RBAC 허용/거부 테스트 |
+
+**운영 원칙:** 랩을 독립적으로 검증한 후, 목적이 명확해질 때만 여러 랩을 조합해 프로젝트를 만듭니다. 새 프로젝트 완성 상태는 랩별 검증 상태와 별도로 판정합니다. 원본 이관 상세는 [이관 대장](migration-register.md)을 참조합니다.

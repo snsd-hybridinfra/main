@@ -54,12 +54,23 @@
 4. 정제 증적을 해당 프로젝트의 승인된 증적 위치에 저장합니다.
 5. 상태 결정 문서가 구현과 증적을 근거로 승격합니다.
 
-## 차기 핵심 실습: IDC Network Operations & Resilience Lab (계획)
+## 저장소 통합 및 랩 우선 개발 방침 (2026-11-11)
 
-- **배치 원칙:** 우선 이 `main` 저장소 안에 독립 프로젝트 영역(제안 경로: `projects/idc-network-operations-resilience/`)을 두고 실습을 확장합니다. 해당 디렉터리는 아직 생성·검증되지 않았습니다.
-- **기반:** 기존 [01 BGP/ECMP](../labs/01-bgp-ecmp/README.md), [02 EVPN/VXLAN](../labs/02-evpn-vxlan/README.md), [10 Network Digital Twin](../labs/10-network-digital-twin/README.md)의 검증 기록을 참고하지만, 이것이 IDC 통합 실습의 검증을 의미하지는 않습니다.
-- **단계:** (1) 2 Spine·2 Leaf·2 Host 기반 eBGP underlay와 ECMP, (2) EVPN/VXLAN overlay, (3) 장애 주입·수렴·관측, (4) 자동화·구성 백업·변경 전후 검증.
-- **상태:** `PLANNED / NOT_VALIDATED`. 실습 단계별 구성·실행 명령·장애 증적·한계를 남긴 후에만 상태를 변경합니다.
-- **보안 경계:** 합성 주소·호스트명·로그만 사용하며 고객사 구성, 운영 접근정보, 실장비 식별정보는 반입하지 않습니다.
+`main`을 독립 실습의 단일 주 저장소로 운영합니다. 신규 IDC 통합 프로젝트부터 만들지 않고, 기존 저장소 3개에서 선별한 기능을 [랩 15~17](lab-roadmap.md)에 이관하여 먼저 검증합니다.
 
-별도 저장소 분리는 프로젝트가 독립 배포·테스트·버전 관리가 필요할 만큼 커졌을 때 검토합니다. 기존 팀 프로젝트의 이력은 임의로 통합하거나 덮어쓰지 않습니다.
+| 원본 | 이관된 랩 | 이관 범위 | 아직 보존되지 않은 범위 |
+|---|---|---|---|
+| `snsd-hybridinfra/test` (private) | [15 AWS 2-Tier VPC](../labs/15-aws-2tier-vpc/README.md) | 중복을 제거한 Ansible 코드 14개 | 기존 Git 이력, 중복 폴더 및 생성 예시 일부 |
+| `snsd-hybridinfra/dandelion-cloud-automation` | [16 OpenStack Ansible Operations](../labs/16-openstack-ansible-operations/README.md) | 핵심 Ansible 파일 6개 | 팀 문서, 이미지, 자동 복구 스크립트, 기여 기록 다수 |
+| `snsd-hybridinfra/snsd-multicloud-ops` | [17 Cloud Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md) | Terraform·RBAC·기준선 14개 | IDP, 에이전트, 거버넌스, 검증 프레임워크 등 대다수 |
+
+미이관 범위를 무의미하거나 삭제 가능하다고 판단한 것은 아닙니다. 원본 삭제 전 **전체 Git 미러 백업, 기여자·이슈·PR 및 릴리스 기록 보존, 필요한 고유 자료 재검토**가 필요합니다. 자세한 목록과 기준은 [이관 대장](migration-register.md)을 따릅니다.
+
+### 차기 단계: 조합형 프로젝트 (아직 생성하지 않음)
+
+1. 랩별 전제 조건, 입력·출력, 설정 변수, 정상·실패·복구 검증을 완료합니다.
+2. 호환되는 랩을 선택해 인프라·네트워크·운영 시나리오를 설계합니다.
+3. 통합 후에는 랩별 증적을 그대로 재사용하지 않고 새로운 통합 증적을 생성합니다.
+4. 그때 `projects/` 또는 별도 배포 저장소를 선택합니다.
+
+고객사 실제 장비 설정·원시 운영 로그·내부 식별자·인증정보는 이관하거나 공개하지 않습니다.

@@ -23,9 +23,9 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 전체 실습 | 14 | 뉴스에서 도출한 독립 기술 질문 |
-| 로컬 검증 | 14 | 코드·컨테이너·합성 모델과 임시 로컬 클러스터에서 직접 실행하고 증적 저장 |
-| 설계 | 0 | 실행 증적 없이 설계만 남은 실습 없음 |
+| 등록 랩 | 17 | 기존 로컬 실습 14개 + 실험 저장소에서 선별 이관한 랩 3개 |
+| 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
+| 이관·재검증 대기 | 3 | 소스 추출과 정적 조정만 수행, 통합·실행 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -59,6 +59,16 @@
 | [13 Kubernetes RBAC](labs/13-kubernetes-rbac/README.md) | 로컬 검증 | ServiceAccount 읽기 허용 2개와 Secret·삭제·Namespace 밖·ClusterRole 거부 4개 |
 | [14 Terraform Security Validation](labs/14-terraform-security-validation/README.md) | 로컬 검증 | 공개 SSH 1건 탐지, CIDR 수정 후 같은 Checkov 규칙 통과 |
 
+### Extracted Labs: Source-Migrated (NOT_REVALIDATED)
+
+| 랩 | 원본 저장소 | 이관 상태 |
+|---|---|---|
+| [15 AWS 2-Tier VPC with Ansible](labs/15-aws-2tier-vpc/README.md) | private `test` | 보안 조정·중복 제거, 실행 재검증 대기 |
+| [16 OpenStack Ansible Operations](labs/16-openstack-ansible-operations/README.md) | `dandelion-cloud-automation` | 팀 코드 일부 선별, 실행 재검증 대기 |
+| [17 Cloud Network & Access Guardrails](labs/17-cloud-network-access-baselines/README.md) | `snsd-multicloud-ops` | 네트워크·RBAC 일부 선별, 실행 재검증 대기 |
+
+자세한 원본 커밋·제외 범위·삭제 전 보존 조건은 [이관 대장](docs/migration-register.md)을 참고합니다. **이관은 검증이나 원본 전체 보존을 의미하지 않습니다.**
+
 ## 문서 구조
 
 | 문서 | 역할 |
@@ -74,19 +84,18 @@
 ## 저장소 역할
 
 ```text
-F:\main
-├─ docs/   뉴스·로드맵·상태·프로젝트 연결
-└─ labs/   독립 재현 실습과 정제 증적
-
-snsd-multicloud-ops
-└─ 가상 증권사 Hybrid-Ready Private Cloud IDP 구현
+main/
+├─ docs/           근거·로드맵·출처·실습 이관 대장
+├─ labs/01-14/     기존에 로컬 검증된 독립 실습
+└─ labs/15-17/     3개 프로젝트 저장소에서 선별 이관한 미검증 랩
 ```
 
-이 저장소는 학습·실험의 **주 저장소**입니다. [프로젝트 연결 지도](docs/project-map.md)에서 독립 실습, 연결된 구현 프로젝트, 별도 팀 프로젝트의 역할을 구분합니다.
+이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.
 
-- [snsd-multicloud-ops](https://github.com/snsd-hybridinfra/snsd-multicloud-ops): 가상 증권사 Hybrid-Ready Private Cloud IDP의 구현 저장소. 해당 저장소의 권위 문서에 따라 현재 퍼블릭 클라우드 어댑터는 `DEFERRED`, 금융 네트워크는 `DESIGN_ONLY`, 플랫폼 종단 간 런타임은 `NOT_VALIDATED`입니다.
-- [dandelion-cloud-automation](https://github.com/snsd-hybridinfra/dandelion-cloud-automation): OpenStack·Ansible·모니터링·복구를 다룬 별도 팀 프로젝트 이력. 이 저장소의 개인 실습 완료 상태와 합산하지 않습니다.
-- **IDC Network Operations & Resilience Lab (계획):** 기존 네트워크 실습을 기반으로 이 저장소 내 독립 프로젝트로 확장할 예정입니다. 통합 실습은 아직 `PLANNED / NOT_VALIDATED`이며, 세부 방향은 [프로젝트 연결 지도](docs/project-map.md)를 참고합니다.
+- 신규 랩은 `MIGRATED / NOT_REVALIDATED`에서 출발합니다.
+- **실습 축적 → 정상·거부·장애·복구 검증 → 공통 인터페이스 정리 → 조합형 프로젝트 설계** 순서를 따릅니다.
+- 삭제 대상 원본 저장소의 Git 히스토리·기여자 기록·고유 문서·미이관 코드는 별도 미러 백업 후 확인해야 합니다. 이관 3개만으로 원본 전체를 보존한 것은 아닙니다.
+- [저장소·프로젝트 연결 지도](docs/project-map.md), [이관 대장](docs/migration-register.md)를 기준으로 관리합니다.
 
 ## 기록 원칙
 
