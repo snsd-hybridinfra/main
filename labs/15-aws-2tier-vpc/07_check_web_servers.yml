@@ -1,0 +1,32 @@
+---
+- name: check private web servers through bastion
+  hosts: web
+  become: no
+  gather_facts: yes
+
+  tasks:
+    - name: check hostname
+      command: hostname
+      register: hostname_result
+      changed_when: false
+
+    - name: check httpd status
+      command: systemctl is-active httpd
+      register: httpd_status
+      changed_when: false
+
+    - name: check local web response
+      uri:
+        url: http://localhost
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: web_response
+
+    - name: show web check result
+      debug:
+        msg:
+          - "host: {{ inventory_hostname }}"
+          - "hostname: {{ hostname_result.stdout }}"
+          - "httpd: {{ httpd_status.stdout }}"
+          - "response: {{ web_response.content }}"

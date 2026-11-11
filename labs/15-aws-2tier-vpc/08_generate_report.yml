@@ -1,0 +1,144 @@
+---
+- name: generate aws vpc lab report
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: yes
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: {{ playbook_dir }}/output
+    report_path: {{ playbook_dir }}/output/report.md
+
+  vars_files:
+    - {{ playbook_dir }}/output/base_network.yml
+    - {{ playbook_dir }}/output/security_groups.yml
+    - {{ playbook_dir }}/output/compute.yml
+    - {{ playbook_dir }}/output/alb.yml
+    - {{ playbook_dir }}/output/validation.yml
+
+  tasks:
+    - name: create final report
+      copy:
+        dest: "{{ report_path }}"
+        content: |
+          # Ansible AWS 2-Tier VPC Automation Lab Report
+
+          ## 1. Lab Summary
+
+          This report summarizes the AWS 2-tier web infrastructure provisioned by Ansible.
+
+          - Project: {{ common_tags.Project }}
+          - Owner: {{ common_tags.Owner }}
+          - ManagedBy: {{ common_tags.ManagedBy }}
+          - Region: {{ base_network.region }}
+          - Generated At: {{ ansible_date_time.iso8601 }}
+
+          ---
+
+          ## 2. Network Resources
+
+          | Resource | Value |
+          |---|---|
+          | VPC ID | {{ base_network.vpc_id }} |
+          | Public Subnet 1 | {{ base_network.public_subnets.public_subnet_1 }} |
+          | Public Subnet 2 | {{ base_network.public_subnets.public_subnet_2 }} |
+          | Private Subnet 1 | {{ base_network.private_subnets.private_subnet_1 }} |
+          | Private Subnet 2 | {{ base_network.private_subnets.private_subnet_2 }} |
+          | Internet Gateway | {{ base_network.internet_gateway_id }} |
+          | NAT Gateway | {{ base_network.nat_gateway_id }} |
+          | Public Route Table | {{ base_network.route_tables.public_route_table_id }} |
+          | Private Route Table | {{ base_network.route_tables.private_route_table_id }} |
+
+          ---
+
+          ## 3. Security Groups
+
+          | Security Group | ID |
+          |---|---|
+          | ALB SG | {{ security_groups.alb_sg_id }} |
+          | Bastion SG | {{ security_groups.bastion_sg_id }} |
+          | Web SG | {{ security_groups.web_sg_id }} |
+
+          ---
+
+          ## 4. Compute Resources
+
+          | Resource | Value |
+          |---|---|
+          | Key Name | {{ compute.key_name }} |
+          | AMI ID | {{ compute.ami_id }} |
+          | Bastion Instance ID | {{ compute.bastion.instance_id }} |
+          | Bastion Public IP | {{ compute.bastion.public_ip }} |
+          | Bastion Private IP | {{ compute.bastion.private_ip }} |
+          | Web 1 Instance ID | {{ compute.web_servers.web_1.instance_id }} |
+          | Web 1 Private IP | {{ compute.web_servers.web_1.private_ip }} |
+          | Web 2 Instance ID | {{ compute.web_servers.web_2.instance_id }} |
+          | Web 2 Private IP | {{ compute.web_servers.web_2.private_ip }} |
+
+          ---
+
+          ## 5. Load Balancer
+
+          | Resource | Value |
+          |---|---|
+          | ALB Name | {{ alb.name }} |
+          | ALB DNS | {{ alb.dns_name }} |
+          | Target Group Name | {{ alb.target_group.name }} |
+          | Target Group ARN | {{ alb.target_group.arn }} |
+          | Web 1 Target | {{ alb.targets.web_1_instance_id }} |
+          | Web 2 Target | {{ alb.targets.web_2_instance_id }} |
+
+          ---
+
+          ## 6. Validation Result
+
+          | Check | Result |
+          |---|---|
+          | ALB HTTP Status | {{ validation.alb_http.status }} |
+          | ALB Response Body | {{ validation.alb_http.response_body }} |
+          | Bastion Instance | {{ validation.instances.bastion_instance_id }} |
+          | Web 1 Instance | {{ validation.instances.web_1_instance_id }} |
+          | Web 2 Instance | {{ validation.instances.web_2_instance_id }} |
+
+          ---
+
+          ## 7. Architecture Notes
+
+          This lab uses a cost-optimized NAT Gateway design.
+
+          - One NAT Gateway is deployed in Public Subnet 1.
+          - Both private subnets use the same NAT Gateway for outbound internet access.
+          - A production-grade design would typically deploy one NAT Gateway per Availability Zone.
+
+          Private web servers are not directly exposed to the internet.
+
+          - HTTP traffic enters through the ALB.
+          - SSH access to private web servers is expected to pass through the Bastion host.
+          - Web security group allows HTTP only from the ALB security group.
+
+          ---
+
+          ## 8. Cleanup
+
+          To delete all lab resources:
+
+              ./99_delete_all.sh
+
+          ---
+
+          ## 9. Future Extension
+
+          Planned extension candidates:
+
+          - Domain connection using gg-snsdinfra.cloud
+          - Gabia DNS record configuration
+          - ACM DNS validation
+          - ALB HTTPS listener
+          - HTTP to HTTPS redirect
+          - Auto Scaling Group
+          - CloudWatch monitoring and alarms
+
+    - name: show report path
+      debug:
+        msg: "report generated: {{ report_path }}"

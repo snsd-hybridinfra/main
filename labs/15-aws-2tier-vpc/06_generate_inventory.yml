@@ -1,0 +1,40 @@
+---
+- name: generate ansible inventory
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: {{ playbook_dir }}/output
+    key_path: {{ playbook_dir }}/ansible-jjh-key
+    inventory_path: {{ playbook_dir }}/inventory.ini
+
+  vars_files:
+    - {{ playbook_dir }}/output/compute.yml
+
+  tasks:
+    - name: generate inventory file
+      copy:
+        dest: "{{ inventory_path }}"
+        content: |
+          [bastion]
+          ansible-jjh-bastion ansible_host={{ compute.bastion.public_ip }}
+
+          [web]
+          ansible-jjh-web-1 ansible_host={{ compute.web_servers.web_1.private_ip }}
+          ansible-jjh-web-2 ansible_host={{ compute.web_servers.web_2.private_ip }}
+
+          [all:vars]
+          ansible_user=ec2-user
+          ansible_ssh_private_key_file={{ key_path }}
+          ansible_python_interpreter=/usr/bin/python3
+          ansible_ssh_common_args=-o StrictHostKeyChecking=accept-new
+
+          [web:vars]
+          ansible_ssh_common_args=-o StrictHostKeyChecking=accept-new -o ProxyCommand="ssh -i {{ key_path }} -o StrictHostKeyChecking=accept-new -W %h:%p ec2-user@{{ compute.bastion.public_ip }}"
+
+    - name: show generated inventory path
+      debug:
+        msg: "inventory generated: {{ inventory_path }}"

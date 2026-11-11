@@ -1,0 +1,180 @@
+---
+- name: create aws compute resources
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: {{ playbook_dir }}/output
+    key_name: ansible-jjh-key
+    key_private_path: {{ playbook_dir }}/ansible-jjh-key
+    key_public_path: {{ playbook_dir }}/ansible-jjh-key.pub
+
+  vars_files:
+    - {{ playbook_dir }}/output/base_network.yml
+    - {{ playbook_dir }}/output/security_groups.yml
+
+  tasks:
+    - name: create local ssh key pair if not exists
+      command: ssh-keygen -t rsa -b 4096 -f "{{ key_private_path }}" -N ""
+      args:
+        creates: "{{ key_private_path }}"
+
+    - name: set private key permission
+      file:
+        path: "{{ key_private_path }}"
+        mode: '0400'
+
+    - name: register key pair to aws
+      amazon.aws.ec2_key:
+        name: "{{ key_name }}"
+        region: "{{ base_network.region }}"
+        key_material: "{{ lookup('file', key_public_path) }}"
+        state: present
+        tags:
+          Name: "{{ key_name }}"
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: key_result
+
+    - name: find latest amazon linux 2023 ami
+      amazon.aws.ec2_ami_info:
+        region: "{{ base_network.region }}"
+        owners:
+          - amazon
+        filters:
+          name: "al2023-ami-2023*-x86_64"
+          architecture: x86_64
+          virtualization-type: hvm
+          root-device-type: ebs
+          state: available
+      register: ami_result
+
+    - name: set latest ami id
+      set_fact:
+        latest_ami_id: "{{ (ami_result.images | sort(attribute='creation_date') | last).image_id }}"
+
+    - name: create bastion ec2
+      amazon.aws.ec2_instance:
+        name: ansible-jjh-bastion
+        key_name: "{{ key_name }}"
+        instance_type: t3.micro
+        image_id: "{{ latest_ami_id }}"
+        region: "{{ base_network.region }}"
+        vpc_subnet_id: "{{ base_network.public_subnets.public_subnet_1 }}"
+        security_group: "{{ security_groups.bastion_sg_id }}"
+        network:
+          assign_public_ip: true
+        wait: yes
+        state: running
+        tags:
+          Name: ansible-jjh-bastion
+          Role: bastion
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: bastion_result
+
+    - name: create web ec2 1
+      amazon.aws.ec2_instance:
+        name: ansible-jjh-web-1
+        key_name: "{{ key_name }}"
+        instance_type: t3.micro
+        image_id: "{{ latest_ami_id }}"
+        region: "{{ base_network.region }}"
+        vpc_subnet_id: "{{ base_network.private_subnets.private_subnet_1 }}"
+        security_group: "{{ security_groups.web_sg_id }}"
+        network:
+          assign_public_ip: false
+        user_data: |
+          #!/bin/bash
+          dnf install -y httpd
+          systemctl enable --now httpd
+          echo "Hello from ansible-jjh-web-1" > /var/www/html/index.html
+        wait: yes
+        state: running
+        tags:
+          Name: ansible-jjh-web-1
+          Role: web
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: web_1_result
+
+    - name: create web ec2 2
+      amazon.aws.ec2_instance:
+        name: ansible-jjh-web-2
+        key_name: "{{ key_name }}"
+        instance_type: t3.micro
+        image_id: "{{ latest_ami_id }}"
+        region: "{{ base_network.region }}"
+        vpc_subnet_id: "{{ base_network.private_subnets.private_subnet_2 }}"
+        security_group: "{{ security_groups.web_sg_id }}"
+        network:
+          assign_public_ip: false
+        user_data: |
+          #!/bin/bash
+          dnf install -y httpd
+          systemctl enable --now httpd
+          echo "Hello from ansible-jjh-web-2" > /var/www/html/index.html
+        wait: yes
+        state: running
+        tags:
+          Name: ansible-jjh-web-2
+          Role: web
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: web_2_result
+
+    - name: set compute summary
+      set_fact:
+        compute_summary:
+          key_name: "{{ key_name }}"
+          key_private_path: "{{ key_private_path }}"
+          ami_id: "{{ latest_ami_id }}"
+          bastion:
+            instance_id: "{{ bastion_result.instances[0].instance_id }}"
+            public_ip: "{{ bastion_result.instances[0].public_ip_address | default('none') }}"
+            private_ip: "{{ bastion_result.instances[0].private_ip_address | default('none') }}"
+          web_servers:
+            web_1:
+              instance_id: "{{ web_1_result.instances[0].instance_id }}"
+              private_ip: "{{ web_1_result.instances[0].private_ip_address | default('none') }}"
+              subnet_id: "{{ base_network.private_subnets.private_subnet_1 }}"
+            web_2:
+              instance_id: "{{ web_2_result.instances[0].instance_id }}"
+              private_ip: "{{ web_2_result.instances[0].private_ip_address | default('none') }}"
+              subnet_id: "{{ base_network.private_subnets.private_subnet_2 }}"
+
+    - name: save compute variables
+      copy:
+        dest: "{{ output_dir }}/compute.yml"
+        content: |
+          compute:
+            key_name: "{{ compute_summary.key_name }}"
+            key_private_path: "{{ compute_summary.key_private_path }}"
+            ami_id: "{{ compute_summary.ami_id }}"
+
+            bastion:
+              instance_id: "{{ compute_summary.bastion.instance_id }}"
+              public_ip: "{{ compute_summary.bastion.public_ip }}"
+              private_ip: "{{ compute_summary.bastion.private_ip }}"
+
+            web_servers:
+              web_1:
+                instance_id: "{{ compute_summary.web_servers.web_1.instance_id }}"
+                private_ip: "{{ compute_summary.web_servers.web_1.private_ip }}"
+                subnet_id: "{{ compute_summary.web_servers.web_1.subnet_id }}"
+
+              web_2:
+                instance_id: "{{ compute_summary.web_servers.web_2.instance_id }}"
+                private_ip: "{{ compute_summary.web_servers.web_2.private_ip }}"
+                subnet_id: "{{ compute_summary.web_servers.web_2.subnet_id }}"
+
+    - name: show compute summary
+      debug:
+        var: compute_summary
