@@ -1,0 +1,211 @@
+---
+# STATUS: CURRENT ORCHESTRATION BASELINE
+# Purpose:
+#   This file defines the target orchestration flow for the Dandelion project.
+#   It replaces the old nginx template and aligns site.yml with the current
+#   OpenStack + Ansible + Monitoring + Backup/Recovery architecture.
+#
+# Execution target:
+#   ansible-playbook -i inventory.ini site.yml
+#
+#
+# Related implementation files:
+#   - provision.yml: OpenStack provisioning baseline
+#   - wait-ssh.yml: SSH readiness validation
+#   - validate.yml: operation validation baseline
+## Current note:
+#   Some playbooks are still under implementation or validation.
+#   This site.yml keeps the final execution order visible for mentoring and review.
+
+- name: Preflight - explain current orchestration baseline
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Print orchestration goal
+      ansible.builtin.debug:
+        msg:
+          - "Final goal: Control Node runs Ansible to automate OpenStack provisioning, service deployment, monitoring, backup, and recovery validation."
+          - "Current focus: configuration automation and operation validation on provisioned OpenStack instances."
+          - "Provisioning automation is tracked as a remaining implementation scope."
+
+- name: Validate Ansible connectivity to managed nodes
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Check managed node connectivity
+      ansible.builtin.ping:
+
+- name: Common baseline configuration
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure required baseline packages are installed
+      ansible.builtin.apt:
+        name:
+          - curl
+          - wget
+          - git
+          - vim
+          - net-tools
+          - ca-certificates
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: true
+
+    - name: Set timezone to Asia/Seoul
+      community.general.timezone:
+        name: Asia/Seoul
+      ignore_errors: true
+
+- name: Web service baseline - Docker Swarm target
+  hosts: web
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure Docker package is installed
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Ensure Docker service is enabled and running
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+
+    - name: Show Docker status
+      ansible.builtin.command: docker ps
+      register: docker_ps
+      changed_when: false
+      failed_when: false
+
+    - name: Print Docker status
+      ansible.builtin.debug:
+        var: docker_ps.stdout_lines
+
+- name: Proxy baseline - HAProxy target
+  hosts: proxy
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure HAProxy is installed
+      ansible.builtin.apt:
+        name: haproxy
+        state: present
+        update_cache: true
+
+    - name: Ensure HAProxy service is enabled and running
+      ansible.builtin.systemd:
+        name: haproxy
+        enabled: true
+        state: started
+      ignore_errors: true
+
+    - name: Check HAProxy service status
+      ansible.builtin.command: systemctl is-active haproxy
+      register: haproxy_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print HAProxy status
+      ansible.builtin.debug:
+        var: haproxy_status.stdout
+
+- name: Database baseline - MariaDB target
+  hosts: db
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure MariaDB server is installed
+      ansible.builtin.apt:
+        name: mariadb-server
+        state: present
+        update_cache: true
+
+    - name: Ensure MariaDB service is enabled and running
+      ansible.builtin.systemd:
+        name: mariadb
+        enabled: true
+        state: started
+      ignore_errors: true
+
+    - name: Check MariaDB service status
+      ansible.builtin.command: systemctl is-active mariadb
+      register: mariadb_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print MariaDB status
+      ansible.builtin.debug:
+        var: mariadb_status.stdout
+
+- name: Monitoring baseline - installation state check
+  hosts: monitoring
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Check Prometheus service status
+      ansible.builtin.command: systemctl is-active prometheus
+      register: prometheus_status
+      changed_when: false
+      failed_when: false
+
+    - name: Check Grafana service status
+      ansible.builtin.command: systemctl is-active grafana-server
+      register: grafana_status
+      changed_when: false
+      failed_when: false
+
+    - name: Check Alertmanager service status
+      ansible.builtin.command: systemctl is-active alertmanager
+      register: alertmanager_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print monitoring service status
+      ansible.builtin.debug:
+        msg:
+          prometheus: "{{ prometheus_status.stdout | default('unknown') }}"
+          grafana: "{{ grafana_status.stdout | default('unknown') }}"
+          alertmanager: "{{ alertmanager_status.stdout | default('unknown') }}"
+
+- name: Backup and recovery baseline - Restic state check
+  hosts: backup
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Check Restic version
+      ansible.builtin.command: restic version
+      register: restic_version
+      changed_when: false
+      failed_when: false
+
+    - name: Print Restic version
+      ansible.builtin.debug:
+        var: restic_version.stdout
+
+- name: Final validation summary
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Print validation summary
+      ansible.builtin.debug:
+        msg:
+          - "site.yml baseline completed."
+          - "Next implementation target: provision.yml, wait-ssh.yml, validate.yml."
+          - "Final target flow: Provisioning -> Configuration -> Service Deployment -> Monitoring -> Backup -> Recovery Validation."
+

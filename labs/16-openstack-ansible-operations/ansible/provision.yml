@@ -1,0 +1,108 @@
+---
+# STATUS: CURRENT BASELINE
+# Purpose:
+#   Minimal OpenStack provisioning playbook for Dandelion project.
+#   This playbook creates security group rules, instances, and backup volume baseline.
+#
+# Run:
+#   ansible-playbook provision.yml
+#
+# Required:
+#   ansible-galaxy collection install openstack.cloud
+#   pip3 install openstacksdk
+#   valid clouds.yaml or OpenStack authentication environment
+
+- name: Provision OpenStack infrastructure
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars/provisioning.yml
+
+  tasks:
+    - name: Require restricted SSH management CIDR
+      ansible.builtin.assert:
+        that:
+          - management_cidr | length > 0
+          - management_cidr != '0.0.0.0/0'
+        fail_msg: "Set LAB_MANAGEMENT_CIDR before provisioning."
+
+    - name: Show provisioning baseline
+      ansible.builtin.debug:
+        msg:
+          - "Provisioning OpenStack resources for Dandelion project."
+          - "Cloud: {{ openstack_cloud }}"
+          - "Network: {{ default_network }}"
+          - "Security Group: {{ default_security_group }}"
+          - "Instances: {{ instances | map(attribute='name') | list }}"
+
+    - name: Create security group
+      openstack.cloud.security_group:
+        cloud: "{{ openstack_cloud }}"
+        state: present
+        name: "{{ default_security_group }}"
+        description: Dandelion project security group
+
+    - name: Create security group rules
+      openstack.cloud.security_group_rule:
+        cloud: "{{ openstack_cloud }}"
+        security_group: "{{ default_security_group }}"
+        protocol: "{{ item.protocol }}"
+        port_range_min: "{{ item.port_min }}"
+        port_range_max: "{{ item.port_max }}"
+        remote_ip_prefix: "{{ item.remote_ip_prefix }}"
+      loop: "{{ security_group_rules }}"
+      register: security_group_rule_result
+
+    - name: Create project instances
+      openstack.cloud.server:
+        cloud: "{{ openstack_cloud }}"
+        state: present
+        name: "{{ item.name }}"
+        image: "{{ default_image }}"
+        key_name: "{{ default_key_name }}"
+        flavor: "{{ item.flavor | default(default_flavor) }}"
+        network: "{{ default_network }}"
+        security_groups:
+          - "{{ default_security_group }}"
+        wait: true
+        timeout: 300
+        auto_ip: false
+      loop: "{{ instances }}"
+      register: created_servers
+
+    - name: Create backup volume
+      openstack.cloud.volume:
+        cloud: "{{ openstack_cloud }}"
+        state: present
+        name: "{{ backup_volume.name }}"
+        size: "{{ backup_volume.size }}"
+      register: created_backup_volume
+
+    - name: Attach backup volume to backup node
+      openstack.cloud.server_volume:
+        cloud: "{{ openstack_cloud }}"
+        state: present
+        server: "{{ backup_volume.target_server }}"
+        volume: "{{ backup_volume.name }}"
+      register: attached_backup_volume
+
+    - name: Print created server result
+      ansible.builtin.debug:
+        var: created_servers.results
+
+    - name: Print backup volume result
+      ansible.builtin.debug:
+        var: created_backup_volume
+
+    - name: Print volume attach result
+      ansible.builtin.debug:
+        var: attached_backup_volume
+
+    - name: Provisioning completion message
+      ansible.builtin.debug:
+        msg:
+          - "Provisioning baseline completed."
+          - "Next step: confirm server IP addresses and update inventory.ini or dynamic inventory."
+          - "Then run: ansible-playbook -i inventory.ini wait-ssh.yml"

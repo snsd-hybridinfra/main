@@ -1,0 +1,93 @@
+---
+# STATUS: CURRENT BASELINE
+# Purpose:
+#   OpenStack provisioning variables for Dandelion project.
+#   Replace image, flavor, network, key_name, and cloud values with the real lab environment values before execution.
+
+openstack_cloud: lab-openstack
+management_cidr: "{{ lookup('env', 'LAB_MANAGEMENT_CIDR') | default('', true) }}"
+
+default_image: ubuntu-22.04
+default_key_name: lab-openstack-key
+default_network: private-network
+default_flavor: m1.small
+default_security_group: lab-sg
+
+instances:
+  - name: proxy-node
+    role: proxy
+    flavor: m1.small
+  - name: web-node
+    role: web
+    flavor: m1.small
+  - name: db-node
+    role: db
+    flavor: m1.medium
+  - name: monitoring-node
+    role: monitoring
+    flavor: m1.small
+  - name: backup-node
+    role: backup
+    flavor: m1.small
+
+security_group_rules:
+  - name: ssh
+    protocol: tcp
+    port_min: 22
+    port_max: 22
+    remote_ip_prefix: "{{ management_cidr }}"
+  - name: http
+    protocol: tcp
+    port_min: 80
+    port_max: 80
+    remote_ip_prefix: 0.0.0.0/0
+  - name: https
+    protocol: tcp
+    port_min: 443
+    port_max: 443
+    remote_ip_prefix: 0.0.0.0/0
+  - name: mariadb
+    protocol: tcp
+    port_min: 3306
+    port_max: 3306
+    remote_ip_prefix: 192.168.0.0/16
+  - name: prometheus
+    protocol: tcp
+    port_min: 9090
+    port_max: 9090
+    remote_ip_prefix: 192.168.0.0/16
+  - name: grafana
+    protocol: tcp
+    port_min: 3000
+    port_max: 3000
+    remote_ip_prefix: 192.168.0.0/16
+  - name: alertmanager
+    protocol: tcp
+    port_min: 9093
+    port_max: 9093
+    remote_ip_prefix: 192.168.0.0/16
+  - name: node_exporter
+    protocol: tcp
+    port_min: 9100
+    port_max: 9100
+    remote_ip_prefix: 192.168.0.0/16
+  - name: cadvisor
+    protocol: tcp
+    port_min: 8080
+    port_max: 8080
+    remote_ip_prefix: 192.168.0.0/16
+  - name: mysqld_exporter
+    protocol: tcp
+    port_min: 9104
+    port_max: 9104
+    remote_ip_prefix: 192.168.0.0/16
+  - name: blackbox_exporter
+    protocol: tcp
+    port_min: 9115
+    port_max: 9115
+    remote_ip_prefix: 192.168.0.0/16
+
+backup_volume:
+  name: backup-volume
+  size: 80
+  target_server: backup-node
