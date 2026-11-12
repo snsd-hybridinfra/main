@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-DEV-001",
+  "assets": [
+    {
+      "asset_id": "ZTD-ASSET-MONITORING-VM-01",
+      "asset_type": "MONITORING_VM",
+      "environment": "NON_PRODUCTION_LAB",
+      "owner_role": "LAB_PLATFORM_OPERATOR",
+      "management_state": "MANAGED",
+      "privileged": true,
+      "compliance_profile": "ZTD-PROFILE-LINUX-WORKLOAD",
+      "assessment_requirement": "MANDATORY_LIVE",
+      "collection_method": "FIXED_READ_ONLY_SSH_COMMAND_SET",
+      "source_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+      "data_minimization": "Alias, version summaries, counts, and security states only; no address, username, MAC address, serial number, or package list.",
+      "limitations": ["Single-node monitoring workload only."]
+    },
+    {
+      "asset_id": "ZTD-ASSET-OPENSTACK-AIO-01",
+      "asset_type": "OPENSTACK_HOST",
+      "environment": "NON_PRODUCTION_LAB",
+      "owner_role": "LAB_PLATFORM_OPERATOR",
+      "management_state": "PARTIALLY_MANAGED",
+      "privileged": true,
+      "compliance_profile": "ZTD-PROFILE-OPENSTACK-HOST",
+      "assessment_requirement": "BOUNDED_VALIDATOR_ONLY",
+      "collection_method": "EXISTING_OPENSTACK_RESTRICTED_VALIDATOR",
+      "source_authority": "EXISTING_RESTRICTED_VALIDATOR",
+      "data_minimization": "Existing validator categories and sanitized counters only.",
+      "limitations": ["Package-manager and scanner details are not exposed by the current restricted endpoint."]
+    },
+    {
+      "asset_id": "ZTD-ASSET-EVE-HOST-01",
+      "asset_type": "EVE_HOST",
+      "environment": "NON_PRODUCTION_LAB",
+      "owner_role": "LAB_NETWORK_OPERATOR",
+      "management_state": "PARTIALLY_MANAGED",
+      "privileged": true,
+      "compliance_profile": "ZTD-PROFILE-EVE-HOST",
+      "assessment_requirement": "BOUNDED_VALIDATOR_ONLY",
+      "collection_method": "EXISTING_EVE_RESTRICTED_VALIDATOR",
+      "source_authority": "EXISTING_RESTRICTED_VALIDATOR",
+      "data_minimization": "Existing validator categories and sanitized counters only.",
+      "limitations": ["Package-manager and scanner details are not exposed by the current restricted endpoint."]
+    },
+    {
+      "asset_id": "ZTD-ASSET-WORKLOAD-VM-01",
+      "asset_type": "LINUX_WORKLOAD",
+      "environment": "NON_PRODUCTION_LAB",
+      "owner_role": "LAB_WORKLOAD_OPERATOR",
+      "management_state": "DECLARED_ONLY",
+      "privileged": false,
+      "compliance_profile": "ZTD-PROFILE-LINUX-WORKLOAD",
+      "assessment_requirement": "INVENTORY_ONLY",
+      "collection_method": "OPENSTACK_DECLARATION_ONLY",
+      "source_authority": "DECLARED_CONFIGURATION",
+      "data_minimization": "Stable alias and role only.",
+      "limitations": ["No approved guest operating-system collection path exists."]
+    },
+    {
+      "asset_id": "ZTD-ASSET-NETWORK-DEVICE-01",
+      "asset_type": "NETWORK_DEVICE",
+      "environment": "NON_PRODUCTION_LAB",
+      "owner_role": "LAB_NETWORK_OPERATOR",
+      "management_state": "PARTIALLY_MANAGED",
+      "privileged": true,
+      "compliance_profile": "ZTD-PROFILE-NETWORK-DEVICE",
+      "assessment_requirement": "BOUNDED_VALIDATOR_ONLY",
+      "collection_method": "EXISTING_ROUTER_RESTRICTED_VALIDATOR",
+      "source_authority": "EXISTING_RESTRICTED_VALIDATOR",
+      "data_minimization": "Stable alias, policy results, and sanitized counters only.",
+      "limitations": ["Linux package and endpoint-agent controls are not applicable."]
+    },
+    {
+      "asset_id": "ZTD-ASSET-WINDOWS-OPERATOR-01",
+      "asset_type": "WINDOWS_OPERATOR",
+      "environment": "OPERATOR_CONTROL_PLANE",
+      "owner_role": "REPOSITORY_OPERATOR",
+      "management_state": "OUT_OF_SCOPE",
+      "privileged": true,
+      "compliance_profile": "ZTD-PROFILE-WINDOWS-OPERATOR",
+      "assessment_requirement": "EXCLUDED",
+      "collection_method": "NO_PERSONAL_WORKSTATION_COLLECTION",
+      "source_authority": "EXCLUDED_PHYSICAL_BOUNDARY",
+      "data_minimization": "No personal application, account, hardware, or device fingerprint data is collected.",
+      "limitations": ["Only repository safety checks apply to this control-plane boundary."]
+    }
+  ]
+}

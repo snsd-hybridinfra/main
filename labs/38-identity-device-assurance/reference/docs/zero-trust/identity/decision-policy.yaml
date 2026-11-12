@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-ID-001",
+  "policy_version": "1.0.0",
+  "default_policy": "DENY_BY_DEFAULT_FOR_UNREGISTERED_IDENTITY",
+  "allowed_decisions": [
+    "ALLOW",
+    "DENY",
+    "REVIEW_REQUIRED",
+    "NOT_APPLICABLE"
+  ],
+  "required_decision_fields": [
+    "decision_id",
+    "identity_id",
+    "requested_action",
+    "target_scope",
+    "evaluated_role",
+    "policy_version",
+    "reason_codes",
+    "approval_requirement",
+    "evidence_authority",
+    "timestamp",
+    "limitations"
+  ],
+  "evaluation_order": [
+    "REJECT_UNREGISTERED_IDENTITY",
+    "REJECT_REVOKED_EXPIRED_OR_SUSPENDED_IDENTITY",
+    "REQUIRE_REVIEW_FOR_DUE_OR_PROPOSED_IDENTITY",
+    "REJECT_UNKNOWN_ROLE_OR_ACTION",
+    "REJECT_SEPARATION_OF_DUTIES_CONFLICT",
+    "REJECT_ACTION_OUTSIDE_ROLE",
+    "REQUIRE_APPROVAL_FOR_MUTATING_OR_EMERGENCY_ACTION",
+    "REQUIRE_SEPARATE_PHASE_2_ACCEPTANCE_FOR_FEDERATED_RUNTIME",
+    "ALLOW_BOUNDED_SYNTHETIC_POLICY_CASE"
+  ],
+  "reason_codes": [
+    "REGISTERED_IDENTITY",
+    "ROLE_ACTION_ALLOWED",
+    "UNREGISTERED_IDENTITY",
+    "IDENTITY_REVOKED",
+    "IDENTITY_EXPIRED",
+    "IDENTITY_SUSPENDED",
+    "IDENTITY_REVIEW_DUE",
+    "IDENTITY_NOT_ACTIVE",
+    "INVALID_ROLE",
+    "UNKNOWN_ACTION",
+    "SEPARATION_OF_DUTIES_CONFLICT",
+    "ACTION_NOT_ALLOWED_FOR_ROLE",
+    "APPROVAL_REQUIRED",
+    "APPROVAL_PRESENT",
+    "RUNTIME_NOT_IMPLEMENTED",
+    "OIDC_NOT_DEPLOYED",
+    "MFA_NOT_ENFORCED",
+    "NOT_APPLICABLE_TO_LOCAL_PACKAGE"
+  ],
+  "decision_authority": "CODEX_EXECUTED_LOCAL",
+  "runtime_enforcement": false,
+  "limitations": [
+    "Decisions are deterministic results over synthetic local fixtures.",
+    "ALLOW does not grant live access and REVIEW_REQUIRED does not create an approval.",
+    "No policy enforcement point consumes these records."
+  ]
+}
