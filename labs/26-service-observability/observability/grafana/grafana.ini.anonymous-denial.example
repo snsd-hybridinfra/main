@@ -1,0 +1,14 @@
+; NON-PRODUCTION EXAMPLE - static validation input only.
+; No URL, token, datasource credential, certificate, or live server value is defined.
+
+[auth.anonymous]
+enabled = false
+; Viewer is documented only; it is non-effective because anonymous access is disabled.
+org_role = Viewer
+
+[security]
+; Placeholder keeps initial admin creation behavior explicit for later implementation review.
+disable_initial_admin_creation = false
+admin_user = <grafana-admin-user-placeholder>
+admin_password = <managed-outside-repository>
+

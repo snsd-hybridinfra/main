@@ -1,0 +1,8 @@
+# NON-PRODUCTION EXAMPLE ONLY
+apiVersion: 1
+datasources:
+  - name: Prometheus Placeholder
+    type: prometheus
+    access: proxy
+    url: http://<prometheus-server-placeholder>:9090
+    isDefault: true

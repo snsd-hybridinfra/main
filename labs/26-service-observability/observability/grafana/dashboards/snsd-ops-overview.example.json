@@ -1,0 +1,20 @@
+{
+  "sample_notice": "NON-PRODUCTION EXAMPLE",
+  "title": "SNSD Ops Overview Placeholder",
+  "uid": "<dashboard-uid-placeholder>",
+  "tags": ["placeholder", "non-production"],
+  "templating": { "list": [] },
+  "panels": [
+    { "id": 1, "title": "Prometheus Target Status", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "up" }] },
+    { "id": 2, "title": "Kubernetes Node Readiness", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "kube_node_status_condition" }] },
+    { "id": 3, "title": "Kubernetes Pod Readiness", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "kube_pod_status_ready" }] },
+    { "id": 4, "title": "Nginx Reverse Proxy Health", "type": "timeseries", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "nginx_http_requests_total" }] },
+    { "id": 5, "title": "Load Balancer Health", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "load_balancer_health_placeholder" }] },
+    { "id": 6, "title": "MariaDB Replication IO Thread", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "mysql_slave_status_slave_io_running" }] },
+    { "id": 7, "title": "MariaDB Replication SQL Thread", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "mysql_slave_status_slave_sql_running" }] },
+    { "id": 8, "title": "MariaDB Replication Lag", "type": "timeseries", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "mariadb_replication_lag_seconds" }] },
+    { "id": 9, "title": "Blackbox Probe Success", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "probe_success" }] },
+    { "id": 10, "title": "Service Availability Summary", "type": "stat", "datasource": { "type": "prometheus", "uid": "<prometheus-datasource-placeholder>" }, "targets": [{ "expr": "up" }] }
+  ],
+  "annotations": { "list": [{ "name": "<alert-readiness-placeholder>", "enable": false }] }
+}
