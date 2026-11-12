@@ -1,2 +1,9 @@
 __pycache__/
 *.pyc
+
+/.runtime/
+*.qcow2
+*.vmdk
+*.iso
+*.swi
+*.pcap

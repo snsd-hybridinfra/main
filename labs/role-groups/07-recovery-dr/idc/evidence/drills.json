@@ -1,0 +1,551 @@
+{
+  "scope": "isolated FRRouting VM",
+  "scenarios": [
+    {
+      "scenario": "spine-link",
+      "run": "spine-link",
+      "pass": true,
+      "fault_at": "2026-11-12T08:46:05.839+00:00",
+      "restore_at": "2026-11-12T08:46:18.289+00:00",
+      "during": {
+        "timestamp": "2026-11-12T08:46:17.864+00:00",
+        "fib": [
+          "203.0.113.4"
+        ],
+        "http": true,
+        "ipv4": {
+          "203.0.113.0": "Active",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Active",
+          "192.0.2.2": "Established"
+        },
+        "link": "DOWN",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      },
+      "measurements": {
+        "fib_convergence_s": 0.175,
+        "fib_restore_s": 0.296,
+        "http_state": "no_outage_observed",
+        "http_first_failure_s": null,
+        "http_outage_s": null,
+        "http_restore_s": null,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 50,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_restore": {
+          "sent": 15,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        }
+      },
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:46:05.839+00:00",
+          "event": "fault_issued",
+          "run": "spine-link",
+          "scenario": "spine-link",
+          "elapsed_s": 0.612751
+        },
+        {
+          "timestamp": "2026-11-12T08:46:05.863+00:00",
+          "event": "fault_applied",
+          "run": "spine-link",
+          "scenario": "spine-link",
+          "elapsed_s": 0.63718
+        },
+        {
+          "timestamp": "2026-11-12T08:46:18.289+00:00",
+          "event": "restore_issued",
+          "run": "spine-link",
+          "scenario": "spine-link",
+          "elapsed_s": 13.063047
+        },
+        {
+          "timestamp": "2026-11-12T08:46:18.325+00:00",
+          "event": "restore_applied",
+          "run": "spine-link",
+          "scenario": "spine-link",
+          "elapsed_s": 13.099919
+        },
+        {
+          "timestamp": "2026-11-12T08:46:22.310+00:00",
+          "event": "restore_checked",
+          "run": "spine-link",
+          "scenario": "spine-link",
+          "elapsed_s": 17.08421
+        }
+      ],
+      "precheck_pass": true,
+      "postcheck_pass": true,
+      "frr_log_excerpt": [
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:05.859 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Down Waiting for peer OPEN"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:11.667 BGP: [HZN6M-XRM1G] %NOTIFICATION: sent to neighbor 192.0.2.1 4/0 (Hold Timer Expired) 0 bytes"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:11.667 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 192.0.2.1(idc-validation) in vrf default Down BGP Notification send"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:18.349 BGP: [HZN6M-XRM1G] %NOTIFICATION: sent to neighbor 203.0.113.0 6/7 (Cease/Connection Collision Resolution) 0 bytes"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:18.360 BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Up"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:19.680 BGP: [HZN6M-XRM1G] %NOTIFICATION: sent to neighbor 192.0.2.1 6/7 (Cease/Connection Collision Resolution) 0 bytes"
+        }
+      ]
+    },
+    {
+      "scenario": "bgp-neighbor",
+      "run": "bgp-neighbor",
+      "pass": true,
+      "fault_at": "2026-11-12T08:46:26.343+00:00",
+      "restore_at": "2026-11-12T08:46:38.777+00:00",
+      "during": {
+        "timestamp": "2026-11-12T08:46:38.431+00:00",
+        "fib": [
+          "203.0.113.4"
+        ],
+        "http": true,
+        "ipv4": {
+          "203.0.113.0": "Idle (Admin)",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Active",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      },
+      "measurements": {
+        "fib_convergence_s": 0.183,
+        "fib_restore_s": 2.567,
+        "http_state": "no_outage_observed",
+        "http_first_failure_s": null,
+        "http_outage_s": null,
+        "http_restore_s": null,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 49,
+          "lost": 1,
+          "errors": 0,
+          "loss_pct": 2.04
+        },
+        "icmp_restore": {
+          "sent": 18,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        }
+      },
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:46:26.343+00:00",
+          "event": "fault_issued",
+          "run": "bgp-neighbor",
+          "scenario": "bgp-neighbor",
+          "elapsed_s": 0.611402
+        },
+        {
+          "timestamp": "2026-11-12T08:46:26.429+00:00",
+          "event": "fault_applied",
+          "run": "bgp-neighbor",
+          "scenario": "bgp-neighbor",
+          "elapsed_s": 0.697502
+        },
+        {
+          "timestamp": "2026-11-12T08:46:38.777+00:00",
+          "event": "restore_issued",
+          "run": "bgp-neighbor",
+          "scenario": "bgp-neighbor",
+          "elapsed_s": 13.045719
+        },
+        {
+          "timestamp": "2026-11-12T08:46:38.871+00:00",
+          "event": "restore_applied",
+          "run": "bgp-neighbor",
+          "scenario": "bgp-neighbor",
+          "elapsed_s": 13.139614
+        },
+        {
+          "timestamp": "2026-11-12T08:46:43.311+00:00",
+          "event": "restore_checked",
+          "run": "bgp-neighbor",
+          "scenario": "bgp-neighbor",
+          "elapsed_s": 17.579235
+        }
+      ],
+      "precheck_pass": true,
+      "postcheck_pass": true,
+      "frr_log_excerpt": [
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:26.421 BGP: [H7QV4-WR3ZD] %NOTIFICATION(Hard Reset): sent to neighbor 203.0.113.0 6/2 (Cease/Administrative Shutdown) \"\""
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:26.422 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Down Admin. shutdown"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:31.672 BGP: [HZN6M-XRM1G] %NOTIFICATION: sent to neighbor 192.0.2.1 4/0 (Hold Timer Expired) 0 bytes"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:31.672 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 192.0.2.1(idc-validation) in vrf default Down BGP Notification send"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:39.868 BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Up"
+        },
+        {
+          "node": "leaf1",
+          "message": "2026/11/12 08:46:41.188 BGP: [HZN6M-XRM1G] %NOTIFICATION: sent to neighbor 192.0.2.1 6/7 (Cease/Connection Collision Resolution) 0 bytes"
+        }
+      ]
+    },
+    {
+      "scenario": "ecmp-path",
+      "run": "ecmp-path",
+      "pass": true,
+      "fault_at": "2026-11-12T08:46:47.259+00:00",
+      "restore_at": "2026-11-12T08:46:59.668+00:00",
+      "during": {
+        "timestamp": "2026-11-12T08:46:59.342+00:00",
+        "fib": [
+          "203.0.113.4"
+        ],
+        "http": true,
+        "ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      },
+      "measurements": {
+        "fib_convergence_s": 0.184,
+        "fib_restore_s": 0.342,
+        "http_state": "no_outage_observed",
+        "http_first_failure_s": null,
+        "http_outage_s": null,
+        "http_restore_s": null,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 49,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_restore": {
+          "sent": 7,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        }
+      },
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:46:47.259+00:00",
+          "event": "fault_issued",
+          "run": "ecmp-path",
+          "scenario": "ecmp-path",
+          "elapsed_s": 0.612144
+        },
+        {
+          "timestamp": "2026-11-12T08:46:47.341+00:00",
+          "event": "fault_applied",
+          "run": "ecmp-path",
+          "scenario": "ecmp-path",
+          "elapsed_s": 0.693242
+        },
+        {
+          "timestamp": "2026-11-12T08:46:59.668+00:00",
+          "event": "restore_issued",
+          "run": "ecmp-path",
+          "scenario": "ecmp-path",
+          "elapsed_s": 13.020635
+        },
+        {
+          "timestamp": "2026-11-12T08:46:59.758+00:00",
+          "event": "restore_applied",
+          "run": "ecmp-path",
+          "scenario": "ecmp-path",
+          "elapsed_s": 13.110489
+        },
+        {
+          "timestamp": "2026-11-12T08:47:01.413+00:00",
+          "event": "restore_checked",
+          "run": "ecmp-path",
+          "scenario": "ecmp-path",
+          "elapsed_s": 14.765495
+        }
+      ],
+      "precheck_pass": true,
+      "postcheck_pass": true,
+      "frr_log_excerpt": []
+    },
+    {
+      "scenario": "leaf-device",
+      "run": "leaf-device",
+      "pass": true,
+      "fault_at": "2026-11-12T08:47:05.617+00:00",
+      "restore_at": "2026-11-12T08:47:18.657+00:00",
+      "during": {
+        "timestamp": "2026-11-12T08:47:17.847+00:00",
+        "fib": [],
+        "http": false,
+        "ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "DOWN",
+          "eth2": "DOWN",
+          "eth3": "DOWN"
+        },
+        "leaf2_processes": 0
+      },
+      "measurements": {
+        "fib_convergence_s": 1.165,
+        "fib_restore_s": 6.971,
+        "http_state": "recovered",
+        "http_first_failure_s": 0.676,
+        "http_outage_s": 20.808,
+        "http_restore_s": 8.444,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 52,
+          "lost": 52,
+          "errors": 0,
+          "loss_pct": 100.0
+        },
+        "icmp_restore": {
+          "sent": 42,
+          "lost": 32,
+          "errors": 0,
+          "loss_pct": 76.19
+        }
+      },
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:47:05.617+00:00",
+          "event": "fault_issued",
+          "run": "leaf-device",
+          "scenario": "leaf-device",
+          "elapsed_s": 0.61142
+        },
+        {
+          "timestamp": "2026-11-12T08:47:05.845+00:00",
+          "event": "fault_applied",
+          "run": "leaf-device",
+          "scenario": "leaf-device",
+          "elapsed_s": 0.83928
+        },
+        {
+          "timestamp": "2026-11-12T08:47:18.657+00:00",
+          "event": "restore_issued",
+          "run": "leaf-device",
+          "scenario": "leaf-device",
+          "elapsed_s": 13.651178
+        },
+        {
+          "timestamp": "2026-11-12T08:47:20.203+00:00",
+          "event": "restore_applied",
+          "run": "leaf-device",
+          "scenario": "leaf-device",
+          "elapsed_s": 15.196981
+        },
+        {
+          "timestamp": "2026-11-12T08:47:29.283+00:00",
+          "event": "restore_checked",
+          "run": "leaf-device",
+          "scenario": "leaf-device",
+          "elapsed_s": 24.277254
+        }
+      ],
+      "precheck_pass": true,
+      "postcheck_pass": true,
+      "frr_log_excerpt": [
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:05.636 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 203.0.113.2(idc-validation) in vrf default Down Waiting for peer OPEN"
+        },
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:05.653 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 203.0.113.6(idc-validation) in vrf default Down Waiting for peer OPEN"
+        },
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:05.699 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 192.0.2.1(idc-validation) in vrf default Down Neighbor deleted"
+        },
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:05.701 BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 192.0.2.2(idc-validation) in vrf default Down Neighbor deleted"
+        },
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:24.205 BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.2(idc-validation) in vrf default Up"
+        },
+        {
+          "node": "leaf2",
+          "message": "2026/11/12 08:47:24.208 BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.6(idc-validation) in vrf default Up"
+        }
+      ]
+    },
+    {
+      "scenario": "routing-policy",
+      "run": "routing-policy",
+      "pass": true,
+      "fault_at": "2026-11-12T08:47:34.031+00:00",
+      "restore_at": "2026-11-12T08:47:47.130+00:00",
+      "during": {
+        "timestamp": "2026-11-12T08:47:46.372+00:00",
+        "fib": [],
+        "http": false,
+        "ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      },
+      "measurements": {
+        "fib_convergence_s": 0.421,
+        "fib_restore_s": 0.391,
+        "http_state": "recovered",
+        "http_first_failure_s": 0.488,
+        "http_outage_s": 13.227,
+        "http_restore_s": 0.616,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 52,
+          "lost": 51,
+          "errors": 0,
+          "loss_pct": 98.08
+        },
+        "icmp_restore": {
+          "sent": 8,
+          "lost": 1,
+          "errors": 0,
+          "loss_pct": 12.5
+        }
+      },
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:47:34.031+00:00",
+          "event": "fault_issued",
+          "run": "routing-policy",
+          "scenario": "routing-policy",
+          "elapsed_s": 0.616688
+        },
+        {
+          "timestamp": "2026-11-12T08:47:34.371+00:00",
+          "event": "fault_applied",
+          "run": "routing-policy",
+          "scenario": "routing-policy",
+          "elapsed_s": 0.95616
+        },
+        {
+          "timestamp": "2026-11-12T08:47:47.130+00:00",
+          "event": "restore_issued",
+          "run": "routing-policy",
+          "scenario": "routing-policy",
+          "elapsed_s": 13.715121
+        },
+        {
+          "timestamp": "2026-11-12T08:47:47.397+00:00",
+          "event": "restore_applied",
+          "run": "routing-policy",
+          "scenario": "routing-policy",
+          "elapsed_s": 13.982158
+        },
+        {
+          "timestamp": "2026-11-12T08:47:49.114+00:00",
+          "event": "restore_checked",
+          "run": "routing-policy",
+          "scenario": "routing-policy",
+          "elapsed_s": 15.699141
+        }
+      ],
+      "precheck_pass": true,
+      "postcheck_pass": true,
+      "frr_log_excerpt": []
+    }
+  ]
+}

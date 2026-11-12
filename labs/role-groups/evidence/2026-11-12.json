@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-11-12T08:51:26.885+00:00",
+  "scope": "local role workflows",
+  "catalog": {
+    "labs": 51,
+    "groups": 7,
+    "unique_assignments": 51
+  },
+  "roles": {
+    "01-network-fabric": {
+      "pass": true,
+      "case": "Digital Twin path matrix, IDC rendered config parity and NetBox plan",
+      "configuration_check": "10 FRR, EOS and host configuration files match"
+    },
+    "02-cloud-foundation": {
+      "pass": true,
+      "case": "AWS, Azure and OpenStack fixture CIDR placement",
+      "overlap_rejected": "aws: subnet placement or overlap"
+    },
+    "03-platform-delivery": {
+      "pass": true,
+      "case": "VM resolves, API awaits its dependencies, deployment authorization stays false"
+    },
+    "04-security-trust": {
+      "pass": true,
+      "case": "IAM/STS trust, scoped allow and explicit deny fixtures"
+    },
+    "05-observability-sre": {
+      "pass": true,
+      "case": "Synthetic metric triage and invalid dataset rejection"
+    },
+    "06-change-automation": {
+      "pass": true,
+      "case": "RESTCONF/CLI fixture parity and read-only change policy"
+    },
+    "07-recovery-dr": {
+      "pass": true,
+      "case": "Loopback HTTP/SQLite site outage, missing snapshot denial and restore"
+    }
+  }
+}

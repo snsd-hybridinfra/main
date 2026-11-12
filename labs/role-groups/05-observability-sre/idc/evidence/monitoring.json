@@ -1,0 +1,328 @@
+{
+  "runtime": "Linux VM, pinned image-version binaries",
+  "versions": {
+    "prometheus": "3.5.5",
+    "alertmanager": "0.28.1",
+    "loki": "3.7.0",
+    "alloy": "1.18.0",
+    "grafana": "13.1.0"
+  },
+  "prometheus_series": {
+    "idc_bgp_peer_up": 16,
+    "idc_ecmp_nexthops": 2,
+    "idc_interface_rx_bytes_total": 10,
+    "idc_interface_tx_bytes_total": 10,
+    "idc_link_oper_up": 10,
+    "idc_service_probe_success": 2
+  },
+  "grafana": {
+    "uid": "idc-network-resilience",
+    "panels": 9,
+    "datasources": {
+      "prometheus": "OK",
+      "loki": "OK"
+    }
+  },
+  "loki": {
+    "frr": 90,
+    "operator": 15,
+    "alertmanager": 28
+  },
+  "frr_neighbor_messages": [
+    {
+      "node": "leaf1",
+      "unix_ns": "1794473691241000000",
+      "message": "BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Up"
+    },
+    {
+      "node": "leaf1",
+      "unix_ns": "1794473677710000000",
+      "message": "BGP: [PXVXG-TFNNT] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Down Admin. shutdown"
+    },
+    {
+      "node": "leaf1",
+      "unix_ns": "1794473607641000000",
+      "message": "BGP: [N9HHH-F8H1M] %ADJCHANGE: neighbor 203.0.113.0(idc-validation) in vrf default Up"
+    }
+  ],
+  "operator_events": {
+    "routing-policy": [
+      {
+        "timestamp": "2026-11-12T08:54:12.572+00:00",
+        "event": "fault_issued",
+        "run": "routing-policy",
+        "scenario": "routing-policy",
+        "elapsed_s": 0.614495
+      },
+      {
+        "timestamp": "2026-11-12T08:54:13.284+00:00",
+        "event": "fault_applied",
+        "run": "routing-policy",
+        "scenario": "routing-policy",
+        "elapsed_s": 1.328016
+      },
+      {
+        "timestamp": "2026-11-12T08:54:30.079+00:00",
+        "event": "restore_issued",
+        "run": "routing-policy",
+        "scenario": "routing-policy",
+        "elapsed_s": 18.122856
+      },
+      {
+        "timestamp": "2026-11-12T08:54:30.388+00:00",
+        "event": "restore_applied",
+        "run": "routing-policy",
+        "scenario": "routing-policy",
+        "elapsed_s": 18.432768
+      },
+      {
+        "timestamp": "2026-11-12T08:54:32.524+00:00",
+        "event": "restore_checked",
+        "run": "routing-policy",
+        "scenario": "routing-policy",
+        "elapsed_s": 20.568062
+      }
+    ],
+    "bgp-neighbor": [
+      {
+        "timestamp": "2026-11-12T08:54:37.614+00:00",
+        "event": "fault_issued",
+        "run": "bgp-neighbor",
+        "scenario": "bgp-neighbor",
+        "elapsed_s": 0.617188
+      },
+      {
+        "timestamp": "2026-11-12T08:54:37.721+00:00",
+        "event": "fault_applied",
+        "run": "bgp-neighbor",
+        "scenario": "bgp-neighbor",
+        "elapsed_s": 0.724816
+      },
+      {
+        "timestamp": "2026-11-12T08:54:50.131+00:00",
+        "event": "restore_issued",
+        "run": "bgp-neighbor",
+        "scenario": "bgp-neighbor",
+        "elapsed_s": 13.134124
+      },
+      {
+        "timestamp": "2026-11-12T08:54:50.231+00:00",
+        "event": "restore_applied",
+        "run": "bgp-neighbor",
+        "scenario": "bgp-neighbor",
+        "elapsed_s": 13.234575
+      },
+      {
+        "timestamp": "2026-11-12T08:54:56.335+00:00",
+        "event": "restore_checked",
+        "run": "bgp-neighbor",
+        "scenario": "bgp-neighbor",
+        "elapsed_s": 19.338578
+      }
+    ]
+  },
+  "webhook_alerts": [
+    {
+      "timestamp": "2026-11-12T08:54:18.881+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCECMPReduced",
+      "node": "leaf1",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:18.893+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCServiceUnavailable",
+      "node": null,
+      "interface": null,
+      "peer": null,
+      "path": "l2"
+    },
+    {
+      "timestamp": "2026-11-12T08:54:18.893+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCServiceUnavailable",
+      "node": null,
+      "interface": null,
+      "peer": null,
+      "path": "l3"
+    },
+    {
+      "timestamp": "2026-11-12T08:54:33.896+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCServiceUnavailable",
+      "node": null,
+      "interface": null,
+      "peer": null,
+      "path": "l2"
+    },
+    {
+      "timestamp": "2026-11-12T08:54:33.897+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCServiceUnavailable",
+      "node": null,
+      "interface": null,
+      "peer": null,
+      "path": "l3"
+    },
+    {
+      "timestamp": "2026-11-12T08:54:33.901+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCECMPReduced",
+      "node": "leaf1",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:42.885+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "leaf1",
+      "interface": null,
+      "peer": "203.0.113.0",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:42.886+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "spine1",
+      "interface": null,
+      "peer": "203.0.113.1",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:42.914+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCECMPReduced",
+      "node": "leaf1",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:42.914+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCECMPReduced",
+      "node": "leaf2",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:48.919+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "leaf1",
+      "interface": null,
+      "peer": "192.0.2.1",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:48.919+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "spine1",
+      "interface": null,
+      "peer": "192.0.2.11",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:48.919+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "leaf1",
+      "interface": null,
+      "peer": "203.0.113.0",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:48.919+00:00",
+      "event": "alert",
+      "status": "firing",
+      "alert": "IDCBGPPeerDown",
+      "node": "spine1",
+      "interface": null,
+      "peer": "203.0.113.1",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.957+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCECMPReduced",
+      "node": "leaf1",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.958+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCECMPReduced",
+      "node": "leaf2",
+      "interface": null,
+      "peer": null,
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.971+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCBGPPeerDown",
+      "node": "leaf1",
+      "interface": null,
+      "peer": "192.0.2.1",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.972+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCBGPPeerDown",
+      "node": "spine1",
+      "interface": null,
+      "peer": "192.0.2.11",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.972+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCBGPPeerDown",
+      "node": "leaf1",
+      "interface": null,
+      "peer": "203.0.113.0",
+      "path": null
+    },
+    {
+      "timestamp": "2026-11-12T08:54:54.972+00:00",
+      "event": "alert",
+      "status": "resolved",
+      "alert": "IDCBGPPeerDown",
+      "node": "spine1",
+      "interface": null,
+      "peer": "203.0.113.1",
+      "path": null
+    }
+  ],
+  "frr_management_history_written": true,
+  "namespace_cleanup_verified": true
+}

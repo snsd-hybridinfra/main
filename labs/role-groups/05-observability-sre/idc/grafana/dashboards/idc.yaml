@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: idc-operations
+    type: file
+    folder: IDC Network Operations
+    options:
+      path: /var/lib/grafana/idc-dashboards

@@ -1,0 +1,33 @@
+groups:
+  - name: idc-fabric
+    rules:
+      - alert: IDCLabScrapeFailed
+        expr: up{job="idc-lab"} == 0
+        for: 4s
+        labels: {severity: warning}
+        annotations: {summary: "IDC telemetry scrape failed"}
+      - alert: IDCQueryFailed
+        expr: idc_query_success == 0
+        for: 4s
+        labels: {severity: warning}
+        annotations: {summary: "Query {{ $labels.query }} failed on {{ $labels.node }}"}
+      - alert: IDCInterfaceDown
+        expr: idc_link_oper_up == 0
+        for: 2s
+        labels: {severity: warning}
+        annotations: {summary: "{{ $labels.node }} {{ $labels.interface }} is down"}
+      - alert: IDCBGPPeerDown
+        expr: idc_bgp_peer_up == 0
+        for: 2s
+        labels: {severity: warning}
+        annotations: {summary: "{{ $labels.node }} {{ $labels.afi }} peer {{ $labels.peer }} is down"}
+      - alert: IDCECMPReduced
+        expr: idc_ecmp_nexthops < 2
+        for: 2s
+        labels: {severity: warning}
+        annotations: {summary: "VTEP FIB on {{ $labels.node }} has fewer than two next hops"}
+      - alert: IDCServiceUnavailable
+        expr: idc_service_probe_success == 0
+        for: 2s
+        labels: {severity: critical}
+        annotations: {summary: "Synthetic HTTP path {{ $labels.path }} is down"}

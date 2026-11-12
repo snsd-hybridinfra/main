@@ -1,0 +1,45 @@
+---
+- name: Back up the four synthetic FRR configurations
+  hosts: idc_routers
+  gather_facts: false
+  become: true
+  any_errors_fatal: true
+  vars:
+    snapshot: baseline
+    backup_dir: "{{ playbook_dir }}/../../../../.runtime/idc/backups/{{ snapshot }}"
+    topology: "{{ lookup('ansible.builtin.file', playbook_dir ~ '/../../01-network-fabric/idc/topology.json') | from_json }}"
+  tasks:
+    - name: Verify scope and snapshot name
+      ansible.builtin.assert:
+        that:
+          - inventory_hostname in topology.routers
+          - snapshot is match('^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$')
+
+    - name: Read each scoped VTY running configuration
+      ansible.builtin.command:
+        argv:
+          - vtysh
+          - --vty_socket
+          - "/run/frr/idc-{{ inventory_hostname }}"
+          - --config_dir
+          - "/run/idc-resilience/{{ inventory_hostname }}"
+          - -c
+          - show running-config
+      register: running
+      changed_when: false
+      failed_when: >
+        running.rc != 0 or
+        ('bgp router-id ' ~ topology.routers[inventory_hostname].loopback) not in running.stdout
+
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: "0700"
+      run_once: true
+
+    - name: Store running configuration
+      ansible.builtin.copy:
+        content: "{{ running.stdout ~ '\n' }}"
+        dest: "{{ backup_dir }}/{{ inventory_hostname }}.conf"
+        mode: "0600"

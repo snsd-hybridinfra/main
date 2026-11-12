@@ -1,6 +1,6 @@
 # 프로젝트 연결 지도: Labs First
 
-**기준:** 2026-11-12, `snsd-hybridinfra/main` 검토 브랜치. 이 문서에서 말하는 상태는 새 이관 랩의 현재 상태이며, 원본 프로젝트의 과거 통합 상태가 아닙니다.
+기준 저장소는 `snsd-hybridinfra/main`입니다. 번호 랩의 이관 출처와 역할 랩의 실행 범위를 연결합니다.
 
 ## 현재 운영 원칙
 
@@ -41,16 +41,14 @@ Composed projects (only when ready)
 | 26, 33 | 서비스 관측, EVE-NG 검증 |
 | 27–29 | 신청, 승인·권한, Terraform 프로비저닝 원본 |
 | 30–32 | AI Agent/NAS 계약, GitOps, 보안 기준선 |
-
 | 34–35 | PostgreSQL 스키마·마이그레이션, 사용자·관리자 포털 UI 셸 |
 | 36–37 | Day-2 운영 Runbook과 원본 검증 테스트 |
 | 38–40 | Identity/Device, k3s Ansible, Zero Trust 패키지 계약 |
-
 | 41–43 | Team Dandelion의 Restic·상태 점검·서비스 토폴로지 참고자료 |
 | 44–46 | OpenStack 모니터링 배포, 원격 읽기 전용 검증, Zero Trust 아키텍처 |
 | 47–48 | Team Dandelion의 저장소 품질 검증과 IDP 복구·유지보수 참고자료 |
-
 | 49–51 | Edge WAF/IDP 계약, OpenStack 네트워크, 격리 VM 제공 |
+
 **모두 이관·재검증 대기**입니다. 특히 API·공급망·클러스터 소스는 단독 실행 가능한 완성 랩이라는 의미가 아닙니다.
 
 ## 출처와 보존
@@ -61,7 +59,7 @@ Composed projects (only when ready)
 
 ## 역할군 통합
 
-[7개 역할군](../labs/role-groups/README.md)이 역할·입출력·검증 게이트를 정의합니다. 51개 랩의 코드와 기존 증적은 원위치에 두었고 역할군별 새 통합 테스트는 아직 수행하지 않았습니다. [통합 전환 기준](role-consolidation-plan.md)을 따릅니다.
+[7개 역할 랩](../labs/role-groups/README.md)에서 대표 실습과 51개 번호 랩의 소스·기존 증적을 확인할 수 있습니다. IDC는 동일한 가상 패브릭에 Network Fabric, Observability, Change Automation, Recovery를 연결했습니다. [실행 범위](role-consolidation-plan.md) · [IDC 아키텍처](../labs/role-groups/01-network-fabric/idc/architecture.md)
 
 ## 향후 조합형 프로젝트
 

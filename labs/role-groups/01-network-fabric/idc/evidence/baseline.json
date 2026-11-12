@@ -1,0 +1,111 @@
+{
+  "timestamp": "2026-11-12T08:53:32.389+00:00",
+  "pass": true,
+  "failures": [],
+  "neighbors": {
+    "spine1/ipv4": {
+      "203.0.113.1": "Established",
+      "203.0.113.3": "Established"
+    },
+    "spine1/evpn": {
+      "192.0.2.11": "Established",
+      "192.0.2.12": "Established"
+    },
+    "spine2/ipv4": {
+      "203.0.113.5": "Established",
+      "203.0.113.7": "Established"
+    },
+    "spine2/evpn": {
+      "192.0.2.11": "Established",
+      "192.0.2.12": "Established"
+    },
+    "leaf1/ipv4": {
+      "203.0.113.0": "Established",
+      "203.0.113.4": "Established"
+    },
+    "leaf1/evpn": {
+      "192.0.2.1": "Established",
+      "192.0.2.2": "Established"
+    },
+    "leaf2/ipv4": {
+      "203.0.113.2": "Established",
+      "203.0.113.6": "Established"
+    },
+    "leaf2/evpn": {
+      "192.0.2.1": "Established",
+      "192.0.2.2": "Established"
+    }
+  },
+  "leaves": {
+    "leaf1": {
+      "next_hops": [
+        "203.0.113.0",
+        "203.0.113.4"
+      ],
+      "imet": true,
+      "remote_mac": true,
+      "l3vni": {
+        "vni": 50000,
+        "type": "L3",
+        "tenantVrf": "TENANT",
+        "state": "Up",
+        "l2Vnis": [
+          1010,
+          1020
+        ]
+      },
+      "tenant_routes": [
+        {
+          "dst": "198.51.100.128/26",
+          "nhid": 32,
+          "gateway": "192.0.2.12",
+          "dev": "br4090",
+          "protocol": "bgp",
+          "metric": 20,
+          "flags": [
+            "onlink"
+          ]
+        }
+      ],
+      "underlay_isolated": true
+    },
+    "leaf2": {
+      "next_hops": [
+        "203.0.113.2",
+        "203.0.113.6"
+      ],
+      "imet": true,
+      "remote_mac": true,
+      "l3vni": {
+        "vni": 50000,
+        "type": "L3",
+        "tenantVrf": "TENANT",
+        "state": "Up",
+        "l2Vnis": [
+          1010,
+          1030
+        ]
+      },
+      "tenant_routes": [
+        {
+          "dst": "198.51.100.64/26",
+          "nhid": 30,
+          "gateway": "192.0.2.11",
+          "dev": "br4090",
+          "protocol": "bgp",
+          "metric": 20,
+          "flags": [
+            "onlink"
+          ]
+        }
+      ],
+      "underlay_isolated": true
+    }
+  },
+  "probes": {
+    "l2_mtu": true,
+    "l3_icmp": true,
+    "l2_http": true,
+    "l3_http": true
+  }
+}
