@@ -1,0 +1,23 @@
+# NON-PRODUCTION EXAMPLE - static validation input only.
+# TLS placeholder: <tls-secret-placeholder>; no Secret resource or certificate material is defined.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-service-ingress-placeholder
+  namespace: snsd-example
+  labels:
+    app: sample-service-placeholder
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.example.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sample-service-placeholder
+                port:
+                  number: 80
+
