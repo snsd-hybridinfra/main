@@ -1,0 +1,2 @@
+# NON-PRODUCTION TEMPLATE. Replace only the public-key placeholder outside Git.
+command="/usr/local/sbin/codex-router-dispatcher",no-agent-forwarding,no-port-forwarding,no-pty,no-user-rc,no-X11-forwarding <DEDICATED_ROUTER_VALIDATOR_PUBLIC_KEY>

@@ -1,0 +1,7 @@
+# BOUNDED NON-PRODUCTION TEMPLATE: validate with visudo before installation.
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-readonly ""
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-identity-readonly identity-summary
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-identity-readonly policy-status
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-identity-readonly service-health
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-identity-readonly configuration-metadata
+codex-validator ALL=(root) NOPASSWD: NOSETENV: /usr/local/sbin/validate-eve-identity-readonly validator-version

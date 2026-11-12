@@ -1,0 +1,3 @@
+# NON-PRODUCTION TEMPLATE: install as a root-owned sudoers fragment and run
+# visudo -cf against the installed copy before use.
+codex-validator ALL=(root) NOPASSWD: /usr/local/sbin/validate-openstack-readonly
