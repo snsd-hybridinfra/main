@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: request-api-config
+  namespace: user-service
+data:
+  AUTH_MODE: oidc
+  AUTO_CREATE_SCHEMA: "false"
+  ENABLE_PROVISIONING_STATES: "false"
+  OIDC_ISSUER: https://id.gg-snsdinfra.cloud/realms/iaas
+  OIDC_AUDIENCE: request-api
+  OIDC_JWKS_URL: https://id.gg-snsdinfra.cloud/realms/iaas/protocol/openid-connect/certs
+  MONITORING_ASSISTANT_PROVIDER: disabled
+  MONITORING_ASSISTANT_MODEL: ""
+  MONITORING_ASSISTANT_TOKEN_FILE: /etc/monitoring-assistant/token
+  APPROVAL_API_URL: http://approval-api.control.internal:8001
+  CALLBACK_TIMEOUT_SECONDS: "3"
+  REQUIRED_DB_REVISION: 0006_portal_usage
+  SERVICE_TOKEN_URL: https://keycloak.control.internal/realms/iaas/protocol/openid-connect/token
+  SERVICE_CLIENT_ID: request-api-callback
+  SERVICE_CLIENT_SECRET_FILE: /etc/service-oauth/client-secret
+  SERVICE_SCOPE: service:callback
+  SSL_CERT_FILE: /etc/service-ca/ca.crt

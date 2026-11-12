@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: request-api
+  namespace: user-service
+  labels:
+    app.kubernetes.io/name: request-api
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: request-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: request-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: /metrics
+    spec:
+      serviceAccountName: request-api
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      nodeSelector:
+        zero-trust.snsd.local/workload-class: application
+      tolerations:
+        - key: workload
+          operator: Equal
+          value: app
+          effect: NoSchedule
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: request-api
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: request-api
+      containers:
+        - name: request-api
+          image: registry.example.com/iaas/request-api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: request-api-config
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: request-api-runtime
+                  key: database-url
+          ports:
+            - {name: http, containerPort: 8000, protocol: TCP}
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          resources:
+            requests:
+              cpu: 150m
+              memory: 192Mi
+            limits:
+              cpu: 750m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - {name: runtime, mountPath: /tmp}
+            - {name: service-ca, mountPath: /etc/service-ca, readOnly: true}
+            - {name: service-oauth, mountPath: /etc/service-oauth, readOnly: true}
+            - {name: monitoring-assistant, mountPath: /etc/monitoring-assistant, readOnly: true}
+      volumes:
+        - name: runtime
+          emptyDir:
+            sizeLimit: 64Mi
+        - name: service-ca
+          secret:
+            secretName: service-trust-bundle
+            defaultMode: 0440
+        - name: service-oauth
+          secret:
+            secretName: request-api-oauth
+            defaultMode: 0440
+        - name: monitoring-assistant
+          secret:
+            secretName: monitoring-assistant-provider
+            optional: true
+            defaultMode: 0440

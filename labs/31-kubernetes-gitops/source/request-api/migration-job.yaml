@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: request-db-migration-
+  namespace: user-service
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: request-db-migration
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: migrate
+          image: registry.example.com/iaas/request-api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          command: ["alembic", "-c", "/app/migrations/alembic.ini", "upgrade", "head"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: request-db-migrator
+                  key: database-url
+            - {name: SSL_CERT_FILE, value: /etc/service-ca/ca.crt}
+          resources:
+            requests: {cpu: 100m, memory: 128Mi}
+            limits: {cpu: 500m, memory: 256Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: ["ALL"]}
+          volumeMounts:
+            - {name: runtime, mountPath: /tmp}
+            - {name: service-ca, mountPath: /etc/service-ca, readOnly: true}
+      volumes:
+        - name: runtime
+          emptyDir: {sizeLimit: 32Mi}
+        - name: service-ca
+          secret:
+            secretName: service-trust-bundle
+            defaultMode: 0440
