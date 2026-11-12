@@ -4,7 +4,7 @@
 **Destination:** `snsd-hybridinfra/main` (review branch `chore/portfolio-structure-2026-11`)  
 **State:** `EXTRACTED / AWAITING_REVALIDATION / SOURCES_RETAINED`
 
-The old projects are sources of reusable **labs**, not automatically completed integration projects. Twenty-six source-derived labs are registered: 15 through 40, including twenty-four derived from the former multicloud repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
+The old projects are sources of reusable **labs**, not automatically completed integration projects. Thirty-four source-derived labs are registered: 15 through 48, including twenty-eight derived from the former multicloud repository, five from Team Dandelion, and one from the original private AWS test repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
 
 | Source repository | Source commit SHA | Destination | Source files selected | Not imported |
 |---|---|---|---:|---|
@@ -66,3 +66,10 @@ Build and validate independent labs first. Only after multiple labs have stable 
 | [40 Zero Trust Package Contracts](../labs/40-zero-trust-package-contracts/README.md) | 보안 패키지·검증·롤백 계약 | 38 | reference only / not revalidated |
 
 The original `snsd-multicloud-ops` source had **1,252 tracked file entries** on the pinned `main` commit. This register tracks selected file transfers, not a byte-for-byte migration of the full repository or its history. For remaining unique source trees, see [remaining-source-areas.md](migration/remaining-source-areas.md).
+
+
+## Continued extraction: Labs 41–48 (2026-11-12)
+
+The eight new reference labs and detailed migration decisions are recorded in [new-labs-41-48.md](migration/new-labs-41-48.md). Team Dandelion's full `main` source tree has been indexed separately in [dandelion-source-file-manifest.tsv](migration/dandelion-source-file-manifest.tsv): 161 file paths, SHA and sizes **only, not a reconstructible backup**.
+
+**Risk boundary:** old automatic repair scripts, network installers, systemd timers and CI write workflows are stored as inert references only. The original source code/data, issue/PR/team attribution and binary assets still require a separate verified backup before deletion.

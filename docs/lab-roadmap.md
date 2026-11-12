@@ -2,7 +2,7 @@
 
 각 주제를 선택한 뉴스 원문, 내가 도출한 질문, 실제 증적과 한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 있습니다.
 
-상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 기존 01~14번 실습만 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 새 15~40번은 프로젝트 저장소에서 선별 이관·재구성했지만 **아직 실행 재검증 전**입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
+상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 기존 01~14번 실습만 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 새 15~48번은 프로젝트 저장소에서 선별 이관·재구성했지만 **아직 실행 재검증 전**입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
 
 | 순서 | 주제 | 직접 확인할 질문 | 남길 증적 |
 |---|---|---|---|
@@ -64,5 +64,14 @@
 | 38 | [Identity & Device Assurance](../labs/38-identity-device-assurance/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 주체·역할·기기 신뢰 정책 독립 재검증 |
 | 39 | [k3s Ansible Bootstrap](../labs/39-k3s-ansible-bootstrap/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 단일 노드 k3s Ansible 구성 독립 재검증 |
 | 40 | [Zero Trust Package Contracts](../labs/40-zero-trust-package-contracts/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 보안 패키지·검증·롤백 계약 독립 재검증 |
+
+| 41 | [Dandelion Restic Recovery](../labs/41-dandelion-restic-recovery/README.md) | `Team Dandelion` / `NOT_REVALIDATED` | 다중 서비스 Restic 복구 시나리오 독립 재검증 |
+| 42 | [Dandelion Health Triage](../labs/42-dandelion-health-triage/README.md) | `Team Dandelion` / `NOT_REVALIDATED` | Web·DB·Proxy 상태 점검·자동복구 위험 분리 독립 재검증 |
+| 43 | [Dandelion Service Topology](../labs/43-dandelion-service-topology/README.md) | `Team Dandelion` / `NOT_REVALIDATED` | OpenStack·HAProxy·WordPress·MariaDB 설계 독립 재검증 |
+| 44 | [OpenStack Observability Deployment](../labs/44-openstack-observability-deployment/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | Terraform·Ansible·mTLS 모니터링 배포 소스 독립 재검증 |
+| 45 | [Remote Read-Only Validation](../labs/45-remote-readonly-validation/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | EVE-NG·라우터·OpenStack 검증 및 증적 독립 재검증 |
+| 46 | [Zero Trust Target Architecture](../labs/46-zero-trust-target-architecture/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 아키텍처·수용 기준·의존성 독립 재검증 |
+| 47 | [Repository Quality Gates](../labs/47-repository-quality-gates/README.md) | `Team Dandelion` / `NOT_REVALIDATED` | CI 검증·리뷰·문서 자동화 독립 재검증 |
+| 48 | [Restic Restore & Maintenance](../labs/48-restic-restore-maintenance/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 복원·유지보수·systemd 타이머 독립 재검증 |
 
 **운영 원칙:** 랩을 독립적으로 검증한 후, 목적이 명확해질 때만 여러 랩을 조합해 프로젝트를 만듭니다. 새 프로젝트 완성 상태는 랩별 검증 상태와 별도로 판정합니다. 원본 이관 상세는 [이관 대장](migration-register.md)을 참조합니다.

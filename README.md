@@ -23,9 +23,9 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 등록 랩 | 40 | 기존 로컬 검증 기록 14개 + 선별 이관·재구성 랩 26개 |
+| 등록 랩 | 48 | 기존 로컬 검증 기록 14개 + 선별 이관·재구성 랩 34개 |
 | 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
-| 이관·재검증 대기 | 26 | 소스 추출·정적 보존 단계, 독립 실행·통합 검증 전 |
+| 이관·재검증 대기 | 34 | 소스 추출·정적 보존 단계, 독립 실행·통합 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -106,6 +106,21 @@
 
 **참고:** 원본 저장소의 파일 경로 목록은 완전한 소스 백업이 아니며, 일부 영역은 보안·출처·중복 우려로 미이관 상태입니다. [남은 원본 영역](docs/migration/remaining-source-areas.md)을 확인하세요.
 
+### Additional extracted labs (41–48)
+
+| 랩 | 재사용 범위 | 출처 | 이관 소스 파일 |
+|---|---|---|---:|
+| [41 Dandelion Restic Recovery](labs/41-dandelion-restic-recovery/README.md) | 다중 서비스 Restic 복구 시나리오 | Team Dandelion | 5 |
+| [42 Dandelion Health Triage](labs/42-dandelion-health-triage/README.md) | Web·DB·Proxy 상태 점검·자동복구 위험 분리 | Team Dandelion | 9 |
+| [43 Dandelion Service Topology](labs/43-dandelion-service-topology/README.md) | OpenStack·HAProxy·WordPress·MariaDB 설계 | Team Dandelion | 8 |
+| [44 OpenStack Observability Deployment](labs/44-openstack-observability-deployment/README.md) | Terraform·Ansible·mTLS 모니터링 배포 소스 | snsd-multicloud-ops | 37 |
+| [45 Remote Read-Only Validation](labs/45-remote-readonly-validation/README.md) | EVE-NG·라우터·OpenStack 검증 및 증적 | snsd-multicloud-ops | 33 |
+| [46 Zero Trust Target Architecture](labs/46-zero-trust-target-architecture/README.md) | 아키텍처·수용 기준·의존성 | snsd-multicloud-ops | 23 |
+| [47 Repository Quality Gates](labs/47-repository-quality-gates/README.md) | CI 검증·리뷰·문서 자동화 | Team Dandelion | 8 |
+| [48 Restic Restore & Maintenance](labs/48-restic-restore-maintenance/README.md) | 복원·유지보수·systemd 타이머 | snsd-multicloud-ops | 19 |
+
+새 랩은 모두 `NOT_REVALIDATED`입니다. [41–48 이관 기록](docs/migration/new-labs-41-48.md)과 [Dandelion 원본 파일 목록](docs/migration/dandelion-source-file-manifest.tsv)을 참고하세요. 원본 저장소는 삭제하지 않았습니다.
+
 ## 문서 구조
 
 | 문서 | 역할 |
@@ -124,14 +139,14 @@
 main/
 ├─ docs/           근거·로드맵·출처·실습 이관 대장
 ├─ labs/01-14/     기존에 로컬 검증된 독립 실습
-└─ labs/15-40/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
+└─ labs/15-48/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
 ```
 
 이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.
 
 - 신규 랩은 `MIGRATED / NOT_REVALIDATED`에서 출발합니다.
 - **실습 축적 → 정상·거부·장애·복구 검증 → 공통 인터페이스 정리 → 조합형 프로젝트 설계** 순서를 따릅니다.
-- 삭제 대상 원본 저장소의 Git 히스토리·기여자 기록·고유 문서·미이관 코드는 별도 미러 백업 후 확인해야 합니다. 이관 3개만으로 원본 전체를 보존한 것은 아닙니다.
+- 삭제 대상 원본 저장소의 Git 히스토리·기여자 기록·고유 문서·미이관 코드는 별도 미러 백업 후 확인해야 합니다. 선별 이관만으로 원본 전체를 보존한 것은 아닙니다.
 - [저장소·프로젝트 연결 지도](docs/project-map.md), [이관 대장](docs/migration-register.md)를 기준으로 관리합니다.
 
 ## 기록 원칙
