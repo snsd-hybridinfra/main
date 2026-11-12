@@ -1,0 +1,16 @@
+---
+zt_vis_002_host_bootstrap_authorized: false
+zt_vis_002_restore_checkpoint_ready: false
+zt_vis_002_data_device: ""
+zt_vis_002_data_device_expected_size_gib: 0
+zt_vis_002_root: /opt/snsd-zt-vis-002
+zt_vis_002_proxy_bind_address: ""
+zt_vis_002_proxy_server_name: zt-vis-002-monitoring.lab.internal
+zt_vis_002_proxy_client_ca_source: ""
+zt_vis_002_proxy_server_certificate_source: ""
+zt_vis_002_proxy_server_key_source: ""
+zt_vis_002_offline_package_bundle_source: ""
+zt_vis_002_host_packages:
+  - podman
+  - podman-compose
+  - nginx
