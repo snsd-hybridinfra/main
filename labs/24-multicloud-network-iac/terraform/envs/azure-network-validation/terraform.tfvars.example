@@ -1,0 +1,16 @@
+# NON-PRODUCTION EXAMPLE - copy locally only after a separate implementation review.
+resource_group_name         = "snsd-validation-rg"
+location                    = "koreacentral"
+vnet_name                   = "snsd-validation-vnet"
+vnet_cidr                   = "10.20.0.0/16"
+public_subnet_name          = "public-validation-subnet"
+public_subnet_cidr          = "10.20.1.0/24"
+private_subnet_name         = "private-validation-subnet"
+private_subnet_cidr         = "10.20.11.0/24"
+network_security_group_name = "snsd-validation-nsg"
+route_table_name            = "snsd-validation-route-table"
+
+common_tags = {
+  environment = "validation"
+  managed_by  = "terraform-definition-only"
+}
