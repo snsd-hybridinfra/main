@@ -1,0 +1,13 @@
+*.pgpass
+*.password
+*.pem
+*.key
+.env
+.env.*
+!*.env.example
+output/
+.data/
+.staging/
+.runtime/
+*.dump
+*.log
