@@ -1,0 +1,37 @@
+{
+  "model_id": "ZT-HANDOFF-001",
+  "status": "DESIGN_SPECIFICATION",
+  "validation_status": "NOT_IMPLEMENTED",
+  "operator_steps": [
+    "select target type",
+    "copy approved profile template",
+    "enter environment settings",
+    "prepare secrets outside repository",
+    "perform preflight",
+    "generate plan",
+    "review policy results",
+    "request or record approval",
+    "deploy",
+    "validate",
+    "locate sanitized evidence",
+    "detect drift",
+    "perform approved reconciliation",
+    "perform rollback",
+    "follow recovery procedures"
+  ],
+  "acceptance_checks": [
+    "no hidden manual step",
+    "no author-specific local path",
+    "no hardcoded personal account",
+    "no hardcoded management address",
+    "no shared password",
+    "no repository secret",
+    "no source-code modification required",
+    "deterministic profile validation",
+    "clear failure location",
+    "clear rollback",
+    "clear evidence location",
+    "correct VM and physical-server distinction",
+    "idempotent repeat execution where applicable"
+  ]
+}
