@@ -1,0 +1,89 @@
+{
+  "catalog_version": 4,
+  "provider": "openstack",
+  "authority_state": "LOCAL_CANDIDATE",
+  "deployment_authorized": false,
+  "allowed_duration_hours": [4, 8, 24, 72, 168],
+  "products": {
+    "DEV-OS-VM-S": {
+      "product_version": 1,
+      "module_name": "openstack-dev-vm-small",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:97f4ece588f80e2ea24524e07d5662c5d6d93b78bcccf75bb935fad99ae090f0",
+      "allowed_resource_types": [
+        "openstack_networking_port_v2",
+        "openstack_compute_instance_v2"
+      ],
+      "max_instances": 1,
+      "max_ports": 1
+    },
+    "DEV-OS-VM-M": {
+      "product_version": 1,
+      "module_name": "openstack-dev-vm-medium",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:624d5ff0d50bfc97c733a48b78d2d4e4f3cdf4633898a1b5e52ad4003f28a10a",
+      "allowed_resource_types": [
+        "openstack_networking_port_v2",
+        "openstack_compute_instance_v2"
+      ],
+      "max_instances": 1,
+      "max_ports": 1
+    },
+    "DEV-OS-VM-L": {
+      "product_version": 1,
+      "module_name": "openstack-dev-vm-large",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:b09a0e5e839100bfb09e09469738eca9195418bf2e93153e5f03bcc21db2deae",
+      "allowed_resource_types": [
+        "openstack_networking_port_v2",
+        "openstack_compute_instance_v2"
+      ],
+      "max_instances": 1,
+      "max_ports": 1
+    },
+    "DEV-OS-K3S-S": {
+      "product_version": 1,
+      "module_name": "openstack-dev-k3s-small",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:fa1542d73dd9f6c3e7981bd9fe6d0c18564180055f7890ed98aa6575e3286960",
+      "configuration_digest": "sha256:27ae92895d90f49a118c2fa5db7e897173e15fa002796090765872769c4a6e18",
+      "service_profile": "K3S_SINGLE_NODE",
+      "allowed_resource_types": [
+        "openstack_networking_port_v2",
+        "openstack_compute_instance_v2"
+      ],
+      "max_instances": 1,
+      "max_ports": 1,
+      "grant_requires_bootstrap_validation": true
+    },
+    "DEV-OS-K3S-M": {
+      "product_version": 1,
+      "module_name": "openstack-dev-k3s-medium",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:12867fb8f7fef31fe34d63305b13555fb1ef3fd37ea789daa6e67b9a4ba5b03a",
+      "configuration_digest": "sha256:27ae92895d90f49a118c2fa5db7e897173e15fa002796090765872769c4a6e18",
+      "service_profile": "K3S_SINGLE_NODE",
+      "allowed_resource_types": [
+        "openstack_networking_port_v2",
+        "openstack_compute_instance_v2"
+      ],
+      "max_instances": 1,
+      "max_ports": 1,
+      "grant_requires_bootstrap_validation": true
+    }
+  },
+  "denied_capabilities": [
+    "floating_ip",
+    "public_management_cidr",
+    "create_network",
+    "create_subnet",
+    "create_router",
+    "create_security_group",
+    "create_identity",
+    "arbitrary_hcl",
+    "unapproved_image",
+    "unapproved_flavor",
+    "unvalidated_k3s_bootstrap",
+    "missing_required_metadata"
+  ]
+}
