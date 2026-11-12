@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: approval-api
+  namespace: control-service
+  labels:
+    app.kubernetes.io/name: approval-api
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: approval-api
+  ports:
+    - {name: http, port: 8001, targetPort: http, protocol: TCP}

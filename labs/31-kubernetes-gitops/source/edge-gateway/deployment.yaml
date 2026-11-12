@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-gateway
+  namespace: edge-system
+  labels:
+    app.kubernetes.io/name: edge-gateway
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: edge-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: edge-gateway
+      annotations:
+        prometheus.io/scrape: "false"
+    spec:
+      serviceAccountName: edge-gateway
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      nodeSelector:
+        zero-trust.snsd.local/workload-class: edge
+      tolerations:
+        - key: workload
+          operator: Equal
+          value: edge
+          effect: NoSchedule
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: edge-gateway
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: edge-gateway
+      containers:
+        - name: edge-gateway
+          image: registry.example.com/iaas/edge-gateway@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          imagePullPolicy: IfNotPresent
+          env:
+            - {name: USER_HOST, value: gg-snsdinfra.cloud}
+            - {name: ADMIN_HOST, value: admin.gg-snsdinfra.cloud}
+            - {name: IDENTITY_HOST, value: id.gg-snsdinfra.cloud}
+            - {name: USER_PORTAL_UPSTREAM, value: "http://user-portal.user-service.svc.cluster.local:8080"}
+            - {name: ADMIN_PORTAL_UPSTREAM, value: "http://admin-portal.admin-service.svc.cluster.local:8081"}
+            - {name: REQUEST_API_UPSTREAM, value: "http://request-api.user-service.svc.cluster.local:8000"}
+            - {name: APPROVAL_API_UPSTREAM, value: "http://approval-api.control.internal:8001"}
+            - {name: GRANT_API_UPSTREAM, value: "http://grant-api.control.internal:8002"}
+            - {name: IDENTITY_UPSTREAM, value: "https://keycloak.control.internal:443"}
+            - {name: IDENTITY_TLS_SERVER_NAME, value: keycloak.control.internal}
+          ports:
+            - name: https
+              containerPort: 8443
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: https
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: https
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "nginx -s quit"]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 768Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - {name: runtime, mountPath: /tmp}
+            - {name: edge-tls, mountPath: /etc/edge-tls, readOnly: true}
+            - {name: upstream-ca, mountPath: /etc/edge-ca, readOnly: true}
+      volumes:
+        - name: runtime
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: edge-tls
+          secret:
+            secretName: edge-gateway-tls
+            defaultMode: 0440
+        - name: upstream-ca
+          secret:
+            secretName: edge-upstream-ca
+            defaultMode: 0440
