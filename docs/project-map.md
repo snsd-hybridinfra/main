@@ -1,6 +1,6 @@
 # 프로젝트 연결 지도: Labs First
 
-**기준:** 2026-11-11, `snsd-hybridinfra/main` 검토 브랜치. 이 문서에서 말하는 상태는 새 이관 랩의 현재 상태이며, 원본 프로젝트의 과거 통합 상태가 아닙니다.
+**기준:** 2026-11-12, `snsd-hybridinfra/main` 검토 브랜치. 이 문서에서 말하는 상태는 새 이관 랩의 현재 상태이며, 원본 프로젝트의 과거 통합 상태가 아닙니다.
 
 ## 현재 운영 원칙
 
@@ -16,7 +16,7 @@ Stable inputs, outputs, interfaces and reusable modules
 Composed projects (only when ready)
 ```
 
-기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~20번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
+기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~33번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
 
 ## 활용 가능한 랩군
 
@@ -31,6 +31,18 @@ Composed projects (only when ready)
 | [18 Bounded Observability](../labs/18-sanitized-observability/README.md) | Loki, Alloy, Grafana | 합성 운영 이벤트 수집과 시각화, 재검증 대기 |
 | [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | 합성 메트릭 처리·임계값 점수 | 이상징후 기록·인적 검토, 재검증 대기 |
 | [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | PostgreSQL dump·Restic·무결성 검증 | DR 사전검증 설계, 재검증 대기 |
+
+## 추가 이관 랩 21–33
+
+| 랩군 | 관심사 |
+|---|---|
+| 21–22 | 변경 승인, 증적 유효성, 반복·회귀 검증 |
+| 23–25 | FinOps, 멀티클라우드 IaC, 공급망 |
+| 26, 33 | 서비스 관측, EVE-NG 검증 |
+| 27–29 | 신청, 승인·권한, Terraform 프로비저닝 원본 |
+| 30–32 | AI Agent/NAS 계약, GitOps, 보안 기준선 |
+
+**모두 이관·재검증 대기**입니다. 특히 API·공급망·클러스터 소스는 단독 실행 가능한 완성 랩이라는 의미가 아닙니다.
 
 ## 출처와 보존
 

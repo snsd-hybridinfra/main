@@ -4,7 +4,7 @@
 **Destination:** `snsd-hybridinfra/main` (review branch `chore/portfolio-structure-2026-11`)  
 **State:** `EXTRACTED / AWAITING_REVALIDATION / SOURCES_RETAINED`
 
-The old projects are sources of reusable **labs**, not automatically completed integration projects. Six standalone labs are now registered: 15 through 20, including four derived from the former multicloud repository. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
+The old projects are sources of reusable **labs**, not automatically completed integration projects. Nineteen source-derived labs are registered: 15 through 33, including seventeen derived from the former multicloud repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
 
 | Source repository | Source commit SHA | Destination | Source files selected | Not imported |
 |---|---|---|---:|---|
@@ -29,12 +29,26 @@ The old projects are sources of reusable **labs**, not automatically completed i
 
 Build and validate independent labs first. Only after multiple labs have stable inputs, outputs, tests and evidence should they be assembled into an IDC/network/cloud/resilience project. New integrated projects must have separate acceptance evidence.
 
-## Further extraction candidates (not yet migrated)
+## Additional source extraction (2026-11-12)
 
-- Change-control automation: `tools/automation/` + its policy/catalog dependencies; must isolate from any remote action execution.
-- Evidence freshness/regression: `tools/continuous_verification/` + referenced policies/history; too tightly coupled to copy wholesale.
-- Cost/cleanup guardrails: `cost-governance/`; source is mostly templates and decision matrices, requiring a real evaluator and fixtures.
-- Container supply chain: `applications/internal-iaas-portal/supply-chain/` + tests; not a standalone CI proof and needs careful security review.
-- Portal and lifecycle: `applications/internal-iaas-portal/services/` and tests; extract by service boundary rather than a monolith.
+| Lab | Scope | Validation |
+|---|---|---|
+| [21 Change Automation & Approval](../labs/21-automation-approval/README.md) | 승인·위험 분류 | `NOT_REVALIDATED` |
+| [22 Continuous Verification](../labs/22-continuous-verification/README.md) | 증적 신선도·회귀·반복성 | `NOT_REVALIDATED` |
+| [23 Cost & Cleanup Guardrails](../labs/23-cost-cleanup-guardrails/README.md) | 비용·정리 정책 | `NOT_REVALIDATED` |
+| [24 Multi-cloud Network IaC](../labs/24-multicloud-network-iac/README.md) | AWS·Azure Terraform | `NOT_REVALIDATED` |
+| [25 Container Supply Chain](../labs/25-container-supply-chain/README.md) | 컨테이너 빌드 공급망 | `NOT_REVALIDATED` |
+| [26 Service Observability](../labs/26-service-observability/README.md) | Prometheus·Blackbox·Nginx | `NOT_REVALIDATED` |
+| [27 Self-Service Request API](../labs/27-self-service-request-api/README.md) | 신청 API·카탈로그 | `NOT_REVALIDATED` |
+| [28 Approval & Grant Lifecycle](../labs/28-approval-grant-lifecycle/README.md) | 승인·권한·만료 | `NOT_REVALIDATED` |
+| [29 Terraform Runner & Blueprints](../labs/29-terraform-runner-blueprints/README.md) | OpenStack 상품·실행기 | `NOT_REVALIDATED` |
+| [30 Agent & Data Contracts](../labs/30-agent-data-contracts/README.md) | Agent·NAS·금융 SaaS 경계 | `NOT_REVALIDATED` |
+| [31 Kubernetes GitOps](../labs/31-kubernetes-gitops/README.md) | 63개 매니페스트 | `NOT_REVALIDATED` |
+| [32 Zero Trust Baselines](../labs/32-security-baselines/README.md) | SSH·서비스·데이터 정책 | `NOT_REVALIDATED` |
+| [33 EVE-NG Assurance](../labs/33-eve-network-assurance/README.md) | 라우팅·읽기 전용 검증 | `NOT_REVALIDATED` |
 
-**No repository deletion until all unique material, collaboration history, and GitHub-only metadata are independently backed up and reviewed.**
+### Source inventory is not a complete backup
+
+- [Source file manifest](migration/snsd-multicloud-ops-source-file-manifest.tsv): 1,252 original source `main` branch paths, Git blob SHAs and byte sizes. **No file bytes, history, other branches, issues or PRs are preserved by this manifest itself.**
+- Source packages, Terraform modules, and all 63 original IDP Kubernetes manifests have been selectively extracted. Large amounts of portal UI, migrations, Zero Trust history/evidence, ADRs, runbooks and tooling **remain in the original**.
+- **No original repository deletion/archival** occurred. A full independent Git mirror and GitHub metadata export must be verified before considering deletion.

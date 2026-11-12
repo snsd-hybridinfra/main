@@ -2,7 +2,7 @@
 
 각 주제를 선택한 뉴스 원문, 내가 도출한 질문, 실제 증적과 한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 있습니다.
 
-상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 기존 01~14번 실습만 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 새 15~20번은 프로젝트 저장소에서 선별 이관·재구성했지만 **아직 실행 재검증 전**입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
+상태 표기는 `계획`, `설계`, `로컬 검증`, `런타임 검증`을 사용합니다. 기존 01~14번 실습만 컨테이너·코드·합성 모델 또는 임시 로컬 클러스터에서 **로컬 검증** 상태입니다. 새 15~33번은 프로젝트 저장소에서 선별 이관·재구성했지만 **아직 실행 재검증 전**입니다. 실제 운영 환경에서 검증한 실습은 없습니다.
 
 | 순서 | 주제 | 직접 확인할 질문 | 남길 증적 |
 |---|---|---|---|
@@ -43,5 +43,19 @@
 | 18 | [Bounded Observability](../labs/18-sanitized-observability/README.md) | `snsd-multicloud-ops`에서 선별 이관 / `NOT_REVALIDATED` | 로컬 Compose·권한·로그 수집·지속성 검증 |
 | 19 | [Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | `snsd-multicloud-ops`에서 선별 이관 / `NOT_REVALIDATED` | Python 합성 입력 처리·이상 점수·오류 데이터 검증 |
 | 20 | [PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | `snsd-multicloud-ops`에서 선별 이관 / `NOT_REVALIDATED` | 격리 DB 백업·snapshot·무결성·권한 거부 검증 |
+
+| 21 | [Change Automation & Approval](../labs/21-automation-approval/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 승인·위험 분류 독립 재검증 |
+| 22 | [Continuous Verification](../labs/22-continuous-verification/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 증적 신선도·회귀·반복성 독립 재검증 |
+| 23 | [Cost & Cleanup Guardrails](../labs/23-cost-cleanup-guardrails/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 비용·정리 정책 독립 재검증 |
+| 24 | [Multi-cloud Network IaC](../labs/24-multicloud-network-iac/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | AWS·Azure Terraform 독립 재검증 |
+| 25 | [Container Supply Chain](../labs/25-container-supply-chain/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 컨테이너 빌드 공급망 독립 재검증 |
+| 26 | [Service Observability](../labs/26-service-observability/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | Prometheus·Blackbox·Nginx 독립 재검증 |
+| 27 | [Self-Service Request API](../labs/27-self-service-request-api/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 신청 API·카탈로그 독립 재검증 |
+| 28 | [Approval & Grant Lifecycle](../labs/28-approval-grant-lifecycle/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 승인·권한·만료 독립 재검증 |
+| 29 | [Terraform Runner & Blueprints](../labs/29-terraform-runner-blueprints/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | OpenStack 상품·실행기 독립 재검증 |
+| 30 | [Agent & Data Contracts](../labs/30-agent-data-contracts/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | Agent·NAS·금융 SaaS 경계 독립 재검증 |
+| 31 | [Kubernetes GitOps](../labs/31-kubernetes-gitops/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 63개 매니페스트 독립 재검증 |
+| 32 | [Zero Trust Baselines](../labs/32-security-baselines/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | SSH·서비스·데이터 정책 독립 재검증 |
+| 33 | [EVE-NG Assurance](../labs/33-eve-network-assurance/README.md) | `snsd-multicloud-ops` / `NOT_REVALIDATED` | 라우팅·읽기 전용 검증 독립 재검증 |
 
 **운영 원칙:** 랩을 독립적으로 검증한 후, 목적이 명확해질 때만 여러 랩을 조합해 프로젝트를 만듭니다. 새 프로젝트 완성 상태는 랩별 검증 상태와 별도로 판정합니다. 원본 이관 상세는 [이관 대장](migration-register.md)을 참조합니다.

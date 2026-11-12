@@ -23,9 +23,9 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 등록 랩 | 20 | 기존 로컬 실습 14개 + 선별 이관·재구성한 랩 6개 |
+| 등록 랩 | 33 | 기존 로컬 검증 기록 14개 + 이관·재구성 랩 19개 |
 | 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
-| 이관·재검증 대기 | 6 | 소스 추출과 정적 조정만 수행, 통합·실행 검증 전 |
+| 이관·재검증 대기 | 19 | 소스 추출과 정적 조정 중심; 독립 실행·통합 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -72,6 +72,26 @@
 
 자세한 원본 커밋·제외 범위·삭제 전 보존 조건은 [이관 대장](docs/migration-register.md)을 참고합니다. **이관은 검증이나 원본 전체 보존을 의미하지 않습니다.**
 
+### Additional extracted labs (21–33)
+
+| 랩 | 관심사 | 상태 |
+|---|---|---|
+| [21 Change Automation & Approval](labs/21-automation-approval/README.md) | 승인·위험 분류 | `NOT_REVALIDATED` |
+| [22 Continuous Verification](labs/22-continuous-verification/README.md) | 증적 신선도·회귀·반복성 | `NOT_REVALIDATED` |
+| [23 Cost & Cleanup Guardrails](labs/23-cost-cleanup-guardrails/README.md) | 비용·정리 정책 | `NOT_REVALIDATED` |
+| [24 Multi-cloud Network IaC](labs/24-multicloud-network-iac/README.md) | AWS·Azure Terraform | `NOT_REVALIDATED` |
+| [25 Container Supply Chain](labs/25-container-supply-chain/README.md) | 컨테이너 빌드 공급망 | `NOT_REVALIDATED` |
+| [26 Service Observability](labs/26-service-observability/README.md) | Prometheus·Blackbox·Nginx | `NOT_REVALIDATED` |
+| [27 Self-Service Request API](labs/27-self-service-request-api/README.md) | 신청 API·카탈로그 | `NOT_REVALIDATED` |
+| [28 Approval & Grant Lifecycle](labs/28-approval-grant-lifecycle/README.md) | 승인·권한·만료 | `NOT_REVALIDATED` |
+| [29 Terraform Runner & Blueprints](labs/29-terraform-runner-blueprints/README.md) | OpenStack 상품·실행기 | `NOT_REVALIDATED` |
+| [30 Agent & Data Contracts](labs/30-agent-data-contracts/README.md) | Agent·NAS·금융 SaaS 경계 | `NOT_REVALIDATED` |
+| [31 Kubernetes GitOps](labs/31-kubernetes-gitops/README.md) | 63개 매니페스트 | `NOT_REVALIDATED` |
+| [32 Zero Trust Baselines](labs/32-security-baselines/README.md) | SSH·서비스·데이터 정책 | `NOT_REVALIDATED` |
+| [33 EVE-NG Assurance](labs/33-eve-network-assurance/README.md) | 라우팅·읽기 전용 검증 | `NOT_REVALIDATED` |
+
+[원본 파일 1,252개 목록·SHA](docs/migration/snsd-multicloud-ops-source-file-manifest.tsv)는 **백업이 아닌 인덱스**입니다. 원본에서 미이관 자료가 남아 있으므로 삭제하지 않았습니다.
+
 ## 문서 구조
 
 | 문서 | 역할 |
@@ -90,7 +110,7 @@
 main/
 ├─ docs/           근거·로드맵·출처·실습 이관 대장
 ├─ labs/01-14/     기존에 로컬 검증된 독립 실습
-└─ labs/15-20/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
+└─ labs/15-33/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
 ```
 
 이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.
