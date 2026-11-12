@@ -4,7 +4,7 @@
 **Destination:** `snsd-hybridinfra/main` (review branch `chore/portfolio-structure-2026-11`)  
 **State:** `EXTRACTED / AWAITING_REVALIDATION / SOURCES_RETAINED`
 
-The old projects are sources of reusable **labs**, not automatically completed integration projects. Thirty-four source-derived labs are registered: 15 through 48, including twenty-eight derived from the former multicloud repository, five from Team Dandelion, and one from the original private AWS test repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
+The old projects are sources of reusable **labs**, not automatically completed integration projects. Thirty-seven source-derived labs are registered: 15 through 51, including thirty-one from snsd-multicloud-ops, five from Team Dandelion, and one from the private AWS test repo. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
 
 | Source repository | Source commit SHA | Destination | Source files selected | Not imported |
 |---|---|---|---:|---|
@@ -73,3 +73,14 @@ The original `snsd-multicloud-ops` source had **1,252 tracked file entries** on 
 The eight new reference labs and detailed migration decisions are recorded in [new-labs-41-48.md](migration/new-labs-41-48.md). Team Dandelion's full `main` source tree has been indexed separately in [dandelion-source-file-manifest.tsv](migration/dandelion-source-file-manifest.tsv): 161 file paths, SHA and sizes **only, not a reconstructible backup**.
 
 **Risk boundary:** old automatic repair scripts, network installers, systemd timers and CI write workflows are stored as inert references only. The original source code/data, issue/PR/team attribution and binary assets still require a separate verified backup before deletion.
+
+
+## Final reusable-source extraction and role consolidation (2026-11-12)
+
+- [Lab 49](../labs/49-edge-security-service-contracts/README.md): Edge Nginx/ModSecurity source, original interface contracts and missing IDP frontend/integration/security tests.
+- [Lab 50](../labs/50-openstack-network-validation/README.md): OpenStack Terraform provider/network examples, bastion/DNS and synthetic DB/backup Ansible checks.
+- [Lab 51](../labs/51-disposable-lab-host-provisioning/README.md): Five VM/host/storage provisioner scripts as inert reference files.
+- Source additions to existing Labs 15, 16, 17, 27–29, 41, 43, 46: synthetic AWS output, Dandelion Runbook/backup scripts, K8s policy examples, API Docker build files, full 26/26 Zero Trust architecture files and KISA mapping.
+- 27 cross-cutting ADR documents are [archived](archive/legacy-adr/README.md) apart from lab experiments.
+- 3 full source metadata inventories: [AWS test](migration/test-source-file-manifest.tsv) 41 paths, [Dandelion](migration/dandelion-source-file-manifest.tsv) 161 paths, [multicloud](migration/snsd-multicloud-ops-source-file-manifest.tsv) 1,252 paths. **These are not reconstructible Git backups.**
+- [51 labs belong to 7 mutually exclusive roles](../labs/role-groups/README.md). Their integration contract is [here](lab-interface-contract.md), and the concrete overlap/merge criteria are [here](role-consolidation-plan.md). Role ownership is verified as complete; runtime integration remains untested.

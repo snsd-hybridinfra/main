@@ -2,7 +2,7 @@
 
 **Observed:** 2026-11-12 (KST)  
 **Pinned source:** `snsd-hybridinfra/snsd-multicloud-ops@fd5b2286a68da180fd51ecb247516c960cc7d4ef`  
-**Destination:** `snsd-hybridinfra/main` draft PR #3, 48 lab directories
+**Destination:** `snsd-hybridinfra/main` draft PR #3, 51 numbered lab directories and 7 operational role groups
 
 The source has **1,252 tracked files** on its `main` branch. The extracted labs are **not a byte-identical replacement** and do **not** include Git commit history, other branches/tags, issues, pull requests, releases or external assets.
 
@@ -25,7 +25,7 @@ The copied files are still **reference material**, not independently executable 
 |---|---:|---|
 | `docs/zero-trust/recovery/` | 88 | Large historical recovery and execution analysis; do not misrepresent as current lab evidence |
 | `docs/evidence/zero-trust/` | 52 | Historical evidence and context may include identifiers; requires manual redaction decisions |
-| `docs/zero-trust/target-architecture/` | 26 | 23 files extracted into [Lab 46](../../labs/46-zero-trust-target-architecture/README.md); three large matrix YAMLs remain only in source |
+| `docs/zero-trust/target-architecture/` | 26 | All 26 source files extracted into [Lab 46](../../labs/46-zero-trust-target-architecture/README.md), including three large matrices; no runtime acceptance inferred |
 | `applications/internal-iaas-portal/services/user-portal/eclipse/` | 31 | Source manifest attributes major content to separate `Project-Team-Eclipse` team repo. Review reuse rights and preserve attribution before replication |
 | `docs/platform/` | 20 | Some contracts imported to Labs 27/30, remainder requires dependency analysis |
 | `tools/live-validation/` | 33 | All 33 source files preserved as [Lab 45](../../labs/45-remote-readonly-validation/README.md) references, including dangerous installation/scheduling paths; not runnable |
@@ -45,5 +45,15 @@ The counts in this table are **original subtree totals**, not remaining-file cou
 ## Continued source extraction (41–48)
 
 - Team Dandelion: 41 (Restic scenarios), 42 (health triage), 43 (service network design), 47 (repository quality). Historical team logs, screenshots/presentation and environment-specific materials remain in the source repository. It contains planning references for HAProxy/MariaDB/Prometheus, **not a complete ready-to-run HA deployment**.
-- `snsd-multicloud-ops`: 44 (OpenStack monitoring IaC/Ansible), 45 (all 33 remote validation files as inert source), 46 (23/26 target architecture files), 48 (19 remaining Restic restore/maintenance source files). The three largest architecture matrices remain in source, alongside historical Zero Trust evidence and external-team portal content.
+- `snsd-multicloud-ops`: 44 (OpenStack monitoring IaC/Ansible), 45 (all 33 remote validation files as inert source), 46 (all 26 target architecture files plus KISA control mapping), 48 (19 remaining Restic restore/maintenance source files). Historical Zero Trust evidence and external-team portal content remain in source; all three large matrices are copied into Lab 46.
 - Keep source repositories until full Git-mirror restoration and GitHub-only metadata export have been verified. The manifests alone are not backups.
+
+
+## Last selective extraction: 49–51
+
+- IDP edge WAF and service API contract tests extracted to [Lab 49](../../labs/49-edge-security-service-contracts/README.md); original third-party Eclipse UI remains source-only pending reuse rights.
+- OpenStack provider/network Terraform examples and bounded host/DB checks extracted to [Lab 50](../../labs/50-openstack-network-validation/README.md).
+- Five host-level VM creation or disk modification scripts extracted as **inert** `.reference.txt` samples in [Lab 51](../../labs/51-disposable-lab-host-provisioning/README.md).
+- Original architecture decision docs are in [legacy ADR archive](../archive/legacy-adr/README.md), not a current lab acceptance record.
+- Historical Zero Trust `recovery/` 88-file and `docs/evidence/zero-trust/` 52-file trees, Dandelion's team logs/screenshots/slides and imported third-party Eclipse portal code are intentionally not bulk-published into a personal lab repository. The original repositories remain the authoritative holdings until independently backed up.
+- Role-level integration is [organized](../../labs/role-groups/README.md) but **not runtime verified**, nor is deletion of any original repository authorized.
