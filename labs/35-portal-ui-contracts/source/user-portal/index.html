@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Internal SaaS Developer Portal</title>
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+  <section id="login-view" class="login-view">
+    <div class="login-card">
+      <p class="eyebrow">ZERO TRUST · INTERNAL DEVELOPER PLATFORM</p>
+      <span class="badge">SAAS DEVELOPER PORTAL</span>
+      <h1>SaaS 개발 인프라를<br>안전하게 신청하세요.</h1>
+      <p>사내 개발자가 승인된 OpenStack VM과 k3s PaaS를 셀프서비스로 신청하고 수명주기를 관리합니다.</p>
+      <ul>
+        <li>통합 계정 로그인</li>
+        <li>기간 제한 접근권한</li>
+        <li>신청·승인 이력 추적</li>
+      </ul>
+      <button id="login-button" class="login-button">통합 계정으로 로그인</button>
+      <small id="login-note">운영 로그인은 Pomerium 보호 경로와 Keycloak 인증을 사용합니다.</small>
+    </div>
+  </section>
+
+  <div id="portal-shell" hidden>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">ZERO TRUST · INTERNAL DEVELOPER PLATFORM</p>
+      <h1>SaaS Developer Portal</h1>
+    </div>
+    <div class="identity-box" aria-label="로컬 MVP 사용자 설정">
+      <label>개발 사용자 <input id="dev-user" value="demo-user" autocomplete="off"></label>
+      <small>로컬 MVP 전용이며 브라우저 저장소에 토큰을 저장하지 않습니다.</small>
+      <button id="logout-button" class="header-logout">로그아웃</button>
+    </div>
+  </header>
+
+  <nav class="section-nav" aria-label="사용자 포털 메뉴">
+    <div>
+      <a href="#user-overview">대시보드</a>
+      <a href="#user-catalog">상품</a>
+      <a href="#request-section">신규 신청</a>
+      <a href="#user-requests">신청 현황</a>
+      <a href="#user-resources">할당 인프라</a>
+      <a href="#user-monitoring">모니터링</a>
+    </div>
+  </nav>
+
+  <main>
+    <p id="preview-banner" class="preview-banner" hidden>정적 화면 미리보기입니다. 아래 신청·자원은 <strong>DEMO 샘플 데이터</strong>이며 실제 처리 성공 증거가 아닙니다. 실제 검증은 Compose/API 실행 후 진행하세요.</p>
+    <section class="hero panel" id="user-overview">
+      <div>
+        <span class="badge">핵심 시연 서비스</span>
+        <h2>SaaS 개발 인프라 신청부터 승인까지 한눈에</h2>
+        <p>사내 개발자가 필요한 자원을 신청하고 승인, 임시 Grant와 회수 상태를 실시간으로 확인합니다.</p>
+      </div>
+      <div class="hero-actions"><button class="secondary" id="refresh">상태 새로고침</button><small id="last-refreshed">아직 동기화되지 않음</small></div>
+    </section>
+
+    <section class="flow-panel" aria-label="인프라 신청 승인 흐름">
+      <ol class="flow">
+        <li><span>1</span><strong>상품 선택</strong><small>프로젝트·기간·목적</small></li>
+        <li><span>2</span><strong>신청 접수</strong><small>PENDING</small></li>
+        <li><span>3</span><strong>관리자 승인</strong><small>APPROVED</small></li>
+        <li><span>4</span><strong>자동 생성</strong><small>Terraform Apply</small></li>
+        <li><span>5</span><strong>검증·권한 부여</strong><small>RUNNING → GRANTED</small></li>
+        <li><span>6</span><strong>자원 사용</strong><small>Private Endpoint</small></li>
+        <li><span>7</span><strong>회수·만료</strong><small>Grant 차단 → Destroy</small></li>
+      </ol>
+      <div class="kpis" aria-label="내 신청 요약">
+        <article><strong id="request-total">0</strong><span>전체 신청</span></article>
+        <article><strong id="request-pending">0</strong><span>승인 대기</span></article>
+        <article><strong id="request-granted">0</strong><span>사용 가능</span></article>
+        <article><strong id="request-closed">0</strong><span>종료·거절</span></article>
+      </div>
+    </section>
+
+    <section id="user-catalog">
+      <div class="section-title">
+        <div><p class="eyebrow">CATALOG</p><h2>승인된 조합형 서비스 카탈로그</h2><p>운영자가 고정한 구성요소·네트워크·운영 통제 조합을 선택합니다. 내부 실행 프로파일은 노출되지 않습니다.</p></div>
+      </div>
+      <div id="catalog" class="catalog-grid" role="listbox" aria-label="신청할 상품 선택" aria-live="polite"></div>
+    </section>
+
+    <section class="panel form-panel" id="request-section">
+      <div class="section-title">
+        <div><p class="eyebrow">NEW REQUEST</p><h2>신규 인프라 신청</h2></div>
+      </div>
+      <form id="request-form">
+        <div class="field wide">
+          <label for="product-code">조합형 상품</label>
+          <select id="product-code" name="blueprint_id" required></select>
+        </div>
+        <div id="product-parameters" class="product-parameters"></div>
+        <div class="field"><label for="duration">사용기간</label><select id="duration" name="duration_hours" required><option value="4">4시간</option><option value="8">8시간</option><option value="24" selected>1일</option><option value="72">3일</option><option value="168">7일</option></select></div>
+        <div class="field full"><label for="purpose">사용 목적</label><textarea id="purpose" name="purpose" minlength="5" maxlength="200" required>사내 SaaS 애플리케이션 개발 및 기능 검증</textarea></div>
+        <div class="actions full"><button type="submit">신청 제출</button><span id="form-message" role="status"></span></div>
+      </form>
+    </section>
+
+    <section id="user-requests">
+      <div class="section-title">
+        <div><p class="eyebrow">MY REQUESTS</p><h2>내 신청 현황</h2></div>
+      </div>
+      <div id="requests" class="table-wrap" aria-live="polite"></div>
+    </section>
+
+    <section id="user-resources">
+      <div class="section-title">
+        <div><p class="eyebrow">RESOURCES</p><h2>할당된 인프라</h2><p>로컬은 Mock Runner를 사용합니다. 실제 OpenStack 생성은 승인된 private 프로젝트와 별도 런타임 승인·검증이 모두 갖춰진 경우에만 허용됩니다.</p></div>
+      </div>
+      <div id="resources" class="table-wrap" aria-live="polite"></div>
+    </section>
+
+    <section id="user-monitoring">
+      <div class="section-title">
+        <div><p class="eyebrow">MONITORING</p><h2>내 인프라 모니터링</h2><p>모니터링은 별도 신청 없이 모든 상품에 기본 포함됩니다. 상세 그래프는 Grafana 연동 후 제공됩니다.</p></div>
+      </div>
+      <div id="monitoring" class="table-wrap" aria-live="polite"></div>
+    </section>
+  </main>
+  </div>
+
+  <dialog id="request-detail-dialog" class="detail-dialog">
+    <div class="dialog-heading"><div><p class="eyebrow">REQUEST DETAIL</p><h2>신청 처리 상세</h2></div><button id="request-detail-close" class="dialog-close" aria-label="닫기">×</button></div>
+    <div id="request-detail-content"></div>
+  </dialog>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SaaS Developer Platform Admin</title>
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+  <section id="login-view" class="login-view">
+    <div class="login-card">
+      <p class="eyebrow">CONTROL PLANE · RESTRICTED</p>
+      <span class="login-badge">ADMIN PORTAL</span>
+      <h1>SaaS 개발 인프라 신청을<br>검토하고 승인합니다.</h1>
+      <p>승인 권한이 있는 업무 관리자만 접근할 수 있습니다.</p>
+      <div class="mfa-notice"><strong>관리자 MFA 필수</strong><span>짧은 세션 · 역할 검증 · 모든 결정 감사 기록</span></div>
+      <button id="login-button" class="login-button">관리자 계정으로 로그인</button>
+      <small id="login-note">Pomerium 보호 경로를 거쳐 Keycloak MFA 인증으로 이동합니다.</small>
+    </div>
+  </section>
+
+  <div id="portal-shell" hidden>
+  <header>
+    <div><p class="eyebrow">CONTROL PLANE</p><h1>SaaS Developer Platform Admin</h1><p>사내 개발 자원의 승인·Grant·수명주기를 통제합니다.</p></div>
+    <div class="identity"><label>개발 관리자 <input id="dev-user" value="demo-approver" autocomplete="off"></label><small>운영에서는 Pomerium·Keycloak MFA와 HttpOnly Session을 사용합니다.</small><button id="logout-button" class="header-logout">로그아웃</button></div>
+  </header>
+  <nav class="section-nav" aria-label="관리자 포털 메뉴">
+    <div>
+      <a href="#admin-overview">대시보드</a>
+      <a id="demo-nav" href="#admin-demo" hidden>시연 도구</a>
+      <a href="#admin-requests">승인 대기</a>
+      <a href="#admin-sync">동기화</a>
+      <a href="#admin-provisioning">Terraform 작업</a>
+      <a href="#admin-grants">Grant</a>
+      <a href="#admin-monitoring">모니터링</a>
+    </div>
+  </nav>
+  <main>
+    <p id="preview-banner" class="preview-banner" hidden>정적 화면 미리보기입니다. 아래 신청·동기화·Grant·감사 이력은 <strong>DEMO 샘플 데이터</strong>이며 실제 처리 성공 증거가 아닙니다.</p>
+    <section class="control-hero" id="admin-overview">
+      <div><p class="eyebrow">핵심 시연 서비스</p><h2>사내 SaaS 개발 인프라 승인 통제</h2><p>개발자의 신청을 검토하고 승인·거절한 뒤 Grant 상태를 추적합니다.</p></div>
+      <div class="hero-actions">
+        <button id="refresh">전체 새로고침</button>
+        <button id="reset-demo" class="reset-demo" hidden>데모 데이터 초기화</button>
+        <small id="last-refreshed">아직 동기화되지 않음</small>
+        <small id="reset-message" role="status"></small>
+      </div>
+    </section>
+    <nav class="summary" aria-label="승인 서비스 요약">
+      <article><strong id="pending-count">0</strong><span>승인 대기</span></article>
+      <article><strong id="active-grant-count">0</strong><span>활성 Grant</span></article>
+      <article><strong id="sync-failed-count">0</strong><span>재시도 필요</span></article>
+      <article><strong id="provisioning-active-count">0</strong><span>진행 작업</span></article>
+      <article><strong id="monitoring-state">연동 대기</strong><span>Grafana</span></article>
+      <small>로컬 Mock Runner와 실제 Terraform Runner가 같은 Job/Callback 계약을 사용</small>
+    </nav>
+    <section id="admin-demo" class="demo-center" hidden>
+      <div class="title">
+        <div><p class="eyebrow">LOCAL DEMO CONTROL</p><h2>발표용 시연 도구</h2><p>준비부터 종료까지 아래 순서대로 실행하면 전체 서비스 흐름을 보여줄 수 있습니다.</p></div>
+        <span class="local-only-badge">로컬 전용</span>
+      </div>
+      <ol class="demo-steps">
+        <li><span>1</span><strong>기본 신청 준비</strong><small>개발 VM 대기 신청 1건</small></li>
+        <li><span>2</span><strong>승인 또는 거절</strong><small>결정·Callback 확인</small></li>
+        <li><span>3</span><strong>자동 할당</strong><small>Mock Terraform Apply·검증</small></li>
+        <li><span>4</span><strong>Grant 활성화</strong><small>검증 성공 후에만 발급</small></li>
+        <li><span>5</span><strong>접근 종료</strong><small>Grant 차단 후 Destroy</small></li>
+        <li><span>6</span><strong>초기화</strong><small>다음 발표 상태로 복원</small></li>
+      </ol>
+      <div class="demo-actions">
+        <button id="seed-demo">기본 시나리오 생성</button>
+        <a href="#admin-requests">승인 대기열로 이동</a>
+        <small id="seed-message" role="status">같은 시나리오는 중복 생성되지 않습니다.</small>
+      </div>
+    </section>
+    <section id="admin-requests"><div class="title"><div><p class="eyebrow">APPROVAL QUEUE</p><h2>승인 대기 신청</h2></div></div><div id="requests" class="table-wrap"></div></section>
+    <section id="admin-sync"><div class="title"><div><p class="eyebrow">CONTROL SYNC</p><h2>OpenStack 자원 처리 상태</h2><p>Callback 전달, event version과 재시도 상태를 추적합니다.</p></div></div><div id="sync-status" class="table-wrap"></div></section>
+    <section id="admin-provisioning"><div class="title"><div><p class="eyebrow">TERRAFORM JOBS</p><h2>프로비저닝 작업 상태</h2><p>승인된 모듈의 Apply·검증·Destroy 상태만 노출하며 내부 Job ID와 State Key는 숨깁니다.</p></div></div><div id="provisioning-jobs" class="table-wrap"></div></section>
+    <section id="admin-grants"><div class="title"><div><p class="eyebrow">ACCESS LIFECYCLE</p><h2>Grant 발급·회수·만료 현황</h2></div></div><div id="grants" class="table-wrap"></div></section>
+    <section id="admin-monitoring"><div class="title"><div><p class="eyebrow">OBSERVABILITY</p><h2>운영 모니터링</h2><p>Grafana가 준비되면 승인·Grant·동기화 지표 대시보드를 자동으로 불러옵니다.</p></div></div><div id="monitoring-dashboard" class="monitoring-panel"></div></section>
+  </main>
+  </div>
+  <dialog id="decision-dialog">
+    <form method="dialog" id="decision-form">
+      <h2 id="decision-title">결정</h2>
+      <input type="hidden" id="decision-request-id">
+      <input type="hidden" id="decision-action">
+      <label>사유<textarea id="decision-reason" maxlength="2000"></textarea></label>
+      <div class="dialog-actions"><button value="cancel" class="muted">취소</button><button value="confirm" id="decision-confirm">확인</button></div>
+    </form>
+  </dialog>
+  <dialog id="request-detail-dialog" class="detail-dialog">
+    <div class="dialog-heading"><div><p class="eyebrow">REQUEST REVIEW</p><h2>신청 상세 검토</h2></div><button id="request-detail-close" class="dialog-close" aria-label="닫기">×</button></div>
+    <div id="request-detail-content"></div>
+  </dialog>
+  <script src="assets/app.js" defer></script>
+</body>
+</html>
