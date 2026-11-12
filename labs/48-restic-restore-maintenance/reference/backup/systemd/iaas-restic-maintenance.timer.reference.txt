@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly IaaS Restic repository maintenance
+
+[Timer]
+OnCalendar=Sun *-*-* 05:30:00 Asia/Seoul
+RandomizedDelaySec=15m
+Persistent=true
+Unit=iaas-restic-maintenance.service
+
+[Install]
+WantedBy=timers.target
