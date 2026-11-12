@@ -1,0 +1,165 @@
+---
+- name: Validate immutable local artifact inputs
+  ansible.builtin.assert:
+    that:
+      - k3s_binary_source | length > 0
+      - k3s_binary_sha256 is match('^[0-9a-f]{64}$')
+      - k3s_airgap_images_source | length > 0
+      - k3s_airgap_images_sha256 is match('^[0-9a-f]{64}$')
+    fail_msg: k3s offline artifacts and SHA-256 digests are required
+
+- name: Hash the runner-local k3s binary
+  ansible.builtin.stat:
+    path: "{{ k3s_binary_source }}"
+    checksum_algorithm: sha256
+  delegate_to: localhost
+  become: false
+  register: k3s_binary_artifact
+
+- name: Hash the runner-local k3s air-gap image archive
+  ansible.builtin.stat:
+    path: "{{ k3s_airgap_images_source }}"
+    checksum_algorithm: sha256
+  delegate_to: localhost
+  become: false
+  register: k3s_airgap_artifact
+
+- name: Reject missing or changed k3s artifacts
+  ansible.builtin.assert:
+    that:
+      - k3s_binary_artifact.stat.isreg | default(false)
+      - k3s_binary_artifact.stat.checksum == k3s_binary_sha256
+      - k3s_airgap_artifact.stat.isreg | default(false)
+      - k3s_airgap_artifact.stat.checksum == k3s_airgap_images_sha256
+    fail_msg: k3s artifact digest validation failed
+
+- name: Load required kernel modules at boot
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k3s.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      overlay
+      br_netfilter
+  notify: Restart k3s
+
+- name: Load required kernel modules for the current boot
+  ansible.builtin.command:
+    argv: ["/sbin/modprobe", "{{ item }}"]
+  changed_when: false
+  loop:
+    - overlay
+    - br_netfilter
+
+- name: Configure required kernel network settings
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/90-k3s.conf
+    owner: root
+    group: root
+    mode: "0644"
+    content: |
+      net.ipv4.ip_forward = 1
+      net.bridge.bridge-nf-call-iptables = 1
+      net.bridge.bridge-nf-call-ip6tables = 1
+  register: k3s_sysctl
+
+- name: Apply changed kernel settings
+  ansible.builtin.command: /sbin/sysctl --system
+  when: k3s_sysctl.changed
+  changed_when: true
+
+- name: Create protected k3s directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - {path: /etc/rancher/k3s, mode: "0700"}
+    - {path: /var/lib/rancher/k3s/agent/images, mode: "0700"}
+    - {path: /var/lib/rancher/k3s/server/manifests, mode: "0700"}
+
+- name: Install the verified k3s binary
+  ansible.builtin.copy:
+    src: "{{ k3s_binary_source }}"
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: "0755"
+  notify: Restart k3s
+
+- name: Install the verified air-gap image archive
+  ansible.builtin.copy:
+    src: "{{ k3s_airgap_images_source }}"
+    dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.zst
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart k3s
+
+- name: Install the k3s server configuration
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: /etc/rancher/k3s/config.yaml
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart k3s
+
+- name: Install the development namespace baseline
+  ansible.builtin.template:
+    src: dev-baseline.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/zero-trust-dev-baseline.yaml
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart k3s
+
+- name: Install the managed systemd unit
+  ansible.builtin.template:
+    src: k3s.service.j2
+    dest: /etc/systemd/system/k3s.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart k3s
+
+- name: Enable and start k3s
+  ansible.builtin.systemd_service:
+    name: k3s
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Apply pending service changes before validation
+  ansible.builtin.meta: flush_handlers
+
+- name: Wait for the Kubernetes API readiness endpoint
+  ansible.builtin.command: /usr/local/bin/k3s kubectl get --raw=/readyz
+  changed_when: false
+  register: k3s_ready
+  retries: 30
+  delay: 5
+  until: k3s_ready.rc == 0 and 'ok' in k3s_ready.stdout
+
+- name: Validate required PaaS components and baseline objects
+  ansible.builtin.command:
+    argv: ["/usr/local/bin/k3s", "kubectl", "get", "{{ item.kind }}", "{{ item.name }}", "-n", "{{ item.namespace }}", "-o", "name"]
+  changed_when: false
+  loop:
+    - {kind: deployment, name: coredns, namespace: kube-system}
+    - {kind: deployment, name: metrics-server, namespace: kube-system}
+    - {kind: deployment, name: local-path-provisioner, namespace: kube-system}
+    - {kind: resourcequota, name: dev-quota, namespace: dev}
+    - {kind: limitrange, name: dev-limits, namespace: dev}
+    - {kind: networkpolicy, name: default-deny, namespace: dev}
+
+- name: Verify k3s is enabled and active after configuration
+  ansible.builtin.command: /bin/systemctl is-enabled --quiet k3s
+  changed_when: false
+
+- name: Verify k3s service activity
+  ansible.builtin.command: /bin/systemctl is-active --quiet k3s
+  changed_when: false

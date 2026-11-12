@@ -1,0 +1,19 @@
+---
+- name: Configure and validate the approved single-node k3s PaaS
+  hosts: k3s_nodes
+  become: true
+  gather_facts: false
+  any_errors_fatal: true
+
+  pre_tasks:
+    - name: Wait for the approved private SSH path
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+
+    - name: Verify the target has the required operating-system facilities
+      ansible.builtin.command:
+        argv: ["/bin/sh", "-c", "command -v systemctl && command -v iptables && command -v modprobe && test \"$(uname -m)\" = x86_64 && test -d /etc/systemd/system"]
+      changed_when: false
+
+  roles:
+    - role: k3s_single_node

@@ -1,0 +1,6 @@
+inventory.ini
+hosts.ini
+*.pem
+*.key
+.env
+.retry

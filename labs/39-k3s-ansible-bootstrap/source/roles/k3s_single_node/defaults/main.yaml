@@ -1,0 +1,10 @@
+---
+k3s_binary_source: ""
+k3s_binary_sha256: ""
+k3s_airgap_images_source: ""
+k3s_airgap_images_sha256: ""
+k3s_quota_requests_cpu: "1"
+k3s_quota_requests_memory: "2Gi"
+k3s_quota_limits_cpu: "2"
+k3s_quota_limits_memory: "3Gi"
+k3s_quota_pods: "20"
