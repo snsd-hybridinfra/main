@@ -1,0 +1,312 @@
+{
+  "uid": "idc-network-resilience",
+  "title": "IDC Fabric Operations",
+  "schemaVersion": 39,
+  "timezone": "utc",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "refresh": "5s",
+  "tags": [
+    "idc",
+    "evpn"
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Interface operational state",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "idc_link_oper_up",
+          "legendFormat": "{{node}} {{interface}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "BGP peer state",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "idc_bgp_peer_up",
+          "legendFormat": "{{node}} {{afi}} {{peer}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Receive traffic",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "8 * rate(idc_interface_rx_bytes_total[12s])",
+          "legendFormat": "{{node}} {{interface}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Transmit traffic",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 7,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "8 * rate(idc_interface_tx_bytes_total[12s])",
+          "legendFormat": "{{node}} {{interface}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Remote VTEP FIB",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "idc_ecmp_nexthops",
+          "legendFormat": "{{node}} {{remote}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "HTTP availability",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 14,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "idc_service_probe_success",
+          "legendFormat": "{{path}}"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Device query health",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "idc_query_success",
+          "legendFormat": "{{node}} {{query}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Prometheus scrape health",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 21,
+        "w": 12,
+        "h": 7
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "up{job=\"idc-lab\"}",
+          "legendFormat": "{{job}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "logs",
+      "title": "FRR, incident and alert events",
+      "datasource": {
+        "type": "loki",
+        "uid": "idc-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 24,
+        "h": 10
+      },
+      "options": {
+        "showTime": true,
+        "showLabels": true,
+        "sortOrder": "Descending"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "idc-loki"
+          },
+          "expr": "{job=\"idc-syslog\"}",
+          "queryType": "range"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "netbox": "4.5.0",
+  "first": {
+    "created": 85,
+    "reused": 0,
+    "devices": 6,
+    "interfaces": 24,
+    "cables": 6,
+    "circuits": 1
+  },
+  "repeat": {
+    "created": 0,
+    "reused": 85,
+    "devices": 6,
+    "interfaces": 24,
+    "cables": 6,
+    "circuits": 1
+  }
+}

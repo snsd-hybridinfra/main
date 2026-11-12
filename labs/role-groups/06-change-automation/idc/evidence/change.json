@@ -1,0 +1,85 @@
+{
+  "ansible_core": "2.19.11",
+  "snapshots_match": true,
+  "config_sha256_before_and_after": {
+    "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+    "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948",
+    "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+    "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5"
+  },
+  "cases": {
+    "harmless": {
+      "status": "VERIFIED_ROLLED_BACK",
+      "config_restored": true,
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:49:10.087+00:00",
+          "event": "change_issued",
+          "run": "harmless",
+          "node": "leaf1",
+          "candidate": "harmless"
+        },
+        {
+          "timestamp": "2026-11-12T08:49:12.059+00:00",
+          "event": "change_checked",
+          "run": "harmless",
+          "passed": true
+        },
+        {
+          "timestamp": "2026-11-12T08:49:12.059+00:00",
+          "event": "rollback_issued",
+          "run": "harmless",
+          "node": "leaf1"
+        },
+        {
+          "timestamp": "2026-11-12T08:49:12.965+00:00",
+          "event": "rollback_checked",
+          "run": "harmless",
+          "passed": true
+        }
+      ],
+      "change_diff": "--- before.conf\n+++ applied.conf\n@@ -10,6 +10,7 @@\n no ipv6 forwarding\n service integrated-vtysh-config\n !\n+ip prefix-list FABRIC-LOOPBACKS seq 5 deny 192.0.2.250/32\n ip prefix-list FABRIC-LOOPBACKS seq 10 permit 192.0.2.1/32\n ip prefix-list FABRIC-LOOPBACKS seq 20 permit 192.0.2.2/32\n ip prefix-list FABRIC-LOOPBACKS seq 30 permit 192.0.2.11/32\n",
+      "applied_next_hops": [
+        "203.0.113.0",
+        "203.0.113.4"
+      ],
+      "applied_http": true,
+      "postcheck_pass": true
+    },
+    "break-vtep": {
+      "status": "REJECTED_ROLLED_BACK",
+      "config_restored": true,
+      "events": [
+        {
+          "timestamp": "2026-11-12T08:49:16.360+00:00",
+          "event": "change_issued",
+          "run": "break-vtep",
+          "node": "leaf1",
+          "candidate": "break-vtep"
+        },
+        {
+          "timestamp": "2026-11-12T08:49:25.978+00:00",
+          "event": "change_checked",
+          "run": "break-vtep",
+          "passed": false
+        },
+        {
+          "timestamp": "2026-11-12T08:49:25.982+00:00",
+          "event": "rollback_issued",
+          "run": "break-vtep",
+          "node": "leaf1"
+        },
+        {
+          "timestamp": "2026-11-12T08:49:26.942+00:00",
+          "event": "rollback_checked",
+          "run": "break-vtep",
+          "passed": true
+        }
+      ],
+      "change_diff": "--- before.conf\n+++ applied.conf\n@@ -10,6 +10,7 @@\n no ipv6 forwarding\n service integrated-vtysh-config\n !\n+ip prefix-list FABRIC-LOOPBACKS seq 5 deny 192.0.2.12/32\n ip prefix-list FABRIC-LOOPBACKS seq 10 permit 192.0.2.1/32\n ip prefix-list FABRIC-LOOPBACKS seq 20 permit 192.0.2.2/32\n ip prefix-list FABRIC-LOOPBACKS seq 30 permit 192.0.2.11/32\n",
+      "applied_next_hops": [],
+      "applied_http": false,
+      "postcheck_pass": true
+    }
+  }
+}

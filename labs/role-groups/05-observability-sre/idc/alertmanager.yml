@@ -1,0 +1,12 @@
+route:
+  receiver: local-lab
+  group_by: [alertname]
+  group_wait: 1s
+  group_interval: 3s
+  repeat_interval: 1m
+
+receivers:
+  - name: local-lab
+    webhook_configs:
+      - url: http://127.0.0.1:19808/alerts
+        send_resolved: true

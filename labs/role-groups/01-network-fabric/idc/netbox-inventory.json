@@ -1,0 +1,288 @@
+{
+  "site": "idc-lab",
+  "remote_site": "idc-lab-remote",
+  "vrf": "TENANT",
+  "l3_vni": 50000,
+  "vlans": {
+    "10": {
+      "vni": 1010,
+      "gateway": "198.51.100.1/26"
+    },
+    "20": {
+      "vni": 1020,
+      "gateway": "198.51.100.65/26"
+    },
+    "30": {
+      "vni": 1030,
+      "gateway": "198.51.100.129/26"
+    }
+  },
+  "ports": {
+    "spine1": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": "203.0.113.0/31",
+        "vrf": null
+      },
+      "eth2": {
+        "type": "1000base-t",
+        "address": "203.0.113.2/31",
+        "vrf": null
+      },
+      "lo": {
+        "type": "virtual",
+        "address": "192.0.2.1/32",
+        "vrf": null
+      }
+    },
+    "spine2": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": "203.0.113.4/31",
+        "vrf": null
+      },
+      "eth2": {
+        "type": "1000base-t",
+        "address": "203.0.113.6/31",
+        "vrf": null
+      },
+      "lo": {
+        "type": "virtual",
+        "address": "192.0.2.2/32",
+        "vrf": null
+      }
+    },
+    "leaf1": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": "203.0.113.1/31",
+        "vrf": null
+      },
+      "eth2": {
+        "type": "1000base-t",
+        "address": "203.0.113.5/31",
+        "vrf": null
+      },
+      "eth3": {
+        "type": "1000base-t",
+        "address": null,
+        "vrf": null
+      },
+      "lo": {
+        "type": "virtual",
+        "address": "192.0.2.11/32",
+        "vrf": null
+      },
+      "br10": {
+        "type": "virtual",
+        "address": "198.51.100.1/26",
+        "vrf": "TENANT",
+        "vlan": 10,
+        "role": "anycast"
+      },
+      "br20": {
+        "type": "virtual",
+        "address": "198.51.100.65/26",
+        "vrf": "TENANT",
+        "vlan": 20,
+        "role": null
+      }
+    },
+    "leaf2": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": "203.0.113.3/31",
+        "vrf": null
+      },
+      "eth2": {
+        "type": "1000base-t",
+        "address": "203.0.113.7/31",
+        "vrf": null
+      },
+      "eth3": {
+        "type": "1000base-t",
+        "address": null,
+        "vrf": null
+      },
+      "lo": {
+        "type": "virtual",
+        "address": "192.0.2.12/32",
+        "vrf": null
+      },
+      "br10": {
+        "type": "virtual",
+        "address": "198.51.100.1/26",
+        "vrf": "TENANT",
+        "vlan": 10,
+        "role": "anycast"
+      },
+      "br30": {
+        "type": "virtual",
+        "address": "198.51.100.129/26",
+        "vrf": "TENANT",
+        "vlan": 30,
+        "role": null
+      }
+    },
+    "host1": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": null,
+        "vrf": null
+      },
+      "eth1.10": {
+        "type": "virtual",
+        "address": "198.51.100.11/26",
+        "vrf": "TENANT",
+        "vlan": 10
+      },
+      "eth1.20": {
+        "type": "virtual",
+        "address": "198.51.100.71/26",
+        "vrf": "TENANT",
+        "vlan": 20
+      }
+    },
+    "host2": {
+      "eth1": {
+        "type": "1000base-t",
+        "address": null,
+        "vrf": null
+      },
+      "eth1.10": {
+        "type": "virtual",
+        "address": "198.51.100.12/26",
+        "vrf": "TENANT",
+        "vlan": 10
+      },
+      "eth1.30": {
+        "type": "virtual",
+        "address": "198.51.100.135/26",
+        "vrf": "TENANT",
+        "vlan": 30
+      }
+    }
+  },
+  "prefixes": [
+    {
+      "prefix": "192.0.2.1/32",
+      "vrf": "global"
+    },
+    {
+      "prefix": "192.0.2.11/32",
+      "vrf": "global"
+    },
+    {
+      "prefix": "192.0.2.12/32",
+      "vrf": "global"
+    },
+    {
+      "prefix": "192.0.2.2/32",
+      "vrf": "global"
+    },
+    {
+      "prefix": "198.51.100.0/26",
+      "vrf": "TENANT"
+    },
+    {
+      "prefix": "198.51.100.128/26",
+      "vrf": "TENANT"
+    },
+    {
+      "prefix": "198.51.100.64/26",
+      "vrf": "TENANT"
+    },
+    {
+      "prefix": "203.0.113.0/31",
+      "vrf": "global"
+    },
+    {
+      "prefix": "203.0.113.2/31",
+      "vrf": "global"
+    },
+    {
+      "prefix": "203.0.113.4/31",
+      "vrf": "global"
+    },
+    {
+      "prefix": "203.0.113.6/31",
+      "vrf": "global"
+    }
+  ],
+  "cables": [
+    {
+      "label": "IDC-LAB-U1",
+      "a": [
+        "spine1",
+        "eth1"
+      ],
+      "b": [
+        "leaf1",
+        "eth1"
+      ]
+    },
+    {
+      "label": "IDC-LAB-U2",
+      "a": [
+        "spine1",
+        "eth2"
+      ],
+      "b": [
+        "leaf2",
+        "eth1"
+      ]
+    },
+    {
+      "label": "IDC-LAB-U3",
+      "a": [
+        "spine2",
+        "eth1"
+      ],
+      "b": [
+        "leaf1",
+        "eth2"
+      ]
+    },
+    {
+      "label": "IDC-LAB-U4",
+      "a": [
+        "spine2",
+        "eth2"
+      ],
+      "b": [
+        "leaf2",
+        "eth2"
+      ]
+    },
+    {
+      "label": "IDC-LAB-H1",
+      "a": [
+        "leaf1",
+        "eth3"
+      ],
+      "b": [
+        "host1",
+        "eth1"
+      ]
+    },
+    {
+      "label": "IDC-LAB-H2",
+      "a": [
+        "leaf2",
+        "eth3"
+      ],
+      "b": [
+        "host2",
+        "eth1"
+      ]
+    }
+  ],
+  "circuits": [
+    {
+      "cid": "IDC-LAB-WAN-01",
+      "status": "planned",
+      "a": "idc-lab",
+      "z": "idc-lab-remote"
+    }
+  ]
+}

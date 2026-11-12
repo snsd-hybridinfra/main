@@ -1,47 +1,23 @@
-# Operational Role Consolidation Plan
+# 운영 역할 랩 구성
 
-**Date:** 2026-11-12 KST · **Review branch:** `chore/portfolio-structure-2026-11` · **Base PR:** #3
+메인 저장소는 `snsd-hybridinfra/main`입니다. 51개 번호 랩을 7개 역할에 한 번씩 배정합니다. 역할 페이지는 대표 실습과 관련 소스·기존 증적의 진입점입니다. [역할 랩 인덱스](../labs/role-groups/README.md) · [소유권 목록](../labs/role-groups/manifest.json)
 
-## Decision
-**51 labs are assigned to 7 mutually exclusive primary role groups**. New role pages, a machine-readable manifest and common interface contract become the navigation and future integration layer. The old numbered lab folders remain the single source for code/tests/evidence so that a physical relocation does not break older references or erase original test boundaries.
-
-## Role groups
-
-| Role | Included labs | Count | What becomes shared |
-|---|---|---:|---|
-| [Network Fabric](../labs/role-groups/01-network-fabric/README.md) | 01, 02, 08, 09, 10, 12, 33, 43 | 8 | Topology, routing, failure and failover matrices |
-| [Cloud Foundations](../labs/role-groups/02-cloud-foundation/README.md) | 14, 15, 16, 17, 23, 24, 39, 50, 51 | 9 | Provider-neutral network intent, IaC gates, safe provisioning |
-| [Platform Delivery](../labs/role-groups/03-platform-delivery/README.md) | 25, 27, 28, 29, 30, 31, 34, 35, 49 | 9 | IDP request/approval/grant/provision/deploy lifecycle |
-| [Security and Trust](../labs/role-groups/04-security-trust/README.md) | 04, 06, 07, 11, 13, 32, 38, 40, 46 | 9 | Principal, policy, device/role trust, deny evidence |
-| [Observability SRE](../labs/role-groups/05-observability-sre/README.md) | 18, 19, 26, 42, 44 | 5 | Synthetic metrics/logs/probes, triage, alert quality |
-| [Change Automation](../labs/role-groups/06-change-automation/README.md) | 03, 21, 22, 36, 37, 45, 47 | 7 | Safe read, approval, change plan, evidence freshness/CI |
-| [Recovery DR](../labs/role-groups/07-recovery-dr/README.md) | 05, 20, 41, 48 | 4 | Backup snapshots, isolated restore, measured recovery |
-| **Total** | **51 unique IDs** | **51** | No overlapping primary assignments |
-
-## Duplicate consolidation targets (design, not implemented)
-
-| Related labs | Consolidated functional entry | What remains separate |
+| 역할 | 번호 랩 | 대표 실습 |
 |---|---|---|
-| 01 + 02 + 10 + 33 | Network fabric/digital twin scenario and route/overlay validation | Vendor-specific CLI evidence |
-| 15 + 24 + 50 + 16 | Provider-neutral cloud networking and multi-provider provisioning | AWS/Azure/OpenStack credentials and provider adapters |
-| 17 + 32 + 38 + 40 + 46 | Policy and identity/control traceability | Source standards, bounded validation status |
-| 18 + 26 + 44 + 19 + 42 | Synthetic metrics/logs and incident triage | Host installs, feature flags and access policy |
-| 03 + 21 + 22 + 45 + 37 + 47 | Read-only inventory → approval → bounded change evidence | Remote writes, CI auto-push, production devices |
-| 27 + 28 + 29 + 34 + 35 + 49 + 31 | IDP API → DB → approval → Terraform job → delivery | Separate service processes and privilege boundaries |
-| 05 + 20 + 41 + 48 | Restic snapshot, verification, isolated recovery | Maintenance/prune/forget and database replacement rights |
+| Network Fabric | 01, 02, 08, 09, 10, 12, 33, 43 | 경로 모델과 생성된 FRR/EOS 설정을 대조하고 원장 계획 출력 |
+| Cloud Foundations | 14, 15, 16, 17, 23, 24, 39, 50, 51 | AWS·Azure·OpenStack 주소 계획과 서브넷 충돌 검증 |
+| Platform Delivery | 25, 27, 28, 29, 30, 31, 34, 35, 49 | VM 요청의 카탈로그 해석과 미충족 API 배포 조건 확인 |
+| Security & Trust | 04, 06, 07, 11, 13, 32, 38, 40, 46 | IAM/STS 역할 신뢰, 세션 범위, 명시적 거부 판정 |
+| Observability & SRE | 18, 19, 26, 42, 44 | 합성 메트릭 검증, 점수화, 보고서 생성 |
+| Change Automation | 03, 21, 22, 36, 37, 45, 47 | 인터페이스 읽기 비교와 변경 정책 판정 |
+| Recovery & DR | 05, 20, 41, 48 | 로컬 사이트 장애, 백업 누락 거부와 복구 검증 |
 
-## Migration closure / exclusions
-- Included: original reusable tools, documented example configs, policy matrices, API contract tests, selected schema/migrations, CI patterns and architecture ADR references.
-- Intentionally not bulk-copied: historical Zero Trust execution/recovery evidence (possible identifiers, inconsistent validation authority), imported team Eclipse UI source/assets pending rights review, Dandelion screenshots, slides and team activity records.
-- These exclusions are **not lost**: the original repositories must remain. A file-path/SHA manifest is NOT a full Git backup.
+## IDC 시나리오 연결
 
-## Quality gates
-- [x] Run `python3 tools/check_catalog.py` to validate the numbered lab paths and role README links
-- [x] 51 primary ownership assignments in [manifest.json](../labs/role-groups/manifest.json), unique and covering all lab IDs
-- [x] Seven role READMEs with integration input/output, mandatory failure/denial cases
-- [x] Original numbered labs kept as canonical source files
-- [ ] Group integration workflows implemented and tests re-run
-- [ ] Full secret/license scan, source history mirror, restore verification
-- [ ] PR reviewed and merged, then source repo cleanup separately approved
+IDC의 Network Fabric·Observability & SRE·Change Automation·Recovery & DR가 하나의 FRR 패브릭을 공유합니다. 패브릭 역할이 제공하는 토폴로지와 기준선을 사용해 관제, 변경, 장애 재현을 같은 가상 서비스에서 실행합니다. 장비·주소·회선 원장은 동일한 토폴로지에서 생성합니다. [의존성 및 토폴로지](../labs/role-groups/01-network-fabric/idc/architecture.md) · [IDC 실측 결과](../labs/role-groups/07-recovery-dr/idc/validation.md)
 
-**No lab or role-group integration status is promoted by this organizational change.**
+## 검증
+
+- `python3 tools/check_catalog.py`로 번호 랩 51개와 역할별 링크를 검증합니다.
+- `python3 tools/run_role.py all`로 7개 대표 실습을 실행합니다. 공급자 주소·카탈로그·관제 점수 등 대표 실습에서 사용한 부분의 결과는 [실행 증적](../labs/role-groups/evidence/2026-11-12.json)에서 확인합니다.
+- FRRouting과 운영 도구의 통합 결과는 실제 실행 환경과 함께 IDC 보고서에 기록합니다. 각 번호 랩의 고유 실행 상태와 출처는 해당 README 및 [이관 대장](migration-register.md)에서 확인합니다.
