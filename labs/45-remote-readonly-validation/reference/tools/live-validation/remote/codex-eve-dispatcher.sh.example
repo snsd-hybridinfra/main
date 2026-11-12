@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Root-owned forced-command dispatcher for the bounded non-production EVE-NG
+# validator endpoint. Install only with approved backup and rollback armed.
+readonly PATH='/usr/sbin:/usr/bin:/sbin:/bin'
+export PATH
+umask 077
+
+readonly ACTION_ID='P1-ID-ENF-001-RETRY'
+readonly REQUESTED_COMMAND="${SSH_ORIGINAL_COMMAND:-}"
+
+audit_event() {
+    local operation="$1"
+    local result="$2"
+    local reason="$3"
+    /usr/bin/logger -p authpriv.notice -t snsd-zt-id-validator -- \
+        "action=${ACTION_ID} operation=${operation} result=${result} reason=${reason}" \
+        >/dev/null 2>&1 || true
+}
+
+deny_request() {
+    local reason="$1"
+    local exit_code="$2"
+    audit_event 'REDACTED' 'DENY' "$reason"
+    printf 'DENY_%s\n' "$reason"
+    exit "$exit_code"
+}
+
+case "$REQUESTED_COMMAND" in
+    identity-summary|policy-status|service-health|configuration-metadata|validator-version)
+        audit_event "$REQUESTED_COMMAND" 'ALLOW' 'APPROVED_OPERATION'
+        exec /usr/bin/sudo -n /usr/local/sbin/validate-eve-identity-readonly "$REQUESTED_COMMAND"
+        ;;
+    bounded-validation|validate-host)
+        audit_event 'bounded-validation' 'ALLOW' 'APPROVED_OPERATION'
+        exec /usr/bin/sudo -n /usr/local/sbin/validate-eve-readonly
+        ;;
+    '')
+        deny_request 'EMPTY_COMMAND' 64
+        ;;
+    *'$('*|*'`'*|*';'*|*'&&'*|*'||'*|*'|'*|*'>'*|*'<'*)
+        deny_request 'UNSAFE_SYNTAX' 65
+        ;;
+    *'..'*)
+        deny_request 'PATH_TRAVERSAL' 66
+        ;;
+    [A-Za-z_]*=*)
+        deny_request 'ENVIRONMENT_INJECTION' 67
+        ;;
+    /*)
+        deny_request 'ALTERNATE_EXECUTABLE' 68
+        ;;
+    *[[:space:]]*)
+        deny_request 'UNSUPPORTED_ARGUMENTS' 69
+        ;;
+    *)
+        deny_request 'UNKNOWN_OPERATION' 70
+        ;;
+esac
