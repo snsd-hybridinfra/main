@@ -1,0 +1,211 @@
+---
+- name: Enforce reviewed live gates
+  ansible.builtin.assert:
+    that:
+      - zt_vis_002_deployment_authorized | bool
+      - zt_vis_002_authenticated_proxy_ready | bool
+      - zt_vis_002_proxy_trust_material_ready | bool
+      - zt_vis_002_data_mount_ready | bool
+      - zt_vis_002_restore_checkpoint_ready | bool
+      - zt_vis_002_grafana_admin_password_source | length > 0
+      - zt_vis_002_probe_targets | length > 0
+      - zt_vis_002_image_archive_sources.keys() | sort == ['alloy', 'blackbox', 'grafana', 'loki', 'prometheus']
+      - zt_vis_002_image_archive_sources.values() | reject('equalto', '') | list | length == 5
+    fail_msg: ZT-VIS-002 deployment, proxy trust, storage, restore checkpoint, secret, and probe approvals are required
+
+- name: Enforce digest-pinned component images
+  ansible.builtin.assert:
+    that:
+      - item.value is match('^[a-z0-9][a-z0-9./_-]*@[sS][hH][aA]256:[0-9a-f]{64}$')
+    fail_msg: "{{ item.key }} image must use an immutable repository@sha256 digest"
+  loop: "{{ zt_vis_002_images | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Reject substitution of the reviewed Linux AMD64 image manifests
+  ansible.builtin.assert:
+    that:
+      - zt_vis_002_images.grafana == 'docker.io/grafana/grafana@sha256:6ea068891652aa6a65ca9065c26b89de939653803c836426970305c11fd00534'
+      - zt_vis_002_images.loki == 'docker.io/grafana/loki@sha256:ac6ad1d73bd4c3c38edc93f91ebc217672fa657c20a5dc7b4b0e25baeec7bebb'
+      - zt_vis_002_images.alloy == 'docker.io/grafana/alloy@sha256:eb21f4c0858edffcdd1b385910ddeef26f692fc2c282f61baa724fc09d274a17'
+      - zt_vis_002_images.prometheus == 'docker.io/prom/prometheus@sha256:2024d7bdfc559f6254de22d65e62d799eaa8eb818fe5dbeca212d3f200b70890'
+      - zt_vis_002_images.blackbox == 'docker.io/prom/blackbox-exporter@sha256:43027b43fb785b7c5adc53bd3b5dbc1a258270a2e8aff24f477b45c4e38dac68'
+    fail_msg: Image input differs from the locally reviewed Linux AMD64 manifest set
+
+- name: Verify external Grafana administrator secret
+  ansible.builtin.stat:
+    path: "{{ zt_vis_002_grafana_admin_password_source }}"
+    checksum_algorithm: sha256
+  delegate_to: localhost
+  become: false
+  register: zt_vis_002_grafana_secret
+  no_log: true
+
+- name: Reject missing or unsafe external secret source
+  ansible.builtin.assert:
+    that:
+      - zt_vis_002_grafana_secret.stat.isreg | default(false)
+      - zt_vis_002_grafana_secret.stat.size | int >= 16
+    fail_msg: External Grafana administrator secret is missing or too short
+  no_log: true
+
+- name: Verify approved container runtime
+  ansible.builtin.stat:
+    path: "{{ zt_vis_002_container_runtime }}"
+  register: zt_vis_002_runtime
+
+- name: Reject missing or non-executable container runtime
+  ansible.builtin.assert:
+    that:
+      - zt_vis_002_container_runtime in ['/usr/bin/podman']
+      - zt_vis_002_runtime.stat.exists | default(false)
+      - zt_vis_002_runtime.stat.executable | default(false)
+    fail_msg: The approved Podman runtime is required
+
+- name: Enable root Podman restart-policy restoration
+  ansible.builtin.systemd_service:
+    name: podman-restart.service
+    enabled: true
+
+- name: Verify controller-side OCI image archives
+  ansible.builtin.stat:
+    path: "{{ item.value }}"
+    checksum_algorithm: sha256
+  delegate_to: localhost
+  become: false
+  register: zt_vis_002_image_archives
+  loop: "{{ zt_vis_002_image_archive_sources | dict2items }}"
+
+- name: Reject a missing OCI image archive
+  ansible.builtin.assert:
+    that:
+      - item.stat.isreg | default(false)
+      - item.stat.size | int > 0
+    fail_msg: A reviewed controller-side OCI image archive is missing
+  loop: "{{ zt_vis_002_image_archives.results }}"
+
+- name: Create the bounded target image staging directory
+  ansible.builtin.file:
+    path: /var/cache/snsd-zt-vis-002/images
+    state: directory
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: Stage reviewed OCI image archives
+  ansible.builtin.copy:
+    src: "{{ item.value }}"
+    dest: "/var/cache/snsd-zt-vis-002/images/{{ item.key }}.oci.tar"
+    owner: root
+    group: root
+    mode: '0600'
+  loop: "{{ zt_vis_002_image_archive_sources | dict2items }}"
+  no_log: true
+
+- name: Load reviewed OCI image archives without registry access
+  ansible.builtin.command:
+    argv:
+      - "{{ zt_vis_002_container_runtime }}"
+      - load
+      - --input
+      - "/var/cache/snsd-zt-vis-002/images/{{ item.key }}.oci.tar"
+  loop: "{{ zt_vis_002_image_archive_sources | dict2items }}"
+  changed_when: true
+  no_log: true
+
+- name: Verify every reviewed image digest in local storage
+  ansible.builtin.command:
+    argv:
+      - "{{ zt_vis_002_container_runtime }}"
+      - image
+      - exists
+      - "{{ item.value }}"
+  loop: "{{ zt_vis_002_images | dict2items }}"
+  changed_when: false
+
+- name: Remove target-side OCI image staging
+  ansible.builtin.file:
+    path: /var/cache/snsd-zt-vis-002/images
+    state: absent
+
+- name: Create bounded configuration and data directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - {path: "{{ zt_vis_002_root }}", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/config", mode: "0755"}
+    - {path: "{{ zt_vis_002_root }}/config/grafana", mode: "0755"}
+    - {path: "{{ zt_vis_002_root }}/config/grafana/provisioning", mode: "0755"}
+    - {path: "{{ zt_vis_002_root }}/config/grafana/provisioning/datasources", mode: "0755"}
+    - {path: "{{ zt_vis_002_root }}/secrets", mode: "0700"}
+    - {path: "{{ zt_vis_002_root }}/data", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/data/grafana", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/data/loki", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/data/alloy", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/data/prometheus", mode: "0750"}
+    - {path: "{{ zt_vis_002_root }}/input/sanitized", mode: "0750"}
+
+- name: Install external Grafana administrator secret
+  ansible.builtin.copy:
+    src: "{{ zt_vis_002_grafana_admin_password_source }}"
+    dest: "{{ zt_vis_002_root }}/secrets/grafana_admin_password"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+  notify: Restart ZT-VIS-002 stack
+
+- name: Render reviewed visibility configuration
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ zt_vis_002_root }}/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - {src: compose.yaml.j2, dest: compose.yaml}
+    - {src: loki-config.yaml.j2, dest: config/loki-config.yaml}
+    - {src: alloy-config.alloy.j2, dest: config/alloy-config.alloy}
+    - {src: prometheus.yaml.j2, dest: config/prometheus.yaml}
+    - {src: blackbox.yaml.j2, dest: config/blackbox.yaml}
+    - {src: grafana-datasources.yaml.j2, dest: config/grafana/provisioning/datasources/zero-trust.yaml}
+  notify: Restart ZT-VIS-002 stack
+
+- name: Apply notified stack update only after all gates pass
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure the reviewed package-owned Compose project is running
+  ansible.builtin.command:
+    argv:
+      - "{{ zt_vis_002_container_runtime }}"
+      - compose
+      - --project-name
+      - snsd-zt-vis-002
+      - --file
+      - "{{ zt_vis_002_root }}/compose.yaml"
+      - up
+      - --detach
+      - --remove-orphans
+  changed_when: true
+  no_log: true
+
+- name: Check bounded visibility service state
+  ansible.builtin.command:
+    argv:
+      - "{{ zt_vis_002_container_runtime }}"
+      - compose
+      - --project-name
+      - snsd-zt-vis-002
+      - --file
+      - "{{ zt_vis_002_root }}/compose.yaml"
+      - ps
+  changed_when: false
+  register: zt_vis_002_service_state
+
+- name: Keep runtime output non-authoritative
+  ansible.builtin.debug:
+    msg: ZT-VIS-002 service state was checked; raw output is intentionally not emitted or promoted

@@ -1,0 +1,23 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+local.file_match "sanitized_validation" {
+  path_targets = [{
+    "__path__"    = "/var/log/snsd-validation/*.jsonl",
+    "job"         = "snsd-sanitized-validation",
+    "environment" = "{{ zt_vis_002_environment_label }}",
+  }]
+}
+
+loki.source.file "sanitized_validation" {
+  targets    = local.file_match.sanitized_validation.targets
+  forward_to = [loki.write.local.receiver]
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

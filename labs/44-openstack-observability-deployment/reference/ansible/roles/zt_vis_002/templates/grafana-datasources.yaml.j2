@@ -1,0 +1,18 @@
+apiVersion: 1
+deleteDatasources:
+  - {name: SNSD Loki, orgId: 1}
+  - {name: SNSD Prometheus, orgId: 1}
+datasources:
+  - name: SNSD Loki
+    uid: snsd-loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
+  - name: SNSD Prometheus
+    uid: snsd-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false

@@ -1,0 +1,15 @@
+---
+- name: Restart ZT-VIS-002 stack
+  ansible.builtin.command:
+    argv:
+      - "{{ zt_vis_002_container_runtime }}"
+      - compose
+      - --project-name
+      - snsd-zt-vis-002
+      - --file
+      - "{{ zt_vis_002_root }}/compose.yaml"
+      - up
+      - --detach
+      - --remove-orphans
+  changed_when: true
+  no_log: true
