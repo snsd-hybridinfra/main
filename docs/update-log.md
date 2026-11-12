@@ -193,3 +193,12 @@
 - **학습·실습에 반영:** 바뀐 파일과 이유.
 - **검증 상태:** 계획 / 설계 / 로컬 검증 / 런타임 검증.
 
+
+
+## 2026-11-12 (추가 정리 PR, 미병합)
+
+- `snsd-multicloud-ops`에서 독립 관심사 3개를 추가로 선별했습니다: [18 Observability](../labs/18-sanitized-observability/README.md), [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md), [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md).
+- 18은 제한된 로컬 로그 수집 예제를 사용하며 기존 장비 운영 관제의 검증을 주장하지 않습니다.
+- 19는 학습된 ML 모델이 아니라 합성 데이터 기반 고정 임계값 점수화입니다.
+- 20은 DB restore 전체 자동화가 아니라 백업/무결성 검증 예제이며 위험한 유지보수 삭제 스크립트는 제외했습니다.
+- 저장소에는 총 20개 랩(기존 14개 로컬 검증, 이관 6개 재검증 대기)이 등록됐습니다. 세 원본은 모두 유지 중입니다.

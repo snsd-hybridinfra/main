@@ -23,9 +23,9 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 등록 랩 | 17 | 기존 로컬 실습 14개 + 실험 저장소에서 선별 이관한 랩 3개 |
+| 등록 랩 | 20 | 기존 로컬 실습 14개 + 선별 이관·재구성한 랩 6개 |
 | 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
-| 이관·재검증 대기 | 3 | 소스 추출과 정적 조정만 수행, 통합·실행 검증 전 |
+| 이관·재검증 대기 | 6 | 소스 추출과 정적 조정만 수행, 통합·실행 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -66,6 +66,9 @@
 | [15 AWS 2-Tier VPC with Ansible](labs/15-aws-2tier-vpc/README.md) | private `test` | 보안 조정·중복 제거, 실행 재검증 대기 |
 | [16 OpenStack Ansible Operations](labs/16-openstack-ansible-operations/README.md) | `dandelion-cloud-automation` | 팀 코드 일부 선별, 실행 재검증 대기 |
 | [17 Cloud Network & Access Guardrails](labs/17-cloud-network-access-baselines/README.md) | `snsd-multicloud-ops` | 네트워크·RBAC 일부 선별, 실행 재검증 대기 |
+| [18 Bounded Observability](labs/18-sanitized-observability/README.md) | `snsd-multicloud-ops` | Grafana·Loki·Alloy 로그 수집, 실행 재검증 대기 |
+| [19 Metric Anomaly Scoring](labs/19-metric-anomaly-scoring/README.md) | `snsd-multicloud-ops` | 합성 메트릭 정적 점수화, 실행 재검증 대기 |
+| [20 PostgreSQL Restic Verification](labs/20-postgres-restic-verification/README.md) | `snsd-multicloud-ops` | 제한된 백업·무결성 검증 코드, 실행 재검증 대기 |
 
 자세한 원본 커밋·제외 범위·삭제 전 보존 조건은 [이관 대장](docs/migration-register.md)을 참고합니다. **이관은 검증이나 원본 전체 보존을 의미하지 않습니다.**
 
@@ -87,7 +90,7 @@
 main/
 ├─ docs/           근거·로드맵·출처·실습 이관 대장
 ├─ labs/01-14/     기존에 로컬 검증된 독립 실습
-└─ labs/15-17/     3개 프로젝트 저장소에서 선별 이관한 미검증 랩
+└─ labs/15-20/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
 ```
 
 이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.

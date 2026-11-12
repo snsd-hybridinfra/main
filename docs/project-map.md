@@ -16,7 +16,7 @@ Stable inputs, outputs, interfaces and reusable modules
 Composed projects (only when ready)
 ```
 
-기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~17번은 원본을 선별 이관한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
+기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~20번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
 
 ## 활용 가능한 랩군
 
@@ -28,10 +28,13 @@ Composed projects (only when ready)
 | [15 AWS VPC/Ansible](../labs/15-aws-2tier-vpc/README.md) | AWS 네트워크·Bastion·ALB 자동화 | Public cloud 네트워크 구성, 재검증 대기 |
 | [16 OpenStack/Ansible Ops](../labs/16-openstack-ansible-operations/README.md) | Private IaaS와 운영 체크 | 자동화와 운영 Runbook, 재검증 대기 |
 | [17 Cloud Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md) | OpenStack 네트워크 Terraform, Kubernetes RBAC | 보안 정책·IaC 기반선, 재검증 대기 |
+| [18 Bounded Observability](../labs/18-sanitized-observability/README.md) | Loki, Alloy, Grafana | 합성 운영 이벤트 수집과 시각화, 재검증 대기 |
+| [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | 합성 메트릭 처리·임계값 점수 | 이상징후 기록·인적 검토, 재검증 대기 |
+| [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | PostgreSQL dump·Restic·무결성 검증 | DR 사전검증 설계, 재검증 대기 |
 
 ## 출처와 보존
 
-- 세 원본 저장소의 정확한 HEAD와 선별 파일 수: [이관 대장](migration-register.md)
+- 세 원본 저장소의 정확한 소스 커밋과 선별 파일 수: [이관 대장](migration-register.md)
 - 이관하지 않은 코드·문서·기여 기록은 **저절로 보존된 것이 아닙니다.** 원본 삭제 전 Git 미러·별도 GitHub 메타데이터 백업을 확인합니다.
 - 원본 `snsd-multicloud-ops`의 과거 IDP 구현 상태, 통합 영역과 14개 독립 랩의 연결표는 [역사적 연결표](archive/legacy-project-map-2026-11.md)로 분리했습니다. 과거 설명을 신규 랩의 현재 상태로 오인하면 안 됩니다.
 
