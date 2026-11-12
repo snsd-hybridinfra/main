@@ -1,0 +1,26 @@
+{
+  "package_id": "ZT-NET-001",
+  "package_name": "Restricted Router Validation and Network Policy Evidence",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "RUNTIME_VALIDATED",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "runtime_validation_status": "VALIDATED",
+  "runtime_acceptance_status": "ACCEPTED",
+  "runtime_scope": "BOUNDED_DIRECTIONAL_INTERZONE_ACL",
+  "maturity_status": "UNASSESSED",
+  "current_maturity": "UNASSESSED",
+  "target_maturity": "INITIAL",
+  "evidence_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+  "execution_record": "docs/evidence/zero-trust/zt-net-001-validation.yaml",
+  "capability_mappings": ["ZT-3.1.1", "ZT-3.4.1", "ZT-4.1.1", "ZT-4.3.1", "ZT-7.1", "ZT-8.2"],
+  "required_command": "ssh -o BatchMode=yes snsd-r1-validator validate-routing",
+  "segmentation_classification": "BOUNDED_INTERZONE_ACL_VALIDATED",
+  "blockers": [],
+  "limitations": [
+    "One persistent directional DMZ-to-Kubernetes ACL is runtime validated; this is not complete micro-segmentation.",
+    "Router-only evidence proves only the router-observable portion of the OpenStack provider path.",
+    "Traffic encryption, dynamic policy, SDN enforcement, resilience, enterprise-wide enforcement, and maturity remain outside this package."
+  ]
+}
