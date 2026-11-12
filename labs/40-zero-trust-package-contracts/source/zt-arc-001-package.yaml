@@ -1,0 +1,20 @@
+{
+  "package_id": "ZT-ARC-001",
+  "package_name": "Zero Trust Target Architecture Authority",
+  "package_type": "ARCHITECTURE_GOVERNANCE",
+  "phase": "CROSS_PHASE_GOVERNANCE",
+  "authority_status": "AUTHORITATIVE",
+  "flow_role": "SURROUNDS_PHASE_FLOW",
+  "implementation_status": "DESIGN_ONLY",
+  "validation_status": "LOCAL_VALIDATED",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "runtime_validation_status": "NOT_VALIDATED",
+  "maturity_status": "UNASSESSED",
+  "current_maturity": "UNASSESSED",
+  "validator": "tools/validate_advanced_target_architecture.py",
+  "architecture_root": "docs/zero-trust/target-architecture/",
+  "limitations": [
+    "Architecture is not a sequential Phase 1 package.",
+    "No infrastructure, service, runtime control, or maturity is established by this design."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "package_id": "ZT-AUTO-001",
+  "package_name": "Policy-Based Automation, Orchestration, Approval, Rollback, and Evidence Integration Foundation",
+  "package_type": "BOUNDED_FIXED_HANDLER_AUTOMATION_VALIDATION",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+  "current_maturity": "UNASSESSED",
+  "target_maturity": "INITIAL",
+  "execution_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+  "pilot_scope": "SINGLE_WORKSTATION_FIXED_HANDLER_ORCHESTRATION_OF_APPROVED_LOCAL_AND_RESTRICTED_READ_ONLY_VALIDATORS",
+  "integration_records": 11,
+  "action_records": 13,
+  "workflow_records": 6,
+  "current_catalog_action_records": 20,
+  "current_catalog_workflow_records": 7,
+  "successor_extension": "ZT-CV-001_ADDS_SEVEN_FIXED_ASSESSMENT_ACTIONS_AND_ONE_MANUAL_WORKFLOW_WITHOUT_CHANGING_THE_ACCEPTED_13_ACTION_6_WORKFLOW_RUNTIME_BASELINE",
+  "live_workflows_attempted": 1,
+  "live_workflows_partial": 1,
+  "live_workflows_failed": 0,
+  "executable_risk_boundary": "R0_THROUGH_R3_ONLY",
+  "arbitrary_execution": false,
+  "shell_interpolation": false,
+  "caller_controlled_ssh_target": false,
+  "mutation_action_executable": false,
+  "automatic_authoritative_update": false,
+  "external_notification_integration": false,
+  "autonomous_remediation": false,
+  "complete_soar": false,
+  "capability_assessment": [
+    {"id":"ZT-8.1","canonical_name_ko":"정책 통합","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"DEFAULT_DENY_POLICY_AND_CENTRAL_FIXED_ACTION_EVALUATION","implementation_status":"IMPLEMENTED","validation_status":"PARTIALLY_VALIDATED","evidence_requirement":"Design, configuration, sanitized runtime decision and rollback boundary","target_maturity":"INITIAL","limitation":"Repository-lab orchestration only; no enterprise policy plane or capability maturity assignment."},
+    {"id":"ZT-8.2","canonical_name_ko":"중요 프로세스 자동화","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"DETERMINISTIC_CROSS_DOMAIN_READ_ONLY_VALIDATION","implementation_status":"IMPLEMENTED","validation_status":"PARTIALLY_VALIDATED","evidence_requirement":"Fixed plan, execution record, failure propagation, timeout and lock evidence","target_maturity":"INITIAL","limitation":"One partial live cycle; no repeatability, scheduling, mutation, or continuous operation."},
+    {"id":"ZT-8.3","canonical_name_ko":"인공지능","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"NONE","implementation_status":"GAP_IDENTIFIED","validation_status":"GAP_IDENTIFIED","evidence_requirement":"Capability-specific governed AI implementation and validation","target_maturity":"UNASSESSED","limitation":"No AI analysis, judgment, or remediation is implemented."},
+    {"id":"ZT-8.4","canonical_name_ko":"보안 통합, 자동화 및 대응","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"PROHIBITED_RESPONSE_REFERENCE_ONLY","implementation_status":"GAP_IDENTIFIED","validation_status":"GAP_IDENTIFIED","evidence_requirement":"Approved live integration and response with rollback evidence","target_maturity":"UNASSESSED","limitation":"Response actions are non-executable and no automated blocking, isolation, restart, or recovery exists."},
+    {"id":"ZT-8.5","canonical_name_ko":"데이터 교환 표준화","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"SCHEMA_VALIDATED_PLAN_EXECUTION_AND_TELEMETRY_RECORDS","implementation_status":"MAPPED","validation_status":"REFERENCE_ONLY","evidence_requirement":"Interoperable multi-tool exchange validation over time","target_maturity":"UNASSESSED","limitation":"Repository-local JSON-compatible YAML and JSON only; no external interchange validation."},
+    {"id":"ZT-8.6","canonical_name_ko":"보안 운영 조정 및 사고 대응","source":"제로트러스트 가이드라인 2.0, printed pages 87-89, Table 3-39","package_contribution":"LOCAL_REVIEW_HANDOFF_PROPOSAL_ONLY","implementation_status":"MAPPED","validation_status":"REFERENCE_ONLY","evidence_requirement":"Reviewed incident coordination and operational response evidence","target_maturity":"UNASSESSED","limitation":"No incident is confirmed and no incident-management or notification integration is live."}
+  ],
+  "evidence": [
+    "docs/evidence/zero-trust/zt-auto-001-validation.yaml",
+    "docs/evidence/zero-trust/zt-auto-001-live-summary.sanitized.txt"
+  ],
+  "limitations": [
+    "The live workflow result is PARTIAL because accepted predecessor-package warnings remain explicit.",
+    "The lock is local to one workstation and is not a distributed coordination mechanism.",
+    "R4 through R8 actions, automatic remediation, external notifications, complete SOAR, Advanced or Optimal maturity, and Phase 1 completion are not claimed."
+  ]
+}
