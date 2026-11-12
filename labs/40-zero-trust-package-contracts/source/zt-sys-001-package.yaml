@@ -1,0 +1,53 @@
+{
+  "package_id": "ZT-SYS-001",
+  "package_name": "Bounded System Security, Configuration Integrity, Service State, and Recovery Readiness Foundation",
+  "package_type": "BOUNDED_SYSTEM_SECURITY_VALIDATION",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+  "current_maturity": "UNASSESSED",
+  "target_maturity": "INITIAL",
+  "execution_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+  "pilot_scope": "SEVEN_BOUNDED_LAB_SYSTEM_RECORDS_AND_EXISTING_FIXED_READ_ONLY_VALIDATORS",
+  "systems_assessed": 7,
+  "baseline_profiles": 6,
+  "configuration_authorities": 7,
+  "safe_configuration_matches": 5,
+  "configuration_only_records": 1,
+  "not_assessed_records": 1,
+  "service_records": 7,
+  "current_degraded_services": 1,
+  "configuration_drift_findings": 0,
+  "service_restart_performed": false,
+  "configuration_modified": false,
+  "automatic_recovery": false,
+  "complete_pam": false,
+  "continuous_file_integrity_monitoring": false,
+  "complete_hardening": false,
+  "complete_vulnerability_management": false,
+  "complete_system_recovery": false,
+  "capability_mappings": [
+    {"id": "ZT-4.1.1", "contribution": "BOUNDED_SYSTEM_ACCESS_BOUNDARIES", "limitation": "Existing restricted paths only; no enterprise-wide access control."},
+    {"id": "ZT-4.2.1", "contribution": "SYSTEM_ACCOUNT_AND_PRIVILEGED_ACCESS_MODEL", "limitation": "No complete PAM, MFA, session brokering, or account lifecycle enforcement."},
+    {"id": "ZT-4.2.2", "contribution": "CREDENTIAL_REFERENCE_BOUNDARY", "limitation": "References and ownership only; no value collection, rotation, vault, or recovery."},
+    {"id": "ZT-4.3.1", "contribution": "EXISTING_LAB_NETWORK_ZONE_AND_MANAGEMENT_BOUNDARY", "limitation": "No new segmentation or complete east-west enforcement."},
+    {"id": "ZT-4.4.1", "contribution": "BOUNDED_SYSTEM_BASELINES_CONFIGURATION_AUTHORITY_AND_SERVICE_POLICY", "limitation": "No automatic enforcement, complete host hardening, or continuous FIM."},
+    {"id": "ZT-7.1", "contribution": "SANITIZED_SYSTEM_VALIDATION_EVENTS", "limitation": "Package-bounded summaries only."},
+    {"id": "ZT-8.1", "contribution": "CROSS_RECORD_POLICY_VALIDATION", "limitation": "No unified enforcement-plane policy integration."},
+    {"id": "ZT-8.2", "contribution": "DETERMINISTIC_READ_ONLY_SYSTEM_VALIDATION", "limitation": "No automatic remediation, restart, restoration, or authoritative update."}
+  ],
+  "evidence": [
+    "docs/evidence/zero-trust/zt-sys-001-validation.yaml",
+    "docs/evidence/zero-trust/zt-sys-001-integrity-validation.yaml",
+    "docs/evidence/zero-trust/zt-sys-001-service-state.yaml",
+    "docs/evidence/zero-trust/zt-sys-001-live-summary.sanitized.txt"
+  ],
+  "limitations": [
+    "OpenStack remains CURRENT_DEGRADED at 46 PASS, 0 WARN, and 4 FAIL; no remediation was attempted.",
+    "The monitoring host retains a reboot-required warning and has no dedicated endpoint scanner.",
+    "The virtual Cisco router uses a legacy laboratory image and has an idle-NAT warning.",
+    "Sensitive and generated host-local configurations are metadata-only and are not hashed or captured.",
+    "System restore, continuous FIM, complete PAM, full hardening, vulnerability remediation, Advanced or Optimal maturity, and Phase 1 completion are not claimed."
+  ]
+}
