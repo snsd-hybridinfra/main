@@ -19,13 +19,29 @@
 
 이번 업데이트는 문서 정리입니다. 기존 랩을 새로 실행하거나 검증 상태를 변경하지 않았습니다.
 
+## 7개 운영 역할군
+
+**51개 기존 랩을 7개 역할군으로 논리 통합**했습니다. 각 그룹은 입력/출력, 정상·거부·장애·복구 실습 흐름을 갖지만 **통합 런타임 검증은 아직 전**입니다. 개별 랩의 코드와 기존 증적은 링크 보호를 위해 그대로 둡니다.
+
+| 역할군 | 랩 수 |
+|---|---:|
+| [Network Fabric](labs/role-groups/01-network-fabric/README.md) | 8 |
+| [Cloud Foundations](labs/role-groups/02-cloud-foundation/README.md) | 9 |
+| [Platform Delivery](labs/role-groups/03-platform-delivery/README.md) | 9 |
+| [Security & Trust](labs/role-groups/04-security-trust/README.md) | 9 |
+| [Observability & SRE](labs/role-groups/05-observability-sre/README.md) | 5 |
+| [Change Automation](labs/role-groups/06-change-automation/README.md) | 7 |
+| [Recovery & DR](labs/role-groups/07-recovery-dr/README.md) | 4 |
+
+[전체 역할군 인덱스](labs/role-groups/README.md) · [통합 전환 계획](docs/role-consolidation-plan.md) · [공통 랩 계약](docs/lab-interface-contract.md)
+
 ## 현재 상태
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 등록 랩 | 48 | 기존 로컬 검증 기록 14개 + 선별 이관·재구성 랩 34개 |
+| 등록 랩 | 51 | 기존 로컬 검증 기록 14개 + 선별 이관·재구성 랩 37개 |
 | 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
-| 이관·재검증 대기 | 34 | 소스 추출·정적 보존 단계, 독립 실행·통합 검증 전 |
+| 이관·재검증 대기 | 37 | 소스 추출·정적 보존 단계, 독립 실행·통합 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -121,6 +137,16 @@
 
 새 랩은 모두 `NOT_REVALIDATED`입니다. [41–48 이관 기록](docs/migration/new-labs-41-48.md)과 [Dandelion 원본 파일 목록](docs/migration/dandelion-source-file-manifest.tsv)을 참고하세요. 원본 저장소는 삭제하지 않았습니다.
 
+### Additional extracted labs (49–51)
+
+| 랩 | 재사용 범위 | 상태 |
+|---|---|---|
+| [49 Edge Security Contracts](labs/49-edge-security-service-contracts/README.md) | WAF, Nginx, API 서비스 계약 및 보안 테스트 | `NOT_REVALIDATED` |
+| [50 OpenStack Network Validation](labs/50-openstack-network-validation/README.md) | Terraform/Ansible 네트워크·프로바이더 검증 | `NOT_REVALIDATED` |
+| [51 Disposable Lab VM Provisioning](labs/51-disposable-lab-host-provisioning/README.md) | VM·스토리지 호스트 설정 참고, 원본 실행 금지 | `NOT_REVALIDATED` |
+
+Lab 46에 Zero Trust/KISA 매핑과 대형 행렬을, Lab 17에 Kubernetes 샘플 정책을, Lab 15에 AWS 합성 출력을 추가했습니다. 과거 [아키텍처 결정 27개](docs/archive/legacy-adr/README.md)는 독립 보존했습니다.
+
 ## 문서 구조
 
 | 문서 | 역할 |
@@ -139,7 +165,7 @@
 main/
 ├─ docs/           근거·로드맵·출처·실습 이관 대장
 ├─ labs/01-14/     기존에 로컬 검증된 독립 실습
-└─ labs/15-48/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
+└─ labs/15-51/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
 ```
 
 이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.

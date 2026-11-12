@@ -16,7 +16,7 @@ Stable inputs, outputs, interfaces and reusable modules
 Composed projects (only when ready)
 ```
 
-기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~48번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
+기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~51번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
 
 ## 활용 가능한 랩군
 
@@ -32,7 +32,7 @@ Composed projects (only when ready)
 | [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | 합성 메트릭 처리·임계값 점수 | 이상징후 기록·인적 검토, 재검증 대기 |
 | [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | PostgreSQL dump·Restic·무결성 검증 | DR 사전검증 설계, 재검증 대기 |
 
-## 추가 이관 랩 21–48
+## 추가 이관 랩 21–51
 
 | 랩군 | 관심사 |
 |---|---|
@@ -50,6 +50,7 @@ Composed projects (only when ready)
 | 44–46 | OpenStack 모니터링 배포, 원격 읽기 전용 검증, Zero Trust 아키텍처 |
 | 47–48 | Team Dandelion의 저장소 품질 검증과 IDP 복구·유지보수 참고자료 |
 
+| 49–51 | Edge WAF/IDP 계약, OpenStack 네트워크, 격리 VM 제공 |
 **모두 이관·재검증 대기**입니다. 특히 API·공급망·클러스터 소스는 단독 실행 가능한 완성 랩이라는 의미가 아닙니다.
 
 ## 출처와 보존
@@ -57,6 +58,10 @@ Composed projects (only when ready)
 - 세 원본 저장소의 정확한 소스 커밋과 선별 파일 수: [이관 대장](migration-register.md)
 - 이관하지 않은 코드·문서·기여 기록은 **저절로 보존된 것이 아닙니다.** 원본 삭제 전 Git 미러·별도 GitHub 메타데이터 백업을 확인합니다.
 - 원본 `snsd-multicloud-ops`의 과거 IDP 구현 상태, 통합 영역과 14개 독립 랩의 연결표는 [역사적 연결표](archive/legacy-project-map-2026-11.md)로 분리했습니다. 과거 설명을 신규 랩의 현재 상태로 오인하면 안 됩니다.
+
+## 역할군 통합
+
+[7개 역할군](../labs/role-groups/README.md)이 역할·입출력·검증 게이트를 정의합니다. 51개 랩의 코드와 기존 증적은 원위치에 두었고 역할군별 새 통합 테스트는 아직 수행하지 않았습니다. [통합 전환 기준](role-consolidation-plan.md)을 따릅니다.
 
 ## 향후 조합형 프로젝트
 
