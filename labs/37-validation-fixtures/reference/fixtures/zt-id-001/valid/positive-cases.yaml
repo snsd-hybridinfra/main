@@ -1,0 +1,69 @@
+{
+  "fixture_set": "zt-id-001-positive-v1",
+  "fixture_time": "2026-07-19T02:00:00Z",
+  "cases": [
+    {
+      "case_id": "POS-001",
+      "description": "Registered read-only human operator",
+      "request": {"identity_id": "operator-readonly-001", "requested_action": "IDENTITY_READ", "target_scope": "repository:identity-policy", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-002",
+      "description": "Registered validation operator",
+      "request": {"identity_id": "validation-operator-001", "requested_action": "POLICY_VALIDATE", "target_scope": "repository:identity-validator", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-003",
+      "description": "Approved evidence reviewer",
+      "request": {"identity_id": "evidence-reviewer-001", "requested_action": "EVIDENCE_REVIEW", "target_scope": "repository:sanitized-evidence", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-004",
+      "description": "Scoped automation identity",
+      "request": {"identity_id": "automation-audit-001", "requested_action": "IDENTITY_READ", "target_scope": "repository:identity-policy-readonly", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-005",
+      "description": "Non-interactive validator identity",
+      "request": {"identity_id": "validator-service-001", "requested_action": "POLICY_VALIDATE", "target_scope": "repository:zt-id-001-validation", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-006",
+      "description": "Properly controlled break-glass design record",
+      "request": {"identity_id": "break-glass-fixture-001", "requested_action": "EMERGENCY_ACCESS", "target_scope": "fixture:bounded-emergency-recovery", "approval_present": true},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "APPROVAL_PRESENT", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-007",
+      "description": "Approved mutating operator with explicit fixture approval",
+      "request": {"identity_id": "mutating-operator-001", "requested_action": "IDENTITY_MUTATE", "target_scope": "fixture:bounded-policy-change", "approval_present": true},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "APPROVAL_PRESENT", "ROLE_ACTION_ALLOWED"]
+    },
+    {
+      "case_id": "POS-008",
+      "description": "Future federated OIDC requirement is not implemented",
+      "request": {"identity_id": "future-oidc-operator-001", "requested_action": "FUTURE_FEDERATED_AUTHENTICATION", "target_scope": "future:phase-2-federation", "approval_present": false},
+      "expected_decision": "REVIEW_REQUIRED",
+      "expected_reason_codes": ["IDENTITY_NOT_ACTIVE", "RUNTIME_NOT_IMPLEMENTED", "OIDC_NOT_DEPLOYED"]
+    },
+    {
+      "case_id": "POS-009",
+      "description": "Scoped non-interactive service identity",
+      "request": {"identity_id": "service-catalog-001", "requested_action": "IDENTITY_READ", "target_scope": "fixture:identity-catalog-read", "approval_present": false},
+      "expected_decision": "ALLOW",
+      "expected_reason_codes": ["REGISTERED_IDENTITY", "ROLE_ACTION_ALLOWED"]
+    }
+  ]
+}
