@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: terraform-runner-config
+  namespace: control-service
+data:
+  APPROVAL_API_URL: http://approval-api.control-service.svc.cluster.local:8001
+  AUTH_MODE: oidc
+  RUNNER_ID: terraform-runner
+  RUNNER_MODE: mock
+  TF_OPENSTACK_DEPLOYMENT_AUTHORIZED: "false"
+  TF_K3S_CONFIGURATION_AUTHORIZED: "false"
+  TF_SUPPLY_CHAIN_LOCK: /workspace/terraform/supply-chain-lock.json
+  TF_TERRAFORM_CATALOG: /workspace/terraform/catalog.json
+  SERVICE_TOKEN_URL: https://keycloak.control.internal/realms/iaas/protocol/openid-connect/token
+  SERVICE_CLIENT_ID: terraform-runner
+  SERVICE_CLIENT_SECRET_FILE: /etc/service-oauth/client-secret
+  SERVICE_SCOPE: service:callback
+  OS_REGION_NAME: RegionOne
+  SSL_CERT_FILE: /etc/service-ca/ca.crt
