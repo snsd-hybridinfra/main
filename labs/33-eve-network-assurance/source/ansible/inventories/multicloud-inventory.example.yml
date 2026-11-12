@@ -1,0 +1,121 @@
+---
+# NON-PRODUCTION EXAMPLE - repository-side validation placeholders only.
+all:
+  children:
+    control_plane:
+      hosts:
+        control-plane-01:
+          ansible_host: "<control-plane-ip>"
+          provider_or_zone: control-plane
+          component_type: service
+          environment: non-production-example
+          management_path_placeholder: "<local-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    on_prem:
+      hosts:
+        onprem-router-placeholder:
+          ansible_host: "<onprem-router-ip>"
+          provider_or_zone: on-prem
+          component_type: network
+          environment: non-production-example
+          management_path_placeholder: "<bastion-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    aws:
+      hosts:
+        aws-service-node-01:
+          ansible_host: "<aws-service-node-ip>"
+          provider_or_zone: aws
+          component_type: compute
+          environment: non-production-example
+          management_path_placeholder: "<aws-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    azure:
+      hosts:
+        azure-service-node-01:
+          ansible_host: "<azure-service-node-ip>"
+          provider_or_zone: azure
+          component_type: compute
+          environment: non-production-example
+          management_path_placeholder: "<azure-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    openstack:
+      hosts:
+        openstack-service-node-01:
+          ansible_host: "<openstack-service-node-ip>"
+          provider_or_zone: openstack
+          component_type: compute
+          environment: non-production-example
+          management_path_placeholder: "<openstack-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    bastion:
+      hosts:
+        bastion-host-01:
+          ansible_host: "<bastion-host-ip>"
+          provider_or_zone: on-prem
+          component_type: bastion
+          environment: non-production-example
+          management_path_placeholder: "<edge-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    internal_servers:
+      hosts:
+        db-primary-01:
+          ansible_host: "<db-primary-ip>"
+          provider_or_zone: on-prem
+          component_type: database
+          environment: non-production-example
+          management_path_placeholder: "<internal-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    monitoring:
+      hosts:
+        monitoring-node-01:
+          ansible_host: "<monitoring-node-ip>"
+          provider_or_zone: on-prem
+          component_type: monitoring
+          environment: non-production-example
+          management_path_placeholder: "<monitoring-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    kubernetes_nodes:
+      hosts:
+        k8s-node-01:
+          ansible_host: "<k8s-node-ip>"
+          provider_or_zone: on-prem
+          component_type: kubernetes
+          environment: non-production-example
+          management_path_placeholder: "<kubernetes-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+
+    database_nodes:
+      hosts:
+        db-primary-01:
+          ansible_host: "<db-primary-ip>"
+          provider_or_zone: on-prem
+          component_type: database
+          environment: non-production-example
+          management_path_placeholder: "<database-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
+        db-replica-01:
+          ansible_host: "<db-replica-ip>"
+          provider_or_zone: on-prem
+          component_type: database
+          environment: non-production-example
+          management_path_placeholder: "<database-management-path>"
+          validation_scope: repository-only
+          evidence_reference: retired-numbered-case
