@@ -18,3 +18,7 @@ Network samples were generalized and may require additional adjustments before p
 
 ## Attribution
 Team Dandelion source: `snsd-hybridinfra/dandelion-cloud-automation@22a21c02973e696a9a07c91da3bc2ea033881ea6`. Keep the team's distinct contributions and original commit history.
+
+
+## Expanded operations references
+The Team Dandelion `reference/docs/` set now also includes `server-setup.md`, `troubleshooting.md` and `runbook.md`. Treat 'COMPLETE' in old source documents as historical project wording, **not a runtime test result for this lab**.

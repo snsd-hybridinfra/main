@@ -21,3 +21,7 @@ Derive a reproducible, isolated backup/restore exercise from **Team Dandelion's*
 
 ## Provenance
 Reused Team Dandelion material from `snsd-hybridinfra/dandelion-cloud-automation` commit `22a21c02973e696a9a07c91da3bc2ea033881ea6`. Source team attribution and original commit history stay in the source repo. Redistribution/individual contribution must not be misrepresented. No commands have been run.
+
+
+## Additional historical backup scripts
+`reference/scripts/backup*.reference.txt` and `reference/scripts/backup/*.reference.txt` preserve four older Team Dandelion backup scripts as **non-executable historical references**. Review fixed paths, SSH access and overwrite risks before constructing a new test-only implementation.

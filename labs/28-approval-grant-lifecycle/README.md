@@ -16,3 +16,7 @@ Use synthetic request identities, expired grants and roles; stub identity provid
 The original PostgreSQL schema/migrations and API connections are not yet configured for this lab; passing source tests in the original repository does **not** imply they run here.
 
 **Source:** `snsd-hybridinfra/snsd-multicloud-ops` commit `fd5b2286a68da180fd51ecb247516c960cc7d4ef`.
+
+
+## Source packaging provenance
+`reference/build/{approval-api,grant-api}/` preserves original service Dockerfiles and source notes. These are not an automatically integrated deployment.

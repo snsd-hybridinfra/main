@@ -32,3 +32,7 @@ Extracted and adapted from private `snsd-hybridinfra/test` at commit `6147e9114e
 
 ## Future combinations
 Reusable with the IAM/STS and Terraform security labs, once integration is tested independently.
+
+
+## Added source fixtures (2026-11-12)
+Five historical `output/example/*.example.yml` synthetic AWS output examples are now preserved under `fixtures/examples/`. These are example expected shapes, **not rerun AWS evidence**.

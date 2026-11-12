@@ -31,3 +31,7 @@ Select reusable code from the multi-author **Team Dandelion** repository `snsd-h
 
 ## Future combinations
 Combine this provisioning/Day-2 lab with the network policy, observability, and recovery labs only after independent validation.
+
+
+## Added Team Dandelion reference
+`reference/ansible/ansible.cfg.reference.txt` preserves the old Ansible config as inert text. The original disabled SSH host-key checking and **must not be reused as a secure default**.

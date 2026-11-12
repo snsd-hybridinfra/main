@@ -30,3 +30,7 @@ Selected from `snsd-hybridinfra/snsd-multicloud-ops` commit `fd5b2286a68da180fd5
 
 ## Combination rule
 After the OpenStack networking and Kubernetes RBAC tracks pass independent checks, combine them with Labs 15 and 16 for a higher-level project, keeping evidence and integration status separate.
+
+
+## Additional Kubernetes source examples
+`reference/kubernetes/` preserves 16 further Ingress, workload, namespace, admission/manifest policy and readiness examples. These are source references, **not validated workload deployment**.

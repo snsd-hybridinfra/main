@@ -16,3 +16,7 @@
 First static `fmt/validate` per module and check product inputs, then deterministic dry-run job state transitions, guardrail denials, unknown-state recovery and verified idempotency. Preserve redacted results.
 
 **Source:** `snsd-hybridinfra/snsd-multicloud-ops` commit `fd5b2286a68da180fd51ecb247516c960cc7d4ef`.
+
+
+## Source packaging provenance
+`reference/build/Dockerfile` preserves the original runner image build reference. It must not run Terraform or cloud operations without an isolated runner and approved scope.

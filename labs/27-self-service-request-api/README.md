@@ -18,3 +18,7 @@ Study the boundary between catalog/blueprint selection, request submission, iden
 5. Claim successful local validation only after tests and sanitized evidence are recorded.
 
 **Source:** `snsd-hybridinfra/snsd-multicloud-ops` at `fd5b2286a68da180fd51ecb247516c960cc7d4ef`, `applications/internal-iaas-portal/services/request-api/`.
+
+
+## Source packaging provenance
+`reference/build/request-api/` preserves the old Dockerfile and short service notes. It is **not** a tested standalone container build context.
