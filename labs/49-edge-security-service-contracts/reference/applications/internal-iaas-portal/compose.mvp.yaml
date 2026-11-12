@@ -1,0 +1,164 @@
+name: iaas-service-mvp
+
+services:
+  request-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: request_db
+      POSTGRES_USER: request_app
+      POSTGRES_PASSWORD: ${MVP_DB_PASSWORD:?Set MVP_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U request_app -d request_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - request-db-data:/var/lib/postgresql/data
+
+  control-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: control_db
+      POSTGRES_USER: control_app
+      POSTGRES_PASSWORD: ${MVP_DB_PASSWORD:?Set MVP_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U control_app -d control_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - control-db-data:/var/lib/postgresql/data
+
+  identity-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: identity_db
+      POSTGRES_USER: keycloak_app
+      POSTGRES_PASSWORD: ${MVP_DB_PASSWORD:?Set MVP_DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak_app -d identity_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - identity-db-data:/var/lib/postgresql/data
+
+  request-api:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/request-api/Dockerfile
+      additional_contexts:
+        idp-platform-authorities: ../../docs/platform
+    environment:
+      DATABASE_URL: postgresql+psycopg://request_app:${MVP_DB_PASSWORD}@request-db:5432/request_db
+      AUTO_CREATE_SCHEMA: "true"
+      AUTH_MODE: dev
+      APPROVAL_API_URL: http://approval-api:8001
+      GRANT_API_URL: http://grant-api:8002
+      ENABLE_MOCK_PROVISIONER: "false"
+      ENABLE_DEMO_RESET: "true"
+      MOCK_PROVISION_DELAY_SECONDS: "2"
+    depends_on:
+      request-db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${MVP_REQUEST_API_PORT:-8000}:8000"
+
+  approval-api:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/approval-api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://control_app:${MVP_DB_PASSWORD}@control-db:5432/control_db
+      AUTO_CREATE_SCHEMA: "true"
+      AUTH_MODE: dev
+      ENABLE_DEMO_RESET: "true"
+      GRAFANA_DASHBOARD_URL: ${GRAFANA_DASHBOARD_URL:-}
+      REQUEST_API_URL: http://request-api:8000
+      GRANT_API_URL: http://grant-api:8002
+      ENABLE_PROVISIONING_JOBS: "true"
+    depends_on:
+      control-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/readyz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "127.0.0.1:${MVP_APPROVAL_API_PORT:-8001}:8001"
+
+  grant-api:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/grant-api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://control_app:${MVP_DB_PASSWORD}@control-db:5432/control_db
+      AUTO_CREATE_SCHEMA: "true"
+      AUTH_MODE: dev
+      ENABLE_DEMO_RESET: "true"
+      REQUEST_API_URL: http://request-api:8000
+      APPROVAL_API_URL: http://approval-api:8001
+      GRANT_SIGNING_KEY: ${MVP_GRANT_SIGNING_KEY:?Set MVP_GRANT_SIGNING_KEY}
+      GRANT_SIGNING_ALGORITHM: HS256
+      GRANT_ISSUER: http://grant-api:8002
+      GRANT_AUDIENCE: protected-resource
+    depends_on:
+      control-db:
+        condition: service_healthy
+      approval-api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${MVP_GRANT_API_PORT:-8002}:8002"
+
+  terraform-runner:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/terraform-runner/Dockerfile
+    environment:
+      APPROVAL_API_URL: http://approval-api:8001
+      AUTH_MODE: dev
+      RUNNER_ID: terraform-runner
+      RUNNER_MODE: mock
+      TF_OPENSTACK_DEPLOYMENT_AUTHORIZED: "false"
+      TF_K3S_CONFIGURATION_AUTHORIZED: "false"
+      MOCK_DELAY_SECONDS: "2"
+      POLL_INTERVAL_SECONDS: "1"
+    depends_on:
+      approval-api:
+        condition: service_healthy
+
+  user-portal:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/user-portal/Dockerfile
+      args:
+        PORTAL_EDITION: local
+    depends_on:
+      - request-api
+    ports:
+      - "127.0.0.1:${MVP_USER_PORTAL_PORT:-8080}:8080"
+
+  admin-portal:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: services/admin-portal/Dockerfile
+    depends_on:
+      - approval-api
+      - grant-api
+    ports:
+      - "127.0.0.1:${MVP_ADMIN_PORTAL_PORT:-8081}:8081"
+
+volumes:
+  request-db-data:
+  control-db-data:
+  identity-db-data:

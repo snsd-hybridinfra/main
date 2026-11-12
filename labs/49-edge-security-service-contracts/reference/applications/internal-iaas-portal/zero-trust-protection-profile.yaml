@@ -1,0 +1,52 @@
+{
+  "authority": "APPLICATION_LOCAL_CANDIDATE",
+  "application": "internal-iaas-portal",
+  "protected_system": true,
+  "provider": "OPENSTACK",
+  "service_profiles": ["NOVA_VM", "K3S_SINGLE_NODE_PAAS"],
+  "implementation_status": "LOCAL_CANDIDATE",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "deployment_status": "NOT_AUTHORIZED",
+  "runtime_validation_status": "NOT_VALIDATED",
+  "runtime_evidence_status": "NONE",
+  "package_status_promotion": "NONE",
+  "phase_1_status_change": "NONE",
+  "package_relationships": [
+    {"package_id": "ZT-FND-001", "relationship": "FAIL_CLOSED_EXECUTION_AND_EVIDENCE_BOUNDARY", "candidate_only": true},
+    {"package_id": "ZT-NET-001", "relationship": "PRIVATE_PORT_NO_FLOATING_IP_DEFAULT_DENY", "candidate_only": true},
+    {"package_id": "ZT-VIS-001", "relationship": "SANITIZED_DECISION_AND_LIFECYCLE_TELEMETRY_TARGET", "candidate_only": true},
+    {"package_id": "ZT-ID-001", "relationship": "OIDC_MFA_PEP_AND_SERVICE_IDENTITY_TARGET", "candidate_only": true},
+    {"package_id": "ZT-APP-001", "relationship": "PROTECTED_APPLICATION_WORKLOAD_AND_DEPLOYMENT_GATE", "candidate_only": true},
+    {"package_id": "ZT-DATA-001", "relationship": "REQUEST_GRANT_AUDIT_STATE_AND_BACKUP_CLASSIFICATION", "candidate_only": true},
+    {"package_id": "ZT-SYS-001", "relationship": "APPROVED_IMAGE_HOST_BASELINE_AND_RECOVERY_TARGET", "candidate_only": true},
+    {"package_id": "ZT-AUTO-001", "relationship": "CATALOG_PINNED_APPROVAL_BOUND_EXECUTION", "candidate_only": true},
+    {"package_id": "ZT-CV-001", "relationship": "FUTURE_CROSS_CAPABILITY_VALIDATION", "candidate_only": true}
+  ],
+  "controls": {
+    "identity": ["external OIDC authority", "MFA and PEP required before deployment", "separate user approver and runner identities"],
+    "network": ["existing approved private network", "port security enabled", "no Floating IP", "no public management CIDR"],
+    "application": ["approved composite blueprint catalog", "service-only execution profiles", "immutable manifest and module digest", "bounded purpose and duration", "Grant after validation only"],
+    "paas": ["approved base Glance image", "digest-pinned offline k3s artifacts", "Ansible configuration authority", "secret encryption", "0600 kubeconfig", "CoreDNS", "metrics-server", "local-path-provisioner", "ResourceQuota", "LimitRange", "default-deny NetworkPolicy"],
+    "data": ["credentials outside Git", "protected Terraform state", "no token or kubeconfig outputs", "sanitized evidence only"],
+    "automation": ["mock by default", "explicit runtime authorization", "allow-listed modules", "destroy after Grant block"]
+  },
+  "deployment_gates": [
+    "approved OpenStack project quota and private network",
+    "approved security groups images keypair and flavors",
+    "external clouds.yaml and protected state",
+    "accepted identity PEP and service-identity path",
+    "non-placeholder signed container images and private DNS",
+    "separate k3s configuration authorization",
+    "strict SSH known-hosts authority and external automation identity",
+    "approved k3s binary and air-gap image SHA-256 values",
+    "monitoring audit and recovery onboarding",
+    "positive negative bypass persistence and rollback runtime evidence"
+  ],
+  "limitations": [
+    "No OpenStack resource or Kubernetes workload was created by this candidate.",
+    "Mock success is not runtime evidence.",
+    "A Nova ACTIVE state is not k3s PaaS validation; Ansible READY is also required.",
+    "Ansible failure triggers Terraform destroy; rollback failure remains an explicit blocker.",
+    "Existing package acceptance maturity and Phase 1 authorities are unchanged."
+  ]
+}
