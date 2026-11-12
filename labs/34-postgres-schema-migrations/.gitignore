@@ -1,0 +1,8 @@
+.env
+*.pgpass
+*.dump
+*.sql.gz
+*.key
+*.pem
+.pytest_cache/
+__pycache__/

@@ -1,0 +1,24 @@
+{
+  "package_id": "ZT-VIS-001",
+  "package_name": "Centralized Telemetry and Security Event Correlation Foundation",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "RUNTIME_VALIDATED",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "runtime_validation_status": "VALIDATED",
+  "runtime_acceptance_status": "ACCEPTED",
+  "runtime_scope": "BOUNDED_SINGLE_NODE_SANITIZED_LOCAL_TELEMETRY",
+  "maturity_status": "UNASSESSED",
+  "current_maturity": "UNASSESSED",
+  "target_maturity": "INITIAL",
+  "evidence_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+  "execution_record": "docs/evidence/zero-trust/zt-vis-001-validation.yaml",
+  "capability_mappings": ["ZT-7.1", "ZT-7.2", "ZT-7.3", "ZT-8.2", "ZT-8.6"],
+  "limitations": [
+    "Runtime acceptance is bounded to four sanitized summary sources and one single-node Grafana, Loki, and Alloy stack; it does not establish enterprise central visibility, SIEM, or SOC operation.",
+    "External NTP UDP/123 did not respond during P1-VIS-CLOSE; guest UTC remained aligned to the KVM RTC and OpenStack control host within the three-second sequential-measurement bound, but persistent NTP synchronization is not claimed.",
+    "Continuous observation and automated blocking are not established.",
+    "Host journals, full service logs, external alerting, high availability, behavior analytics, broader source onboarding, and Phase 2 ZT-VIS-002 remain outside the accepted scope."
+  ]
+}

@@ -1,0 +1,8 @@
+# NON-PRODUCTION EXAMPLE - repository validation only.
+# Do not install this file directly on a local or remote SSH server.
+PubkeyAuthentication yes
+PasswordAuthentication no
+PermitRootLogin no
+ChallengeResponseAuthentication no
+KbdInteractiveAuthentication no
+AuthorizedKeysFile .ssh/authorized_keys

@@ -1,0 +1,3 @@
+# SAMPLE / NON-PRODUCTION / INTENTIONALLY INVALID
+dataset_id,metric_timestamp,metric_name,metric_value,normalized_value,anomaly_label_placeholder,collection_method
+<dataset-id-placeholder>,<metric-time-invalid>,cpu_utilization,not_numeric,not_numeric,invalid_label,synthetic_sample

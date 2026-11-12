@@ -1,54 +1,74 @@
-# 독립 실습과 구현 프로젝트의 연결
+# 프로젝트 연결 지도: Labs First
 
-## 저장소 역할
+**기준:** 2026-11-12, `snsd-hybridinfra/main` 검토 브랜치. 이 문서에서 말하는 상태는 새 이관 랩의 현재 상태이며, 원본 프로젝트의 과거 통합 상태가 아닙니다.
 
-| 저장소 | 역할 | 상태 권위 |
+## 현재 운영 원칙
+
+```text
+Briefings / Research
+         ↓
+Single-purpose labs (labs/)
+         ↓
+Local reproducibility + normal/deny/fail/recover evidence
+         ↓
+Stable inputs, outputs, interfaces and reusable modules
+         ↓
+Composed projects (only when ready)
+```
+
+기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~51번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
+
+## 활용 가능한 랩군
+
+| 범위 | 핵심 소재 | 재사용 목적 |
 |---|---|---|
-| `F:\main` | 뉴스 원문에서 기술 질문을 도출하고 독립 실습과 증적을 축적 | 이 저장소의 `README`, `docs/news-to-labs.md`, 각 실습 README |
-| [snsd-multicloud-ops](https://github.com/snsd-hybirdinfra/snsd-multicloud-ops) | 가상 증권사 Hybrid-Ready Private Cloud IDP 구현 | 서브 프로젝트의 플랫폼 기준선·구현 로드맵·Zero Trust 권위 문서 |
+| [01 BGP/ECMP](../labs/01-bgp-ecmp/README.md), [02 EVPN/VXLAN](../labs/02-evpn-vxlan/README.md), [10 Digital Twin](../labs/10-network-digital-twin/README.md) | 경로, Overlay, 변경 전 검증 | 네트워크 기능·경로 모델링 |
+| [03 RESTCONF/Python](../labs/03-restconf-python/README.md), [05 Backup/Recovery](../labs/05-backup-recovery/README.md), [06 AAA/RADIUS](../labs/06-aaa-radius/README.md) | 자동화, 복원, 접근 제어 | Day-2 운영과 장애 대응 |
+| [13 Kubernetes RBAC](../labs/13-kubernetes-rbac/README.md), [14 Terraform Validation](../labs/14-terraform-security-validation/README.md) | 최소 권한, 코드 정책 검사 | 배포 전후 보안 게이트 |
+| [15 AWS VPC/Ansible](../labs/15-aws-2tier-vpc/README.md) | AWS 네트워크·Bastion·ALB 자동화 | Public cloud 네트워크 구성, 재검증 대기 |
+| [16 OpenStack/Ansible Ops](../labs/16-openstack-ansible-operations/README.md) | Private IaaS와 운영 체크 | 자동화와 운영 Runbook, 재검증 대기 |
+| [17 Cloud Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md) | OpenStack 네트워크 Terraform, Kubernetes RBAC | 보안 정책·IaC 기반선, 재검증 대기 |
+| [18 Bounded Observability](../labs/18-sanitized-observability/README.md) | Loki, Alloy, Grafana | 합성 운영 이벤트 수집과 시각화, 재검증 대기 |
+| [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | 합성 메트릭 처리·임계값 점수 | 이상징후 기록·인적 검토, 재검증 대기 |
+| [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | PostgreSQL dump·Restic·무결성 검증 | DR 사전검증 설계, 재검증 대기 |
 
-독립 실습의 통과가 서브 프로젝트 통합 완료를 뜻하지 않습니다. 서브 프로젝트의 파일이 존재한다는 사실도 배포·런타임 검증을 뜻하지 않습니다.
+## 추가 이관 랩 21–51
 
-## 서브 프로젝트 현재 상태
-
-2026-09-28에 서브 프로젝트의 `README`, `docs/platform/implementation-roadmap.md`, `docs/platform/architecture-baseline.yaml`을 대조했습니다.
-
-| 영역 | 현재 상태 |
+| 랩군 | 관심사 |
 |---|---|
-| Authority & Inventory | `COMPLETED_LOCAL` |
-| Private IaaS Golden Path | `IN_PROGRESS_LOCAL` |
-| k3s PaaS Golden Path | `PARTIAL` |
-| Financial Network Fabric | `DESIGN_ONLY` |
-| Integrated Operations | `PARTIAL` |
-| Public Cloud Adapter | `DEFERRED` |
-| 플랫폼 종단 간 런타임 | `NOT_VALIDATED` |
+| 21–22 | 변경 승인, 증적 유효성, 반복·회귀 검증 |
+| 23–25 | FinOps, 멀티클라우드 IaC, 공급망 |
+| 26, 33 | 서비스 관측, EVE-NG 검증 |
+| 27–29 | 신청, 승인·권한, Terraform 프로비저닝 원본 |
+| 30–32 | AI Agent/NAS 계약, GitOps, 보안 기준선 |
 
-따라서 프로젝트 표현은 **Hybrid-Ready Private Cloud IDP**를 유지합니다.
+| 34–35 | PostgreSQL 스키마·마이그레이션, 사용자·관리자 포털 UI 셸 |
+| 36–37 | Day-2 운영 Runbook과 원본 검증 테스트 |
+| 38–40 | Identity/Device, k3s Ansible, Zero Trust 패키지 계약 |
 
-## 실습 연결 지도
+| 41–43 | Team Dandelion의 Restic·상태 점검·서비스 토폴로지 참고자료 |
+| 44–46 | OpenStack 모니터링 배포, 원격 읽기 전용 검증, Zero Trust 아키텍처 |
+| 47–48 | Team Dandelion의 저장소 품질 검증과 IDP 복구·유지보수 참고자료 |
 
-| main 실습 | 서브 프로젝트에서 연결되는 문제 | 적용 상태 |
-|---|---|---|
-| 01 BGP/ECMP, 02 EVPN/VXLAN | 금융 네트워크 언더레이의 경로 이중화와 세그멘테이션 | 독립 실습 완료, 서브 프로젝트 Network Fabric은 `DESIGN_ONLY` |
-| 03 RESTCONF/Python | 장비 상태 수집과 운영 자동화 | 합성 RESTCONF·SSH CLI 로컬 검증; 실제 장비 대조 대기 |
-| 04 IAM/STS | 향후 퍼블릭 클라우드 어댑터와 Agent Workload Identity | 합성 정책 판정 로컬 검증; 실제 STS/Azure와 어댑터는 `DEFERRED` |
-| 05 Backup & Recovery | 플랫폼 수명주기와 사이트 장애 복구 증적 | 로컬 두 디렉터리·엔드포인트 복구 검증; 실제 사이트·트래픽 전환과 통합 복구는 `PARTIAL` |
-| 06 AAA/RADIUS | 관리망 접근 제어 | 독립 로컬 검증; 금융망 적용 미검증 |
-| 07 AI Agent Security | AI Agent Sandbox의 Identity·파일·통신·예산·승인 경계 | 독립 게이트 검증; 서브 프로젝트는 `PARTIALLY_IMPLEMENTED_LOCAL / NOT_VALIDATED` |
-| 08 AI DC Network | 향후 GPU 워크로드의 병목과 관측 | 제한된 가상 링크 검증; GPU/RDMA 미검증 |
-| 09 Edge Load Balancer HA | 포털·서비스 경계의 관리 접근 분리와 가용성 | Nginx·OpenSSH 합성 검증; Cisco SD-WAN Manager 등 실제 경계 장비와 플랫폼 통합은 미검증 |
-| 10 Network Digital Twin | 변경 전 경로·정책, 외부 의존성, AIDC Control Plane의 환경별 관측 상태 검증 | Fabric·Sovereign·AIDC 합성 모델 검증; 실제 장비·Cloud API·플랫폼 통합 미검증 |
-| 11 Vulnerability Prioritization | 네트워크·플랫폼 자산의 패치 우선순위 | CISA KEV·공식 실제 악용·패치 권고와 합성 자산 맥락 검증; 실제 CMDB·버전·노출·패치 미검증 |
-| 12 AI Multi-Region Data Path | 향후 GPU Compute와 Dataset 배치 판단 | 로컬 파일 Cache의 Hit·무결성·단일 파일 복구 검증; Public Cloud Adapter가 `DEFERRED`라 실제 AWS·Qumulo·HyperPod 미검증 |
-| 13 Kubernetes RBAC | k3s PaaS의 자동화 ServiceAccount 최소 권한 | 임시 kind 런타임 검증; Dell CSM·서브 프로젝트 k3s 적용·Audit Log는 미검증 |
-| 14 Terraform Security Validation | Terraform 변경의 배포 전 정책 검사 | 공개 SSH 탐지·수정·재검증 로컬 실행; 서브 프로젝트 CI 적용과 AWS 배포는 미검증 |
+| 49–51 | Edge WAF/IDP 계약, OpenStack 네트워크, 격리 VM 제공 |
+**모두 이관·재검증 대기**입니다. 특히 API·공급망·클러스터 소스는 단독 실행 가능한 완성 랩이라는 의미가 아닙니다.
 
-## 승격 조건
+## 출처와 보존
 
-독립 실습을 서브 프로젝트 성과로 연결하려면 다음이 모두 필요합니다.
+- 세 원본 저장소의 정확한 소스 커밋과 선별 파일 수: [이관 대장](migration-register.md)
+- 이관하지 않은 코드·문서·기여 기록은 **저절로 보존된 것이 아닙니다.** 원본 삭제 전 Git 미러·별도 GitHub 메타데이터 백업을 확인합니다.
+- 원본 `snsd-multicloud-ops`의 과거 IDP 구현 상태, 통합 영역과 14개 독립 랩의 연결표는 [역사적 연결표](archive/legacy-project-map-2026-11.md)로 분리했습니다. 과거 설명을 신규 랩의 현재 상태로 오인하면 안 됩니다.
 
-1. 서브 프로젝트의 권위 문서에 적용 범위와 소유자를 기록합니다.
-2. 실제 대상의 구성·버전·경계를 확인합니다.
-3. 정상·거부·장애·복구 검증을 수행합니다.
-4. 정제 증적을 해당 프로젝트의 승인된 증적 위치에 저장합니다.
-5. 상태 결정 문서가 구현과 증적을 근거로 승격합니다.
+## 역할군 통합
+
+[7개 역할군](../labs/role-groups/README.md)이 역할·입출력·검증 게이트를 정의합니다. 51개 랩의 코드와 기존 증적은 원위치에 두었고 역할군별 새 통합 테스트는 아직 수행하지 않았습니다. [통합 전환 기준](role-consolidation-plan.md)을 따릅니다.
+
+## 향후 조합형 프로젝트
+
+1. 각 랩의 전제 조건, 입력/출력, 재현 명령을 문서화합니다.
+2. 정상·거부·장애·복구를 실험하고 정제된 증적을 저장합니다.
+3. 목적에 맞는 2개 이상 랩의 인터페이스를 연결해 설계합니다.
+4. 통합 테스트 및 복구·운영 Runbook을 별도로 검증합니다.
+5. 통합 성과를 따로 발표하고, 출처가 다른 팀 프로젝트 기여는 적절히 표시합니다.
+
+고객사 운영망에서 추출한 실설정, 인증정보, 로그 및 내부 주소는 포함하지 않습니다.

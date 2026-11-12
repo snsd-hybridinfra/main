@@ -1,0 +1,2483 @@
+{
+  "architecture_package": "ZT-ARC-001",
+  "capability_count": 52,
+  "capabilities": [
+    {
+      "id": "ZT-1.1.1",
+      "canonical_name_ko": "사용자 인벤토리",
+      "stable_slug": "user-inventory",
+      "domain": "identity",
+      "function": "identifier-management",
+      "source_definition": "사용자 계정과 주체의 목록을 식별·유지한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "56",
+        "table_or_figure": "Table 3-11; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "사용자 목록을 수집하고 기록하기 시작; 기본적인 사용자 정보 관리 및문서화",
+        "INITIAL": "사용자의 역할 및권한을 포함한 상세 인벤토리 구축; 주기적인 검토와 업데이트 절차 설정",
+        "ADVANCED": "자동화된 인벤토리 관리 도구 도입을 통한 사용자 데이터 정확성 보장; ID 통합 관리 시스템을 구축",
+        "OPTIMAL": "인벤토리 통합을 통한 기업 전반의 사용자 및권한 관리 최적화; 인공지능 기반 분석을 수행하여 사용자 행동 예측 및대응 전략 강화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "사용자 인벤토리 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.1.2",
+      "canonical_name_ko": "ID 연계 및 사용자 자격 증명",
+      "stable_slug": "id-federation-user-credentials",
+      "domain": "identity",
+      "function": "identifier-management",
+      "source_definition": "식별자 연계와 사용자 자격 증명의 수명주기를 관리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "56",
+        "table_or_figure": "Table 3-11; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 ID 연계 솔루션을 설정 및자격 증명 통합 시작; 중앙에서 사용자 인증 정보 관리",
+        "INITIAL": "여러시스템 간자격 증명 연동으로 사용자 경험 통합; 기업내외부 시스템과의 연동 강화",
+        "ADVANCED": "다양한 ID 제공자 통합을 통한 ID 연계 확대; 보안프로토콜 강화로 데이터 보호 개선",
+        "OPTIMAL": "글로벌 수준의 ID 연계 구현을 통한 통합 사용자 경험 제공; ID 연계 정책 및프로세스의 지속적인 최적화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "ID 연계 및 사용자 자격 증명 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.2.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.2.1",
+      "canonical_name_ko": "다중인증 (MFA)",
+      "stable_slug": "multi-factor-authentication",
+      "domain": "identity",
+      "function": "authentication",
+      "source_definition": "둘 이상의 인증 요소로 접근 주체를 확인한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "57",
+        "table_or_figure": "Table 3-12; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 패스워드 방식과 함께 MFA 도입 및설정 (예: SMS 코드, 이메일 확인); MFA 지원 시스템 구축",
+        "INITIAL": "다양한 MFA 방법 구현으로 보안 수준 강화 (예: 인증 앱, 하드웨어 토큰); MFA 정책 표준화 및적용",
+        "ADVANCED": "상황에 맞춘 맞춤형 MFA 기능 제공 및새로운 인증 방법 지속 도입; MFA 절차 자동화 및사용자 경험 최적화",
+        "OPTIMAL": "비정상적인 로그인 시도 실시간 탐지 및대응; MFA 기반 고급 보안 정책 설정"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "다중인증 (MFA) is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.2.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.2.2",
+      "canonical_name_ko": "지속 인증",
+      "stable_slug": "continuous-authentication",
+      "domain": "identity",
+      "function": "authentication",
+      "source_definition": "세션 중에도 신뢰 신호를 재평가하여 인증을 지속한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "57",
+        "table_or_figure": "Table 3-12; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "세션기반 인증; 사용자 행동 및접속 상태 모니터링",
+        "INITIAL": "모니터링을 통한 이상행위 탐지 및추가 인증 요구; 사용자 세션 중추가 인증 요구 시스템 도입",
+        "ADVANCED": "동적인증 기술 적용으로 실시간 인증 상태 조정; 지속인증을 위한 고급 분석 및경고 기능 통합",
+        "OPTIMAL": "이상행위 탐지 시세션 종료 또는 재인증 요구 등동적 자동 인증 상태 조정"
+      },
+      "selection": "INITIAL_TARGET",
+      "rationale": "지속 인증 is feasible only at a bounded Initial target until broader enforcement, continuous signals, or product coverage exists.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-1.2.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "INITIAL",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping",
+        "bounded runtime result",
+        "documented Advanced-stage gap"
+      ],
+      "limitation": "The laboratory cannot currently evidence all Advanced-stage conditions for this capability.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.3.1",
+      "canonical_name_ko": "통합 ICAM 플랫폼",
+      "stable_slug": "integrated-icam-platform",
+      "domain": "identity",
+      "function": "risk-assessment",
+      "source_definition": "식별자·자격·접근관리 정보를 통합해 위험 판단에 사용한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "58",
+        "table_or_figure": "Table 3-13; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 ICAM 시스템 구축 및주요 기능 통합; 초기사용자 및권한 관리 설정",
+        "INITIAL": "I CAM 시스템 기능 확장 및중앙 집중형 관리와 모니터링 구현; 사용자 인증 및접근 관리 정책 표준화",
+        "ADVANCED": "다양한 보안 기술 및시스템 통합으로 ICAM 플랫폼 강화; 고급분석 및자동화 기능 도입으로 ICAM 최적화",
+        "OPTIMAL": "AI 기반 ICAM 플랫폼을 통한 실시간 보안 강화; 통합 ICAM 솔루션을 통해 보안 정책과 절차 지속 개선 및최적화"
+      },
+      "selection": "DESIGN_ONLY",
+      "rationale": "통합 ICAM 플랫폼 requires organizational scale, lifecycle integration, or development practices not reproducible honestly in the current laboratory.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-1.1.2",
+        "ZT-1.2.1"
+      ],
+      "target_maturity": null,
+      "target_phase": "DESIGN_REVIEW",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY source traceability and limitation review"
+      ],
+      "limitation": "Architecture traceability only; no implementation or maturity inference is permitted.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.3.2",
+      "canonical_name_ko": "행동, 컨텍스트 기반 ID 및 생체 인식",
+      "stable_slug": "behavior-context-id-biometric-recognition",
+      "domain": "identity",
+      "function": "risk-assessment",
+      "source_definition": "행동·컨텍스트·생체 신호를 신원 위험 평가에 활용한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "58",
+        "table_or_figure": "Table 3-13; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 생체 인식 기술 도입 (예: 지문, 얼굴 인식); 사용자 행동 패턴 기록 및수동 분석 시작",
+        "INITIAL": "행동및생체 인식 기술 통합으로 인증 절차 강화; 컨텍스트 기반 접근권한 조정",
+        "ADVANCED": "고급행동 분석 및생체 인식 기술을 통한 인증 정확도 향상; 실시간 사용자 행동 및컨텍스트 변화 반영으로 접근제어 조정",
+        "OPTIMAL": "AI 기반 행동 분석 및생체 인식 솔루션을 통한 고도화된 보안 제공; 새로운 기술 도입을 통한 인증 절차 지속 최적화"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "행동, 컨텍스트 기반 ID 및 생체 인식 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.4.1",
+      "canonical_name_ko": "조건부 사용자 접근",
+      "stable_slug": "conditional-user-access",
+      "domain": "identity",
+      "function": "access-management",
+      "source_definition": "정책과 컨텍스트 조건에 따라 사용자 접근을 결정한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "59",
+        "table_or_figure": "Table 3-14; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "조건부 접근 정책의 기본 개념 정의 및구현; 사용자 활동 및조건 수집을 위한 기초 시스템 구축",
+        "INITIAL": "통합관리 기능 및정책 기반 특정 조건에서 사용자 접근제어; 시간및위치 기반 접근제어를 통해 최소 권한 원칙 적용",
+        "ADVANCED": "정교한 조건과 규칙을 활용한 다단계 접근 정책 구현; 조건에 따른 실시간 접근 결정 자동화",
+        "OPTIMAL": "고급분석 및 ML을 활용한 사용자 행동과 환경 기반 정교한 조건부 접근 제공; 동적접근 정책을 실시간으로 조정 및최적화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "조건부 사용자 접근 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-1.2.1",
+        "ZT-2.1.1",
+        "ZT-7.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-1.4.2",
+      "canonical_name_ko": "최소 권한 접근",
+      "stable_slug": "least-privilege-access",
+      "domain": "identity",
+      "function": "access-management",
+      "source_definition": "업무에 필요한 최소 권한과 범위만 부여한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "59",
+        "table_or_figure": "Table 3-14; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "최소권한 원칙 정의 및적용 가능한 시스템 구축; 권한부여 절차 문서화 및시작",
+        "INITIAL": "권한부여 절차 표준화 및역할 기반 권한 부여; 권한요청 및변경 관리 시스템 도입",
+        "ADVANCED": "권한요청 및사용에 대한 자동화된 모니터링과 분석 구현; 권한관리 정책 지속적 검토 및업데이트",
+        "OPTIMAL": "권한관리 정책 동적 변경 및최소 권한 부여 구현; 최소권한 원칙 전사적 적용 및실시간 조정"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "최소 권한 접근 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.1.1",
+      "canonical_name_ko": "기기 감지 및 규정 준수",
+      "stable_slug": "device-detection-compliance",
+      "domain": "device-endpoint",
+      "function": "policy-compliance-monitoring",
+      "source_definition": "기기를 식별하고 보안 정책 준수 상태를 확인한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "60",
+        "table_or_figure": "Table 3-15; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기기감지 기능을 구축하여 리소스에 연결된 기기를 식별; 초기규정 준수 요구 사항을 설정하고, 수동으로 준수 여부를 확인",
+        "INITIAL": "자동화된 감지 시스템을 도입하여 실시간으로 기기를 탐지하고 규정 준수를 평가; 비준수 기기에 대한 경고 및접근 제한 기능 설정",
+        "ADVANCED": "규정준수 평가를 정교화하여 다양한 규정 기준을 적용; 자동으로 교정 조치를 취할 수있는 기능 추가",
+        "OPTIMAL": "AI를 활용하여 기기 규정 준수 평가를 최적화하고, 실시간으로 조치 자동화; 규정준수 데이터와 보안 분석을 통합하여 기기 보안 강화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "기기 감지 및 규정 준수 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-2.3.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.2.1",
+      "canonical_name_ko": "실시간 검사를 통한 기기 권한 부여",
+      "stable_slug": "real-time-inspection-device-authorization",
+      "domain": "device-endpoint",
+      "function": "data-access-control",
+      "source_definition": "실시간 기기 상태 검사 결과로 데이터 접근 권한을 결정한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "61",
+        "table_or_figure": "Table 3-16; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "자산접근 기기 정보 수집 계획 수립; 초기보안 기준 설정",
+        "INITIAL": "기본적인 보안 검사 프로세스를 수립하여 기기가 자산에 접근하기 전에 수동 검사를 시행",
+        "ADVANCED": "실시간 보안 검사 도구를 도입하여 기기의 상태를 자동으로 평가; 보안기준을 충족하는 기기만 접근을 허용",
+        "OPTIMAL": "실시간 검사를 고도화하여 보다 정교한 보안 기준을 적용하고, 기기의 보안 상태를 지속적으로 평가; 보안상태에 따라 실시간으로 기기 접근권한 조정"
+      },
+      "selection": "INITIAL_TARGET",
+      "rationale": "실시간 검사를 통한 기기 권한 부여 is feasible only at a bounded Initial target until broader enforcement, continuous signals, or product coverage exists.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-2.1.1",
+        "ZT-4.1.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "INITIAL",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping",
+        "bounded runtime result",
+        "documented Advanced-stage gap"
+      ],
+      "limitation": "The laboratory cannot currently evidence all Advanced-stage conditions for this capability.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.3.1",
+      "canonical_name_ko": "기기 인벤토리",
+      "stable_slug": "device-inventory",
+      "domain": "device-endpoint",
+      "function": "asset-management",
+      "source_definition": "관리 대상 기기와 상태의 권위 있는 목록을 유지한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "62",
+        "table_or_figure": "Table 3-17; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본인벤토리를 작성하고 수동으로 업데이트; 주요기기의 정보를 수집하고 관리",
+        "INITIAL": "자동화된 기기 인벤토리 시스템을 도입하여 보유한 모든 기기를 실시간으로 기록; 기기유형, 운영체제, 위치 등의 세부 정보를 포함한 정교한 인벤토리 구축",
+        "ADVANCED": "기기인벤토리를 지속적으로 업데이트; 비정상적이거나 승인되지 않은 기기를 탐지하는 기능 추가",
+        "OPTIMAL": "AI 기반의 인벤토리 관리 솔루션을 활용하여 기기 인벤토리를 자동화하고 최적화; 실시간 모니터링 및예측 분석을 통해 기기 보안을 강화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "기기 인벤토리 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.3.2",
+      "canonical_name_ko": "통합 엔드포인트 관리 및 모바일 기기 관리",
+      "stable_slug": "unified-endpoint-mobile-device-management",
+      "domain": "device-endpoint",
+      "function": "asset-management",
+      "source_definition": "엔드포인트와 모바일 기기를 일관된 정책으로 관리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "62",
+        "table_or_figure": "Table 3-17; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 엔드포인트 및모바일 기기 관리 시스템을 도입하여 주요 기기를 관리; 초기보안 정책 설정",
+        "INITIAL": "엔드포인트 및모바일 기기의 보안 설정을 중앙에서 관리하고, 보안 업데이트를 자동으로 배포; 기기상태를 지속적으로 모니터링하여 보안을 유지",
+        "ADVANCED": "모든엔드포인트와 모바일 기기의 보안을 중앙에서 통합 관리하고, 고급 보안 정책 적용; 실시간 모니터링 및위협 탐지 기능을 추가하여 보안 강화",
+        "OPTIMAL": "AI 기반 엔드포인트 및모바일 기기 관리 솔루션을 통해 보안 최적화 및실시간 대응; 모든기기 보안을 중앙에서 통합적으로 관리하고, 자동화된 위협 대응 구현"
+      },
+      "selection": "DESIGN_ONLY",
+      "rationale": "통합 엔드포인트 관리 및 모바일 기기 관리 requires organizational scale, lifecycle integration, or development practices not reproducible honestly in the current laboratory.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-2.3.1"
+      ],
+      "target_maturity": null,
+      "target_phase": "DESIGN_REVIEW",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY source traceability and limitation review"
+      ],
+      "limitation": "Architecture traceability only; no implementation or maturity inference is permitted.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.4.1",
+      "canonical_name_ko": "엔드포인트 및 확장된 탐지·대응 (EDR 및 XDR)",
+      "stable_slug": "endpoint-extended-detection-response",
+      "domain": "device-endpoint",
+      "function": "device-threat-protection",
+      "source_definition": "엔드포인트 위협을 탐지하고 대응 흐름과 연계한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "63",
+        "table_or_figure": "Table 3-18; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 EDR 솔루션을 도입하여 엔드포인트 위협을 탐지하고 대응; 초기위협 탐지 및대응 정책 설정",
+        "INITIAL": "E DR 시스템을 고도화하여 실시간 위협 탐지 및자동 대응 구현",
+        "ADVANCED": "X DR 솔루션을 도입하여 네트워크 전반에 걸친 위협 탐지 확대; 고급분석 및 ML을 통합하여 위협 탐지 정확도 향상",
+        "OPTIMAL": "AI 기반의 EDR XDR 솔루션을 통해 실시간으로 모든 기기에 대한 위협을 탐지하고 자동화된 대응 구현; 위협인텔리전스를 통합하여 예측 분석 및사전 대응 전략 수립"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "엔드포인트 및 확장된 탐지·대응 (EDR 및 XDR) depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-2.3.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-2.4.2",
+      "canonical_name_ko": "자산, 취약성 및 패치 관리 자동화",
+      "stable_slug": "asset-vulnerability-patch-automation",
+      "domain": "device-endpoint",
+      "function": "device-threat-protection",
+      "source_definition": "자산 취약점과 패치 상태의 식별·조치를 자동화한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "63",
+        "table_or_figure": "Table 3-18; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "자산및취약성을 수동으로 평가하고 패치를 수동으로 적용하는 프로세스 수립; 주요자산 및취약성 목록 작성",
+        "INITIAL": "자동화된 취약성 평가 및패치 관리 도구를 도입하여 주요 자산의 보안 강화; 취약성 발견 시자동으로 패치를 적용하는 시스템 구축",
+        "ADVANCED": "모든자산에 대해 지속적인 취약성 평가 및패치 관리 자동화; 취약성 및패치 관리 시스템을 다른 보안 시스템과 통합하여 종합적인 보안 관리 전략 구현",
+        "OPTIMAL": "AI 기반의 예측 분석을 활용하여 취약성을 사전에 식별하고, 자동으로 패치 적용; 자산관리, 취약성 평가, 패치 관리를 통합하여 실시간으로 보안 최적화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "자산, 취약성 및 패치 관리 자동화 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-2.3.1",
+        "ZT-2.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-3.1.1",
+      "canonical_name_ko": "매크로 세그멘테이션",
+      "stable_slug": "macro-segmentation",
+      "domain": "network",
+      "function": "network-segmentation",
+      "source_definition": "큰 보안 영역과 신뢰 경계를 분리하고 경계 간 흐름을 통제한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "64-65",
+        "table_or_figure": "Table 3-19; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "매크로 세그먼트 설정 기존; 네트워크 내주요 자산과 트래픽 흐름을 기반으로 매크로 세그먼트 구성",
+        "INITIAL": "적용 초기; 경계를 강화하고, 세그먼트 간의 트래픽을 모니터링 및비정상적인 활동 탐지",
+        "ADVANCED": "각세그먼트에 맞춤형 보안 정책 적용 향상; 매크로 세그먼트 간의 트래픽을 자동으로 조정 및보안 위협에 신속 대응",
+        "OPTIMAL": "AI 기반 매크로 세그먼트 관리 도구 사용 최적화; 실시간 세그먼트 간트래픽 분석 및자동 대응"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "매크로 세그멘테이션 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-2.3.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "USER_EXECUTED_RUNTIME",
+        "CODEX_EXECUTED_LIVE_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-eve-ng-on-prem-routing-validation/",
+        "retired-framework-evidence/retired-numbered-case-openstack-network-provisioning-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-3.1.2",
+      "canonical_name_ko": "마이크로 세그멘테이션",
+      "stable_slug": "micro-segmentation",
+      "domain": "network",
+      "function": "network-segmentation",
+      "source_definition": "세밀한 워크로드·자원 단위로 통신 정책을 분리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "64-65",
+        "table_or_figure": "Table 3-19; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "주요애플리케이션 및워크로드 기준 초기 마이크로 기존 세그먼트 설정; 수동으로 세그먼트를 구성하고 기본적인 보안 정책 적용",
+        "INITIAL": "네트워크 수준에서 마이크로 세그멘테이션 수행 및워크로드 초기 간이동 탐지 차단; 마이크로 세그먼트 간의 트래픽 모니터링 및실시간 위협 탐지",
+        "ADVANCED": "모든네트워크 트래픽에 대한 정밀한 보안 제어 구현 향상; 애플리케이션 별격리 메커니즘 적용 및위협 탐지 대응 시스템과 통합",
+        "OPTIMAL": "AI ML을 활용하여 마이크로 세그먼트를 실시간 최적화 최적화; 위협에 자동 대응하고, 종합적인 보안 관리 전략 구현"
+      },
+      "selection": "INITIAL_TARGET",
+      "rationale": "마이크로 세그멘테이션 is feasible only at a bounded Initial target until broader enforcement, continuous signals, or product coverage exists.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-2.3.1",
+        "ZT-3.1.1",
+        "ZT-4.3.1",
+        "ZT-5.4.2"
+      ],
+      "target_maturity": "INITIAL",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping",
+        "bounded runtime result",
+        "documented Advanced-stage gap"
+      ],
+      "limitation": "The laboratory cannot currently evidence all Advanced-stage conditions for this capability.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-3.1.3",
+      "canonical_name_ko": "소프트웨어 정의 네트워킹",
+      "stable_slug": "software-defined-networking",
+      "domain": "network",
+      "function": "network-segmentation",
+      "source_definition": "소프트웨어 기반 정책으로 네트워크 연결과 분리를 제어한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "64-65",
+        "table_or_figure": "Table 3-19; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "네트워크 구성 요소의 기본 소프트웨어 정의 제어 도입 기존; S DN 기본 구조 설정 및네트워크 트래픽을 소프트웨어로 제어",
+        "INITIAL": "정책 적용 초기; 네트워크 보안 정책을 SDN 환경에 통합하여 자동화된 보안 구현",
+        "ADVANCED": "S DN 기능 확장 및네트워크 전반 트래픽 관리 및보안 향상 최적화; 실시간 네트워크 구성 및정책 조정",
+        "OPTIMAL": "자동 최적화 최적화; S DN을 통해 네트워크 보안 실시간 강화 및자동화된 위협 대응 구현"
+      },
+      "selection": "DESIGN_ONLY",
+      "rationale": "소프트웨어 정의 네트워킹 requires organizational scale, lifecycle integration, or development practices not reproducible honestly in the current laboratory.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-3.1.1"
+      ],
+      "target_maturity": null,
+      "target_phase": "DESIGN_REVIEW",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY source traceability and limitation review"
+      ],
+      "limitation": "Architecture traceability only; no implementation or maturity inference is permitted.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-3.2.1",
+      "canonical_name_ko": "위협 대응",
+      "stable_slug": "threat-response",
+      "domain": "network",
+      "function": "threat-response",
+      "source_definition": "네트워크 위협을 식별하고 승인된 대응 절차로 처리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "66",
+        "table_or_figure": "Table 3-20; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "위협인텔리전스와 기본적인 IDS IPS 솔루션 도입; 수동대응이 주를 이루며, 보안 사고 발생 시기본 절차에 따라 대응",
+        "INITIAL": "자동화된 위협 탐지 및대응 시스템 도입; 위협인텔리전스 활용 네트워크 모니터링 및자동 경고 생성",
+        "ADVANCED": "실시간 위협 감지 및선제 대응; 머신러닝 기반 분석 도입, 비정상 활동 자동 탐지 및차단",
+        "OPTIMAL": "완전히 통합된 위협 대응 플랫폼 구축; AI 기반 예측 분석으로 잠재 위협 사전 감지 및차단"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "위협 대응 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L4-failure-recovery/retired-numbered-case-security-rule-misconfiguration-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-3.3.1",
+      "canonical_name_ko": "트래픽 암호화",
+      "stable_slug": "traffic-encryption",
+      "domain": "network",
+      "function": "traffic-encryption",
+      "source_definition": "전송 구간의 기밀성과 무결성을 암호화로 보호한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "67",
+        "table_or_figure": "Table 3-21; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본암호화 기술 도입, 민감 데이터 보호; SSL TLS 등표준 프로토콜로 웹트래픽 보호, VPN을 통한 추가 보안",
+        "INITIAL": "암호화 기술 전사적 확대 적용, 모든 중요 데이터 및통신 채널 암호화; 전사적 암호화 정책 수립 및데이터 전송 암호화 필수화",
+        "ADVANCED": "고도화된 암호화 기법 적용, 전송 데이터 및저장 데이터 보호; 고급암호화 키관리 시스템 도입 및전방위적인 보호 체계 구축",
+        "OPTIMAL": "성능저하 없는 암호화 기술 최적화; 양자내성암호 도입, 최고 수준의 보안 유지"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "트래픽 암호화 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-4.2.2",
+        "ZT-3.4.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-3.4.1",
+      "canonical_name_ko": "데이터 흐름 매핑",
+      "stable_slug": "data-flow-mapping",
+      "domain": "network",
+      "function": "traffic-management",
+      "source_definition": "주체·서비스·데이터 사이의 실제 통신 흐름을 식별한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "68",
+        "table_or_figure": "Table 3-22; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "네트워크 내주요 데이터 흐름을 수동으로 매핑하고 분석; 초기데이터 흐름 다이어그램 작성",
+        "INITIAL": "애플리케이션 단위에서 트래픽 매핑 및분석; 자동화된 데이터 흐름 매핑 도구 도입",
+        "ADVANCED": "보안정책을 수립하여 비정상적인 데이터 이동 탐지; 데이터 흐름 상관관계 분석 및보안 위협 사전 식별",
+        "OPTIMAL": "AI 기반 예측 분석 도구로 데이터 흐름 변화 실시간 감지 및자동 대응; 네트워크 트래픽 우선순위 동적 변경"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "데이터 흐름 매핑 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-3.1.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "USER_EXECUTED_RUNTIME",
+        "CODEX_EXECUTED_LIVE_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-eve-ng-on-prem-routing-validation/",
+        "retired-framework-evidence/retired-numbered-case-openstack-network-provisioning-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-3.5.1",
+      "canonical_name_ko": "네트워크 회복성",
+      "stable_slug": "network-resilience",
+      "domain": "network",
+      "function": "network-resilience",
+      "source_definition": "장애와 공격 후에도 네트워크 기능을 유지·복구한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "69",
+        "table_or_figure": "Table 3-23; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "네트워크 주요 구성 요소에 대한 기본 복구 계획 및백업 경로 마련; 주기적 백업 실시 및장애 대응 절차 마련",
+        "INITIAL": "다중경로 설계 및자동 복구 시스템 도입; 중요한 네트워크 구성 요소에 대해 자동화된 장애조치(페일오버, Failover) 메커니즘 도입",
+        "ADVANCED": "네트워크 복구 능력 고도화; 재해복구 계획 통합 및복구 시나리오 주기적 테스트",
+        "OPTIMAL": "자율복구 시스템 도입, 네트워크 장애 실시간 감지 및복구; 모든복구 절차 자동화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "네트워크 회복성 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-3.1.1",
+        "ZT-3.4.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L4-failure-recovery/retired-numbered-case-load-balancer-failure-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-4.1.1",
+      "canonical_name_ko": "접근통제",
+      "stable_slug": "access-control",
+      "domain": "system",
+      "function": "access-control",
+      "source_definition": "시스템 접근 요청을 정책에 따라 허용·거부한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "70",
+        "table_or_figure": "Table 3-24; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 접근제어 체계 수립; 사용자 및기기별로 수동으로 권한 부여",
+        "INITIAL": "자동화된 접근제어 시스템을 도입; 사용자 역할과 권한을 기반으로 네트워크 및시스템 접근을 중앙에서 관리",
+        "ADVANCED": "속성기반 접근제어(ABAC) 시스템을 도입; 사용자와 기기의 속성에 따라 더욱 세밀한 접근제어 수행",
+        "OPTIMAL": "AI를 기반으로 자율적인 접근통제 시스템 구축; 사용자의 행동 패턴과 기기 상태를 실시간으로 분석하고 자동으로 권한 조정"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "접근통제 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.2.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "CODEX_EXECUTED_LIVE_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-openstack-network-provisioning-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-4.2.1",
+      "canonical_name_ko": "PAM",
+      "stable_slug": "privileged-access-management",
+      "domain": "system",
+      "function": "system-account-management",
+      "source_definition": "특권 계정과 세션을 제한·승인·감사한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "71",
+        "table_or_figure": "Table 3-25; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 PAM 시스템을 구축; 권한있는 사용자 계정을 관리",
+        "INITIAL": "P AM 솔루션을 통해 권한 있는 사용자 접근 모니터링 및제어; 자동화된 권한 상승 승인 기술 도입",
+        "ADVANCED": "P AM 시스템에 분석 및경고 기능을 통합하여 비정상적인 활동 탐지; 권한관리 절차 정교화 및감사 로그 강화",
+        "OPTIMAL": "AI 기반의 위협 탐지 및대응 기능을 활용하여 PAM 시스템 고도화; P AM 정책, 절차 지속적 개선 및최적화"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "PAM supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.2.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-4.2.2",
+      "canonical_name_ko": "자격 증명 관리",
+      "stable_slug": "credential-management",
+      "domain": "system",
+      "function": "system-account-management",
+      "source_definition": "시스템 자격 증명을 안전하게 발급·보관·교체·폐기한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "71",
+        "table_or_figure": "Table 3-25; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "자격증명을 수동으로 관리; 패스워드 기반 인증 방식에 의존",
+        "INITIAL": "자격증명 관리 자동화; MFA 도입 등보다 안전한 인증 방식 적용",
+        "ADVANCED": "고급인증 방식을 도입(생체 인증 및인증서 기반 인증 추가); 자격증명 관리 시스템이 고도화",
+        "OPTIMAL": "AI 기반의 자격 증명 관리 시스템을 통해 실시간으로 인증 정보를 분석; 비정상적인 인증 시도 즉각 차단"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "자격 증명 관리 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-4.3.1",
+      "canonical_name_ko": "네트워크 세분화 및 그룹 간 이동",
+      "stable_slug": "network-segmentation-intergroup-movement",
+      "domain": "system",
+      "function": "network-separation-policy",
+      "source_definition": "시스템 그룹 간 이동을 분리 정책과 허용 경로로 제한한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "72",
+        "table_or_figure": "Table 3-26; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "보안정책 일괄적 적용; 그룹간이동에 대한 제어가 이루어지지 않음",
+        "INITIAL": "일부중요 시스템을 네트워크 세분화를 통해 나눔; 세분화된 네트워크 간접속 이동의 경우 보안 정책 적용",
+        "ADVANCED": "네트워크 등급 및기능별 세분화; 각네트워크 그룹 간의 이동은 강력한 접근통제와 인증을 기반 엄격한 관리",
+        "OPTIMAL": "그룹간이동 실시간 분석 및제어; 그룹간이동 시재인증 없이 이동이 가능하도록 추가적인 정책 적용"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "네트워크 세분화 및 그룹 간 이동 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-3.1.1",
+        "ZT-4.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "USER_EXECUTED_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-eve-ng-on-prem-routing-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-4.4.1",
+      "canonical_name_ko": "시스템 환경에 따른 정책 관리",
+      "stable_slug": "environment-based-policy-management",
+      "domain": "system",
+      "function": "system-security-policy-management",
+      "source_definition": "시스템 환경과 상태에 맞는 보안 정책을 적용·검증한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "73",
+        "table_or_figure": "Table 3-27; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "온프레미스 환경에서 보안 정책 수립 및관리; 정책이 고정된 상태로 운영",
+        "INITIAL": "클라우드 환경으로의 전환 시작; 온프레미스와 클라우드 환경 간의 차이를 반영한 보안 정책 수립",
+        "ADVANCED": "클라우드 환경으로의 전환 가속화; 하이브리드 클라우드 환경을 위한 통합된 보안 정책 적용",
+        "OPTIMAL": "AI 기반 정책 관리 시스템 적용; 클라우드 환경의 변화에 따라 보안 정책이 자동으로 최적화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "시스템 환경에 따른 정책 관리 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-4.1.1",
+        "ZT-7.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L4-failure-recovery/retired-numbered-case-security-rule-misconfiguration-validation/",
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-terraform-drift-detection-validation/",
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-terraform-drift-remediation-validation/",
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-policy-as-code-validation/",
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-kubernetes-manifest-policy-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.1.1",
+      "canonical_name_ko": "리소스 권한 부여 및 통합",
+      "stable_slug": "resource-authorization-integration",
+      "domain": "application-workload",
+      "function": "application-access",
+      "source_definition": "애플리케이션 리소스 권한을 정책과 통합해 부여한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "74",
+        "table_or_figure": "Table 3-28; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 접근권한 관리 시스템 도입; 사용자 및시스템의 권한 수동 관리",
+        "INITIAL": "중앙집중식 접근권한 관리 시스템 도입; 모든리소스에 대한 권한 중앙 관리",
+        "ADVANCED": "다수의 컨텍스트 정보를 조합하여 최소 권한 원칙 적용; R BAC과 ABAC 결합",
+        "OPTIMAL": "AI를 활용하여 사용자 행동 분석; 이상징후를 자동으로 탐지하여 권한 조정"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "리소스 권한 부여 및 통합 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.1.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L2-security-baseline/retired-numbered-case-kubernetes-rbac-validation/",
+        "retired-framework/L2-security-baseline/retired-numbered-case-grafana-anonymous-access-denial-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.2.1",
+      "canonical_name_ko": "지속적인 모니터링 및 진행 중인 승인",
+      "stable_slug": "continuous-monitoring-approval-in-progress",
+      "domain": "application-workload",
+      "function": "application-threat-protection",
+      "source_definition": "애플리케이션 상태를 지속 관찰하고 세션 중 승인 여부를 재평가한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "75",
+        "table_or_figure": "Table 3-29; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "수동으로 애플리케이션 및시스템 보안 상태 모니터링, 보안 이벤트 기록; 초기보안 승인 프로세스 수립",
+        "INITIAL": "자동화된 보안 모니터링 도구 도입; 실시간 보안 이벤트 수집 및분석",
+        "ADVANCED": "AI 기반의 보안 모니터링 시스템 도입; 보안이벤트 분석 및이상 징후 실시간 탐지",
+        "OPTIMAL": "보안모니터링 최적화; 위협사전 예측 및대응"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "지속적인 모니터링 및 진행 중인 승인 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-5.1.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.3.1",
+      "canonical_name_ko": "원격 접속",
+      "stable_slug": "remote-access",
+      "domain": "application-workload",
+      "function": "accessible-application",
+      "source_definition": "승인된 주체가 정책에 따라 애플리케이션에 원격 접근하도록 한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "76",
+        "table_or_figure": "Table 3-30; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 원격 접속 솔루션(VPN 등)을 도입하여 외부 접속 지원; 초기보안 정책 수립과 함께 애플리케이션에 대한 접근제어가 제한적",
+        "INITIAL": "원격접속 보안 강화를 통한 사용자 인증 및데이터 암호화 구현; 애플리케이션별 접근제어가 추가되어, 사용자 및기기의 보안 상태에 따라 애플리케이션 기능 접근 제한",
+        "ADVANCED": "원격접속 기기 실시간 모니터링 및제어; 애플리케이션의 기능 사용을 시나리오별로 제한하고, 접속 상황에 따라 동적 보안 정책을 적용하여 애플리케이션 기능 필요시 제한",
+        "OPTIMAL": "AI를 활용하여 원격 접속 보안 고도화; 애플리케이션 접근이 사용자 행동 및접속 상태에 따라 자동으로 조정되며, AI를 통해 위험 요소가 탐지될 경우 애플리케이션 기능이 즉각적으로 제한 또는 차단"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "원격 접속 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-1.2.1",
+        "ZT-4.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.4.1",
+      "canonical_name_ko": "안전한 애플리케이션 배포",
+      "stable_slug": "secure-application-deployment",
+      "domain": "application-workload",
+      "function": "secure-application-deployment",
+      "source_definition": "검증된 구성과 통제를 거쳐 애플리케이션을 배포한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "77",
+        "table_or_figure": "Table 3-31; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "애플리케이션 배포 시기본적인 보안 검토 실시; 보안가이드라인을 준수하는 초기 배포 절차 마련",
+        "INITIAL": "보안이 내재된, 자동화된 배포 파이프라인 구축; 애플리케이션 배포 시보안 자동으로 적용",
+        "ADVANCED": "배포과정 전반에 걸쳐 고급 보안 검사 추가; 배포환경에 대한 지속적인 모니터링 수행",
+        "OPTIMAL": "완전히 자동화된 보안 중심 배포 파이프라인 구성; 애플리케이션 배포 시최상의 보안 상태를 유지"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "안전한 애플리케이션 배포 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-5.4.2",
+        "ZT-4.4.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-kubernetes-manifest-policy-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.4.2",
+      "canonical_name_ko": "애플리케이션 인벤토리",
+      "stable_slug": "application-inventory",
+      "domain": "application-workload",
+      "function": "secure-application-deployment",
+      "source_definition": "애플리케이션과 워크로드의 목록·소유자·상태를 관리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "77",
+        "table_or_figure": "Table 3-31; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기업내모든 애플리케이션 수동 목록화; 초기애플리케이션 인벤토리 작성",
+        "INITIAL": "자동화된 인벤토리 도구를 도입; 애플리케이션 자동 식별 및주기적으로 업데이트",
+        "ADVANCED": "애플리케이션 인벤토리에 보안 정보 추가; 각애플리케이션의 보안 상태 평가 및관리",
+        "OPTIMAL": "AI 기반의 인벤토리 관리 시스템을 도입; 애플리케이션의 변경 사항 실시간 반영"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "애플리케이션 인벤토리 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-2.3.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.5.1",
+      "canonical_name_ko": "안전한 소프트웨어·애플리케이션 개발 및 통합",
+      "stable_slug": "secure-application-development-integration",
+      "domain": "application-workload",
+      "function": "software-application-security",
+      "source_definition": "개발·통합 과정에 보안 요구와 검증을 포함한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "78",
+        "table_or_figure": "Table 3-32; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "개발프로세스에 기본적인 보안 코딩 표준, 가이드라인 도입; 코드배포 전, 정적/수동 보안 테스트 수행",
+        "INITIAL": "안전성 검토와 테스트를 SDLC에 통합; 개발단계에서부터 보안 취약점 식별 및수정",
+        "ADVANCED": "서드파티 라이브러리 및오픈소스 소프트웨어 보안 검사 자동화 및인벤토리 반영; 프로세스 전반에 걸친 SBOM 문서를 작성",
+        "OPTIMAL": "소프트웨어 개발과 관련된 기업의 프로세스 격리 및마이크로 세그멘테이션 수행; 모든소프트웨어 개발 및통합 프로세스 자동화"
+      },
+      "selection": "DESIGN_ONLY",
+      "rationale": "안전한 소프트웨어·애플리케이션 개발 및 통합 requires organizational scale, lifecycle integration, or development practices not reproducible honestly in the current laboratory.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-5.4.1",
+        "ZT-5.4.2",
+        "ZT-8.1"
+      ],
+      "target_maturity": null,
+      "target_phase": "DESIGN_REVIEW",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY source traceability and limitation review"
+      ],
+      "limitation": "Architecture traceability only; no implementation or maturity inference is permitted.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-5.5.2",
+      "canonical_name_ko": "소프트웨어 취약 관리",
+      "stable_slug": "software-vulnerability-management",
+      "domain": "application-workload",
+      "function": "software-application-security",
+      "source_definition": "소프트웨어 취약점을 식별·우선순위화·조치한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "78",
+        "table_or_figure": "Table 3-32; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "소프트웨어 개발 및운영에 따른 기본적인 위험 요소 식별 및문서화; 위험관리 계획을 수립하여, 발생 가능한 보안 사고에 대비",
+        "INITIAL": "위험평가 프로세스 도입; 각소프트웨어의 위험 수준 평가 및우선순위 지정",
+        "ADVANCED": "위험관리 시스템 자동화; 실시간 소프트웨어 위험 상태 모니터링 및대응",
+        "OPTIMAL": "AI 기반 예측 분석 도입; 잠재적인 보안 위험 사전 식별 및대응"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "소프트웨어 취약 관리 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-5.4.2",
+        "ZT-2.4.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.1.1",
+      "canonical_name_ko": "데이터 카탈로그 위험 정렬",
+      "stable_slug": "data-catalog-risk-sorting",
+      "domain": "data",
+      "function": "data-inventory-management",
+      "source_definition": "데이터 카탈로그를 만들고 위험 기준으로 분류·정렬한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "79",
+        "table_or_figure": "Table 3-33; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "데이터 자산의 초기 카탈로그 작성; 주요데이터 유형 수동 분류",
+        "INITIAL": "자동화된 데이터 카탈로그 도구 도입; 데이터 자산 일부 자동화를 통한 수집 및분류",
+        "ADVANCED": "고급분석 도구를 통한 데이터 민감도 및위험 수준 정밀 평가; 데이터 카탈로그 완전 자동화",
+        "OPTIMAL": "AI를 활용하여 데이터 위험 요소 실시간 분석 및카탈로그 반영; 데이터 카탈로그와 다른 보안 시스템 통합"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "데이터 카탈로그 위험 정렬 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-5.4.2"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.1.2",
+      "canonical_name_ko": "기업 데이터 거버넌스",
+      "stable_slug": "enterprise-data-governance",
+      "domain": "data",
+      "function": "data-inventory-management",
+      "source_definition": "기업 데이터의 소유권·수명주기·정책을 거버넌스로 관리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "79",
+        "table_or_figure": "Table 3-33; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "데이터 거버넌스 정책 수립 및데이터 관리에 대한 기본적인 지침 마련; 데이터 소유자와 관리자 지정",
+        "INITIAL": "데이터 거버넌스 프레임워크를 도입; 기업내모든 데이터 관리 및보호 표준화",
+        "ADVANCED": "데이터 거버넌스 도구를 사용하여 데이터 관리 프로세스를 자동화; 데이터 정책 준수 실시간 모니터링",
+        "OPTIMAL": "AI 기반의 거버넌스 관리 시스템을 도입; 데이터 정책 준수 상태 실시간 평가 및최적화"
+      },
+      "selection": "DESIGN_ONLY",
+      "rationale": "기업 데이터 거버넌스 requires organizational scale, lifecycle integration, or development practices not reproducible honestly in the current laboratory.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-6.1.1",
+        "ZT-6.4.1"
+      ],
+      "target_maturity": null,
+      "target_phase": "DESIGN_REVIEW",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY source traceability and limitation review"
+      ],
+      "limitation": "Architecture traceability only; no implementation or maturity inference is permitted.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.2.1",
+      "canonical_name_ko": "데이터 접근제어",
+      "stable_slug": "data-access-control",
+      "domain": "data",
+      "function": "access-decision-method",
+      "source_definition": "데이터 민감도와 주체·컨텍스트에 따라 접근을 결정한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "80",
+        "table_or_figure": "Table 3-34; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "데이터 접근제어 정책 수립; 초기권한 체계 수동 관리",
+        "INITIAL": "중앙집중식 접근제어 시스템을 도입; 최소한의 권한 요소 확인을 통한 데이터 접근 여부 결정",
+        "ADVANCED": "A BAC 도입을 통해 보다 세밀하고 유연한 접근권한 관리 구현; 접근제어 시스템을 다른 보안 시스템과 통합하여, 종합적인 보안 정책 적용",
+        "OPTIMAL": "AI 기반 데이터 접근제어 최적화 및실시간 권한 조정; 모든데이터 접근제어 자동화 및조직의 보안 정책에 맞춰 지속적으로 최적화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "데이터 접근제어 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-1.1.1",
+        "ZT-4.1.1",
+        "ZT-6.4.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L2-security-baseline/retired-numbered-case-mariadb-access-control-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.3.1",
+      "canonical_name_ko": "데이터 암호화 및 권한 관리",
+      "stable_slug": "data-encryption-key-management",
+      "domain": "data",
+      "function": "data-encryption",
+      "source_definition": "데이터 암호화와 키·권한 관리를 결합한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "81",
+        "table_or_figure": "Table 3-35; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "주요데이터 수동으로 암호화; 기본적인 암호화 정책 수립",
+        "INITIAL": "자동화된 데이터 암호화 도구 도입; 모든중요한 데이터 자동으로 암호화",
+        "ADVANCED": "고급암호화 기술을 도입; 권한관리 시스템을 다른 보안 시스템과 통합",
+        "OPTIMAL": "AI 기반의 암호화 및권한 관리 시스템 도입을 통하여 데이터 보호 최적화 및실시간 권한 조정; 모든데이터 암호화 및권한 관리 자동화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "데이터 암호화 및 권한 관리 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-4.2.2",
+        "ZT-6.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.4.1",
+      "canonical_name_ko": "데이터 라벨링 및 태그 지정",
+      "stable_slug": "data-labeling-tagging",
+      "domain": "data",
+      "function": "data-classification",
+      "source_definition": "데이터에 분류 라벨과 정책 태그를 부여한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "82",
+        "table_or_figure": "Table 3-36; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "라벨링 및태그 지정 지침 수립; 일관된 데이터 분류 체계 마련",
+        "INITIAL": "데이터에 기본적인 라벨 및태그 수동 지정; 민감한 데이터에 대해 특수 라벨 적용 및차등적 보안 정책 적용",
+        "ADVANCED": "자동화된 라벨링 및태그 지정 도구 도입; 데이터 자산 자동 분류 및식별",
+        "OPTIMAL": "고급메타데이터 관리 도구를 사용; 데이터 라벨링과 태그 지정 프로세스를 최적화 및자동화된 규칙 적용"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "데이터 라벨링 및 태그 지정 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-6.1.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.5.1",
+      "canonical_name_ko": "데이터 손실 방지 (DLP)",
+      "stable_slug": "data-loss-prevention",
+      "domain": "data",
+      "function": "data-loss-prevention",
+      "source_definition": "정책 위반 데이터 이동과 유출을 방지한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "83",
+        "table_or_figure": "Table 3-37; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "DLP 정책을 수립; 민감한 데이터의 유출 가능성 수동 평가",
+        "INITIAL": "초기 DLP 도구를 도입, 주요 데이터 유출 경로 모니터링; DLP 정책 중앙 관리 및다양한 데이터 채널을 통한 유출 차단",
+        "ADVANCED": "DLP 시스템을 기업 전반에 도입, 실시간 데이터 보호 및유출 방지; DLP 시스템을 다른 보안 시스템과 통합, 종합적인 데이터 보호 전략 구현",
+        "OPTIMAL": "AI를 활용한 데이터 유출 탐지와 예방 기능을 강화; 데이터 유출 위험 실시간 예측 및차단"
+      },
+      "selection": "INITIAL_TARGET",
+      "rationale": "데이터 손실 방지 (DLP) is feasible only at a bounded Initial target until broader enforcement, continuous signals, or product coverage exists.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-6.4.1",
+        "ZT-6.2.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "INITIAL",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping",
+        "bounded runtime result",
+        "documented Advanced-stage gap"
+      ],
+      "limitation": "The laboratory cannot currently evidence all Advanced-stage conditions for this capability.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-6.5.2",
+      "canonical_name_ko": "데이터 모니터링 및 감지",
+      "stable_slug": "data-monitoring-detection",
+      "domain": "data",
+      "function": "data-loss-prevention",
+      "source_definition": "데이터 사용·이동을 관찰하고 이상을 감지한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "83",
+        "table_or_figure": "Table 3-37; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "데이터 활동 수동 모니터링; 주요보안 이벤트 수동 기록",
+        "INITIAL": "자동화된 데이터 모니터링 도구를 도입; 실시간 데이터 활동 감시 및비정상적인 행동 탐지",
+        "ADVANCED": "AI 기반의 모니터링 시스템을 도입, 데이터 활동 분석 및이상 징후 실시간 탐지; 데이터 모니터링 결과를 다른 보안 시스템과 연계하여, 종합적인 보안 대응 구현",
+        "OPTIMAL": "AI를 활용하여 데이터 모니터링 최적화; 사전에 위협 예측 및대응"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "데이터 모니터링 및 감지 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-6.1.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_3",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-7.1",
+      "canonical_name_ko": "모든 관련 활동 기록",
+      "stable_slug": "record-all-relevant-activities",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "제로트러스트 판단과 감사에 필요한 관련 활동을 기록한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "네트워크 및시스템에서 발생하는 주요 보안 이벤트 기록; 수동적 로그 기록",
+        "INITIAL": "다양한 시스템에서 자동으로 로그 데이터 수집; 활동기록 중앙집중적 수집",
+        "ADVANCED": "수집된 데이터를 분석하여 보안 위협을 실시간으로 탐지하고 경고 생성; 로그기록의 무결성 보장",
+        "OPTIMAL": "AI를 활용한 로그 분석 시스템 구축; 실시간으로 활동 기록 분석 및자동으로 보안 위협 탐지 대응하는 자율 보안 체계 구축"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "모든 관련 활동 기록 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-2.3.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "USER_EXECUTED_RUNTIME",
+        "CODEX_EXECUTED_LIVE_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-openstack-network-provisioning-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-7.2",
+      "canonical_name_ko": "중앙집중적 보안 정보 및 이벤트 관리",
+      "stable_slug": "centralized-security-information-event-management",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "보안 정보와 이벤트를 중앙에서 수집·연계·관리한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "보안이벤트 및로그 데이터 수동 수집 저장; 각시스템에서 발생하는 보안 기록 개별적 관리",
+        "INITIAL": "다양한 시스템에서 발생하는 보안 이벤트와 로그 데이터를 자동으로 중앙집중적 SIEM 시스템으로 전송 수집 관리; 수집된 데이터 실시간 모니터링",
+        "ADVANCED": "중앙집중적 SIEM 시스템에서 실시간으로 보안 이벤트를 분석하고 경고 생성; S IEM 시스템과 다양한 보안 도구 연동을 통한 보안 데이터 종합적 분석",
+        "OPTIMAL": "AI를 도입하여 SIEM 시스템에서 수집된 데이터를 기반으로 보안 이벤트 자동 분석; 비정상적인 활동 실시간 탐지"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "중앙집중적 보안 정보 및 이벤트 관리 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-8.5"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-7.3",
+      "canonical_name_ko": "보안 위협 분석",
+      "stable_slug": "security-threat-analysis",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "수집된 신호를 분석해 보안 위협과 우선순위를 판단한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "수동으로 보안 위협 식별; 보안사건 발생 시추적/분석하는 시스템 구축",
+        "INITIAL": "알려진 취약점에 대한 위험성 평가 기준 구현; 수집된 데이터를 기반으로 보안 위협을 빠르게 분석하고, 경고 생성",
+        "ADVANCED": "자동화된 보안 위협 분석 도구 도입; M L을 활용하여 비정상적인 활동 실시간 분석",
+        "OPTIMAL": "AI 기반의 예측 분석 시스템을 통한 실시간 위협 탐지 및자동 대응; 자율보안 체계 구축"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "보안 위협 분석 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-8.5"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_2",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-7.4",
+      "canonical_name_ko": "사용자 및 기기 동작 분석",
+      "stable_slug": "user-device-behavior-analysis",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "사용자와 기기의 정상 행동 기준과 이상 행동을 분석한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "사용자와 기기의 기본적인 활동 데이터 수집 및수동 분석; 비정상적인 행동 수동 탐지",
+        "INITIAL": "자동화된 사용자 및기기 동작 분석 도구 도입; 네트워크 내모든 활동 실시간 모니터링",
+        "ADVANCED": "고급행동 분석 기능을 도입; 비정상적인 사용자 활동과 기기 동작을 더욱 정밀하게 탐지",
+        "OPTIMAL": "AI 기반 자율적인 사용자 및기기 동작 분석 시스템 구축; 비정상적인 활동 예측 및사전 차단"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "사용자 및 기기 동작 분석 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-1.1.1",
+        "ZT-2.3.1"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-7.5",
+      "canonical_name_ko": "위협 인텔리전스 통합",
+      "stable_slug": "threat-intelligence-integration",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "내·외부 위협 인텔리전스를 정책 판단과 분석에 통합한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "외부의 보안 위협 정보를 수동으로 수집 후, 내부 보안 시스템에 적용; 외부위협 인텔리전스를 수동으로 확인",
+        "INITIAL": "자동화된 위협 인텔리전스 통합 도구 도입; 외부에서 수집된 보안 정보를 실시간으로 내부 보안 시스템과 연동",
+        "ADVANCED": "고급위협 인텔리전스 통합 시스템을 통해 외부 위협 정보를 더욱 세밀하게 분석, 내부 보안 정책과 실시간으로 연계; 위협인텔리전스를 내부 시스템과 통합",
+        "OPTIMAL": "AI 기반의 위협 인텔리전스 시스템을 구축; 외부위협 정보 실시간으로 수집, 분석, 적용"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "위협 인텔리전스 통합 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-7.2",
+        "ZT-8.5"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-7.6",
+      "canonical_name_ko": "자동화된 동적 정책",
+      "stable_slug": "automated-dynamic-policy",
+      "domain": "visibility-analytics",
+      "function": "visibility-analytics",
+      "source_definition": "관찰된 위험과 컨텍스트에 따라 정책을 동적으로 갱신한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "84-86",
+        "table_or_figure": "Table 3-38; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기본적인 보안 정책을 수동 관리; 보안이벤트가 발생할 경우 관리자가 직접 정책을 수정하여 대응",
+        "INITIAL": "자동화된 정책 관리 시스템을 도입; 보안이벤트 발생 시자동 정책 변경 및적용",
+        "ADVANCED": "동적정책을 실시간으로 조정하여, 보안 이벤트 발생 시즉각적으로 새로운 정책을 생성하고 적용; 위협탐지와 연계하여 동적으로 정책 조정",
+        "OPTIMAL": "AI 기반의 자동화된 동적 정책 시스템 구축; 보안이벤트 분석 결과에 따라 자율적인 정책 조정"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "자동화된 동적 정책 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-7.3",
+        "ZT-7.4",
+        "ZT-8.1"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-8.1",
+      "canonical_name_ko": "정책 통합",
+      "stable_slug": "policy-integration",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "여러 통제 지점의 정책 정의와 판단을 일관되게 통합한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "기업내보안 정책을 수동 관리; 각시스템에 개별적으로 적용",
+        "INITIAL": "자동화된 정책 통합 시스템을 도입; 보안정책을 중앙에서 관리하고 여러 시스템에 동시 적용",
+        "ADVANCED": "정책통합 시스템을 고도화하여 실시간 보안 이벤트를 기반 정책 동적 조정; 위협에 따라 즉각적으로 정책 수정/적용하는 자동화된 프로세스 정착",
+        "OPTIMAL": "AI 기반 자율 정책 통합 시스템 도입; 상황에 맞게 정책 자동 조정"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "정책 통합 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-4.1.1",
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_4",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "REFERENCE_ONLY",
+      "current_evidence_level": "DESIGN",
+      "current_evidence_authority": [
+        "DESIGN_ONLY"
+      ],
+      "current_evidence": [
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-policy-as-code-validation/",
+        "retired-framework/L5-governance-intelligent-ops/retired-numbered-case-kubernetes-manifest-policy-validation/"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-8.2",
+      "canonical_name_ko": "중요 프로세스 자동화",
+      "stable_slug": "critical-process-automation",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "반복 가능하고 승인된 중요 운영·보안 프로세스를 자동화한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "핵심보안 및운영 프로세스 수동으로 관리; 특정사건이 발생할 때마다 관리자가 직접 개입하여 처리",
+        "INITIAL": "중요한 프로세스에 대한 자동화 도구를 도입; 반복적인 작업과 기본적인 보안 절차 자동으로 처리",
+        "ADVANCED": "자동화된 프로세스를 확장하여, 보안 사고 발생 시신속한 자동 대응; 주요보안 이벤트에 대한 실시간 경고 및대응 시스템이 도입",
+        "OPTIMAL": "AI ML을 기반으로 모든 중요 프로세스가 자율적으로 운영; 이상상황 발생 시즉각 대응"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "중요 프로세스 자동화 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-8.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_4",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "MAPPED",
+      "current_validation_status": "PARTIALLY_VALIDATED",
+      "current_evidence_level": "RUNTIME",
+      "current_evidence_authority": [
+        "CODEX_EXECUTED_LIVE_RUNTIME"
+      ],
+      "current_evidence": [
+        "retired-framework-evidence/retired-numbered-case-openstack-network-provisioning-validation/",
+        "docs/evidence/zero-trust/zt-net-001-validation.yaml"
+      ],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": true
+    },
+    {
+      "id": "ZT-8.3",
+      "canonical_name_ko": "인공지능",
+      "stable_slug": "artificial-intelligence",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "검증된 범위에서 인공지능을 분석·판단 지원에 활용한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "AI 기술이 적용되지 않은 상태; 수동분석과 경고 시스템에 의존",
+        "INITIAL": "기본적인 AI 기반 도구를 도입; 보안이벤트를 분석하고 패턴 식별",
+        "ADVANCED": "AI 기반의 보안 시스템 고도화를 통한 실시간위협 탐지 및대응; AI는 복잡한 활동을 분석하여 보다 정교한 위협 탐지와 실시간 대응 수행",
+        "OPTIMAL": "AI가 모든 보안 시스템에 완전히 통합; 자율적으로 보안 위협을 감지하고 대응하며, 정책을 동적으로 조정"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "인공지능 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-7.1",
+        "ZT-7.4"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-8.4",
+      "canonical_name_ko": "보안 통합, 자동화 및 대응",
+      "stable_slug": "security-integration-automation-response",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "보안 도구·데이터·대응 절차를 통합하고 승인된 자동화를 수행한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "보안도구와 시스템이 각각 독립적으로 운영; 수동대응에 의존",
+        "INITIAL": "S OAR 시스템을 도입; 보안도구와 시스템을 통합하고, 기본적인 보안 이벤트에 대한 자동화된 대응 절차 마련",
+        "ADVANCED": "S OAR 시스템 고도화; 복잡한 보안 사고에 대해 자동화된 대응과 실시간 통합 수행",
+        "OPTIMAL": "AI ML 기반의 SOAR 시스템을 통해 자율적인 보안 대응 수행; 모든보안 이벤트 중앙에서 자동으로 처리"
+      },
+      "selection": "OPTIMAL_ROADMAP_ONLY",
+      "rationale": "보안 통합, 자동화 및 대응 depends on dynamic risk, behavior analytics, enterprise telemetry, or closed-loop automation and is retained only for future Optimal expansion.",
+      "lab_feasibility": "LOW",
+      "dependency_ids": [
+        "ZT-3.2.1",
+        "ZT-7.3",
+        "ZT-8.1",
+        "ZT-8.2"
+      ],
+      "target_maturity": "OPTIMAL",
+      "target_phase": "FUTURE_PHASE_6",
+      "roadmap_status": "ROADMAP_ONLY",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "DESIGN_ONLY extension contract",
+        "MISSING until a separately approved future implementation"
+      ],
+      "limitation": "Future interface only; implementation is NOT_STARTED and validation is UNASSESSED.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-8.5",
+      "canonical_name_ko": "데이터 교환 표준화",
+      "stable_slug": "data-exchange-standardization",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "구성요소 사이의 보안 데이터 형식과 교환 방식을 표준화한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "각시스템에서 수집된 데이터를 상이한 형식으로 저장; 비효율적 데이터 교환",
+        "INITIAL": "데이터 교환 표준을 도입; 기업내모든 시스템에서 일관된 형식으로 데이터를 저장하고 공유",
+        "ADVANCED": "데이터 교환 표준화가 고도화되어, 다양한 외부 시스템 및파트너와도 데이터 공유 가능; 데이터 교환 절차 실시간 수행",
+        "OPTIMAL": "AI를 통해 데이터 교환 표준화 자율적 관리; 외부파트너와의 데이터 교환까지 실시간 자동화"
+      },
+      "selection": "ADVANCED_PRIMARY_TARGET",
+      "rationale": "데이터 교환 표준화 is directly required by the Golden Path, can be operated through IaC, Configuration as Code, or Policy as Code, and can produce bounded runtime evidence in the laboratory.",
+      "lab_feasibility": "HIGH",
+      "dependency_ids": [
+        "ZT-7.1"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_4",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; ADVANCED_VALIDATED requires capability-specific implementation, enforcement where applicable, runtime, failure, recovery, repeatability, and fresh sanitized evidence.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    },
+    {
+      "id": "ZT-8.6",
+      "canonical_name_ko": "보안 운영 조정 및 사고 대응",
+      "stable_slug": "security-operations-coordination-incident-response",
+      "domain": "automation-integration",
+      "function": "automation-integration",
+      "source_definition": "보안 운영 주체와 사고 대응 절차를 조정한다.",
+      "source_reference": {
+        "document": "제로트러스트 가이드라인 2.0",
+        "printed_page": "87-89",
+        "table_or_figure": "Table 3-39; capability relationship also in Table 3-10, pp. 54-55"
+      },
+      "source_maturity_summary": {
+        "TRADITIONAL": "보안사고 발생 시대응 절차 수동으로 수행; 보안팀이 수동으로 여러 부서와 소통하고 조정",
+        "INITIAL": "보안사고 대응 계획 수립; 사고대응 절차를 표준화",
+        "ADVANCED": "사고대응 절차가 자동화; 보안운영 팀과 다른 부서 간실시간 조율",
+        "OPTIMAL": "AI 기반 사고 대응 및운영 조정 시스템 도입; 보안사고가 발생하기 전예측하고 선제적 대응"
+      },
+      "selection": "ADVANCED_SUPPORTING_TARGET",
+      "rationale": "보안 운영 조정 및 사고 대응 supports the Golden Path and has a credible bounded Advanced target, but scope or evidence breadth will remain narrower than an enterprise deployment.",
+      "lab_feasibility": "BOUNDED",
+      "dependency_ids": [
+        "ZT-3.2.1",
+        "ZT-7.1",
+        "ZT-8.2",
+        "ZT-8.4"
+      ],
+      "target_maturity": "ADVANCED",
+      "target_phase": "PHASE_4",
+      "roadmap_status": "TARGET_DEFINED",
+      "current_maturity": "UNASSESSED",
+      "current_implementation_status": "GAP_IDENTIFIED",
+      "current_validation_status": "GAP_IDENTIFIED",
+      "current_evidence_level": "NONE",
+      "current_evidence_authority": [
+        "MISSING"
+      ],
+      "current_evidence": [],
+      "evidence_requirements": [
+        "CONFIGURATION_ONLY mapping to versioned desired state",
+        "CODEX_EXECUTED_LOCAL deterministic validator result",
+        "CODEX_EXECUTED_LIVE_RUNTIME or USER_EXECUTED_RUNTIME sanitized evidence",
+        "allow and deny or positive and negative test as applicable",
+        "failure test and rollback or recovery test",
+        "repeatability record and freshness metadata"
+      ],
+      "limitation": "Target only; any future assessment is limited to the declared lab subjects, resources, and enforcement points.",
+      "implementation_mapping": "Target architecture mapping only; consult package and runbook records before any implementation claim.",
+      "runtime_evidence_available": false
+    }
+  ]
+}

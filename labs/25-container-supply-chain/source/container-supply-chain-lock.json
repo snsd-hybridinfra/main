@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "status": "LOCAL_POLICY_AUTHORITY",
+  "source": {
+    "repository": "snsd-hybridinfra/snsd-multicloud-ops",
+    "required_branch_for_release": "main",
+    "dirty_source_allowed": false
+  },
+  "build": {
+    "context": "applications/internal-iaas-portal",
+    "builder": "docker-buildx",
+    "network": "none_after_dependency_resolution",
+    "sbom_required": true,
+    "provenance_required": true,
+    "base_image_reference_policy": "DIGEST_ONLY_EXTERNAL_INPUT"
+  },
+  "promotion": {
+    "registry": "EXTERNAL_APPROVED_PRIVATE_REGISTRY",
+    "image_reference_policy": "REPOSITORY_AT_SHA256",
+    "signature_required": true,
+    "signature_verification_required": true,
+    "sbom_attestation_required": true,
+    "provenance_attestation_required": true,
+    "maximum_high_vulnerabilities": 0,
+    "maximum_critical_vulnerabilities": 0,
+    "partial_release_allowed": false
+  },
+  "installation": {
+    "target": "K3S",
+    "mode": "GITOPS_PROMOTION_PR_THEN_ARGOCD_RECONCILE",
+    "protected_environment_required": true,
+    "ci_kubeconfig_allowed": false,
+    "ci_direct_cluster_mutation_allowed": false,
+    "promotion_pull_request_required": true,
+    "argocd_source_branch": "main",
+    "argocd_application": "idp-container-release",
+    "generated_root": ".runtime/container-supply-chain",
+    "gitops_root": "applications/internal-iaas-portal/kubernetes/releases",
+    "rollback": "REVIEWED_GIT_REVERT_TO_PREVIOUS_RELEASE"
+  },
+  "images": [
+    {
+      "id": "request-api",
+      "repository": "iaas/request-api",
+      "dockerfile": "services/request-api/Dockerfile",
+      "required_base_args": ["PYTHON_IMAGE"],
+      "rollout": {"namespace": "user-service", "kind": "deployment", "name": "request-api"},
+      "install_manifests": ["kubernetes/request-api/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/request-api/deployment.yaml", "kubernetes/request-api/migration-job.yaml"]
+    },
+    {
+      "id": "approval-api",
+      "repository": "iaas/approval-api",
+      "dockerfile": "services/approval-api/Dockerfile",
+      "required_base_args": ["PYTHON_IMAGE"],
+      "rollout": {"namespace": "control-service", "kind": "deployment", "name": "approval-api"},
+      "install_manifests": ["kubernetes/approval-api/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/approval-api/deployment.yaml", "kubernetes/approval-api/migration-job.yaml"]
+    },
+    {
+      "id": "grant-api",
+      "repository": "iaas/grant-api",
+      "dockerfile": "services/grant-api/Dockerfile",
+      "required_base_args": ["PYTHON_IMAGE"],
+      "rollout": {"namespace": "control-service", "kind": "deployment", "name": "grant-api"},
+      "install_manifests": ["kubernetes/grant-api/deployment.yaml", "kubernetes/grant-api/expiry-cronjob.yaml"],
+      "kubernetes_consumers": ["kubernetes/grant-api/deployment.yaml", "kubernetes/grant-api/expiry-cronjob.yaml"]
+    },
+    {
+      "id": "terraform-runner",
+      "repository": "iaas/terraform-runner",
+      "dockerfile": "services/terraform-runner/Dockerfile",
+      "required_base_args": ["PYTHON_IMAGE", "TERRAFORM_IMAGE"],
+      "rollout": {"namespace": "control-service", "kind": "deployment", "name": "terraform-runner"},
+      "install_manifests": ["kubernetes/terraform-runner/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/terraform-runner/deployment.yaml"]
+    },
+    {
+      "id": "user-portal",
+      "repository": "iaas/user-portal",
+      "dockerfile": "services/user-portal/Dockerfile",
+      "required_base_args": ["NGINX_IMAGE"],
+      "rollout": {"namespace": "user-service", "kind": "deployment", "name": "user-portal"},
+      "install_manifests": ["kubernetes/user-portal/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/user-portal/deployment.yaml"]
+    },
+    {
+      "id": "admin-portal",
+      "repository": "iaas/admin-portal",
+      "dockerfile": "services/admin-portal/Dockerfile",
+      "required_base_args": ["NGINX_IMAGE"],
+      "rollout": {"namespace": "admin-service", "kind": "deployment", "name": "admin-portal"},
+      "install_manifests": ["kubernetes/admin-portal/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/admin-portal/deployment.yaml"]
+    },
+    {
+      "id": "edge-gateway",
+      "repository": "iaas/edge-gateway",
+      "dockerfile": "security/nginx/Dockerfile",
+      "required_base_args": ["CRS_IMAGE"],
+      "rollout": {"namespace": "edge-system", "kind": "deployment", "name": "edge-gateway"},
+      "install_manifests": ["kubernetes/edge-gateway/deployment.yaml"],
+      "kubernetes_consumers": ["kubernetes/edge-gateway/deployment.yaml"]
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+---
+- name: create aws base network
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    region: ap-northeast-2
+    owner: jjh
+    project: ansible-vpc-lab
+    managed_by: ansible
+    vpc_name: ansible-jjh-vpc
+    output_dir: "{{ playbook_dir }}/output"
+
+  tasks:
+    - name: create vpc
+      amazon.aws.ec2_vpc_net:
+        name: "{{ vpc_name }}"
+        cidr_block: 10.21.0.0/16
+        region: "{{ region }}"
+        tenancy: default
+        state: present
+        tags:
+          Name: "{{ vpc_name }}"
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: vpc_result
+
+    - name: create public subnet 1
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        cidr: 10.21.1.0/24
+        az: ap-northeast-2a
+        region: "{{ region }}"
+        map_public: yes
+        tags:
+          Name: ansible-jjh-public-subnet-1
+          Type: public
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: public_subnet_1
+
+    - name: create public subnet 2
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        cidr: 10.21.2.0/24
+        az: ap-northeast-2c
+        region: "{{ region }}"
+        map_public: yes
+        tags:
+          Name: ansible-jjh-public-subnet-2
+          Type: public
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: public_subnet_2
+
+    - name: create private subnet 1
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        cidr: 10.21.11.0/24
+        az: ap-northeast-2a
+        region: "{{ region }}"
+        map_public: no
+        tags:
+          Name: ansible-jjh-private-subnet-1
+          Type: private
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: private_subnet_1
+
+    - name: create private subnet 2
+      amazon.aws.ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        cidr: 10.21.12.0/24
+        az: ap-northeast-2c
+        region: "{{ region }}"
+        map_public: no
+        tags:
+          Name: ansible-jjh-private-subnet-2
+          Type: private
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: private_subnet_2
+
+    - name: create and attach internet gateway
+      amazon.aws.ec2_vpc_igw:
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        region: "{{ region }}"
+        state: present
+        tags:
+          Name: ansible-jjh-igw
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: igw_result
+
+    - name: create public route table
+      amazon.aws.ec2_vpc_route_table:
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        region: "{{ region }}"
+        tags:
+          Name: ansible-jjh-public-rtb
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+        subnets:
+          - "{{ public_subnet_1.subnet.id }}"
+          - "{{ public_subnet_2.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw_result.gateway_id }}"
+        state: present
+      register: public_route_table_result
+
+    - name: create nat gateway
+      amazon.aws.ec2_vpc_nat_gateway:
+        state: present
+        subnet_id: "{{ public_subnet_1.subnet.id }}"
+        region: "{{ region }}"
+        wait: yes
+        if_exist_do_not_create: true
+        tags:
+          Name: ansible-jjh-nat-gw
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+      register: nat_gateway_result
+
+    - name: create private route table
+      amazon.aws.ec2_vpc_route_table:
+        vpc_id: "{{ vpc_result.vpc.id }}"
+        region: "{{ region }}"
+        tags:
+          Name: ansible-jjh-private-rtb
+          Project: "{{ project }}"
+          Owner: "{{ owner }}"
+          ManagedBy: "{{ managed_by }}"
+        subnets:
+          - "{{ private_subnet_1.subnet.id }}"
+          - "{{ private_subnet_2.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            nat_gateway_id: "{{ nat_gateway_result.nat_gateway_id }}"
+        state: present
+      register: private_route_table_result
+
+    - name: set base network summary
+      set_fact:
+        base_network_summary:
+          region: "{{ region }}"
+          vpc_id: "{{ vpc_result.vpc.id }}"
+          public_subnet_1: "{{ public_subnet_1.subnet.id }}"
+          public_subnet_2: "{{ public_subnet_2.subnet.id }}"
+          private_subnet_1: "{{ private_subnet_1.subnet.id }}"
+          private_subnet_2: "{{ private_subnet_2.subnet.id }}"
+          internet_gateway_id: "{{ igw_result.gateway_id }}"
+          nat_gateway_id: "{{ nat_gateway_result.nat_gateway_id }}"
+          public_route_table_id: "{{ public_route_table_result.route_table.id }}"
+          private_route_table_id: "{{ private_route_table_result.route_table.id }}"
+
+    - name: ensure output directory exists
+      file:
+        path: "{{ output_dir }}"
+        state: directory
+
+    - name: save base network variables
+      copy:
+        dest: "{{ output_dir }}/base_network.yml"
+        content: |
+          base_network:
+            region: "{{ base_network_summary.region }}"
+            vpc_id: "{{ base_network_summary.vpc_id }}"
+
+            public_subnets:
+              public_subnet_1: "{{ base_network_summary.public_subnet_1 }}"
+              public_subnet_2: "{{ base_network_summary.public_subnet_2 }}"
+
+            private_subnets:
+              private_subnet_1: "{{ base_network_summary.private_subnet_1 }}"
+              private_subnet_2: "{{ base_network_summary.private_subnet_2 }}"
+
+            internet_gateway_id: "{{ base_network_summary.internet_gateway_id }}"
+            nat_gateway_id: "{{ base_network_summary.nat_gateway_id }}"
+
+            route_tables:
+              public_route_table_id: "{{ base_network_summary.public_route_table_id }}"
+              private_route_table_id: "{{ base_network_summary.private_route_table_id }}"
+
+          common_tags:
+            Project: "{{ project }}"
+            Owner: "{{ owner }}"
+            ManagedBy: "{{ managed_by }}"
+
+    - name: show base network summary
+      debug:
+        var: base_network_summary

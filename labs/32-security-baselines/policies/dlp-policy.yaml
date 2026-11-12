@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-DATA-001",
+  "mode": "DETECTION_ONLY",
+  "external_transmission": false,
+  "source_modification": false,
+  "approved_actions": ["LOG", "ALERT", "CREATE_EVIDENCE", "REQUIRE_REVIEW"],
+  "prohibited_actions": ["DELETE", "QUARANTINE", "BLOCK", "MODIFY", "ROTATE"],
+  "approved_scan_roots": ["docs", "schemas", "tools", "tests", "policy", "profiles", "observability"],
+  "excluded_paths": [".git", ".runtime", ".venv", "venv", "node_modules", "vendor", "__pycache__"],
+  "rules": [
+    {"rule_id": "ZTDLP-PRIVATE-KEY", "category": "PRIVATE_KEY_PATTERN", "detector": "BUILTIN_PRIVATE_KEY_HEADER", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-PASSWORD", "category": "PASSWORD_ASSIGNMENT", "detector": "BUILTIN_ASSIGNMENT_PATTERN", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "HIGH"},
+    {"rule_id": "ZTDLP-API-TOKEN", "category": "API_TOKEN_PATTERN", "detector": "BUILTIN_TOKEN_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-CLOUD-KEY", "category": "CLOUD_ACCESS_KEY_PATTERN", "detector": "BUILTIN_CLOUD_KEY_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-CLIENT-SECRET", "category": "CLIENT_SECRET_PATTERN", "detector": "BUILTIN_ASSIGNMENT_PATTERN", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-DATABASE-CREDENTIAL", "category": "DATABASE_CREDENTIAL_PATTERN", "detector": "BUILTIN_CONNECTION_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-MFA", "category": "MFA_SECRET_PATTERN", "detector": "BUILTIN_MFA_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"},
+    {"rule_id": "ZTDLP-RECOVERY", "category": "RECOVERY_CODE_PATTERN", "detector": "BUILTIN_RECOVERY_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "HIGH"},
+    {"rule_id": "ZTDLP-PERSONAL-ID-TEST", "category": "PERSONAL_IDENTIFIER_TEST_PATTERN", "detector": "BUILTIN_CONTROLLED_TEST_SHAPE", "actions": ["LOG", "CREATE_EVIDENCE"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "MEDIUM"},
+    {"rule_id": "ZTDLP-RESTRICTED-LABEL", "category": "RESTRICTED_DATA_LABEL", "detector": "BUILTIN_LABEL", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "HIGH"},
+    {"rule_id": "ZTDLP-EXPORT", "category": "UNAPPROVED_EXPORT_PATH", "detector": "BUILTIN_EXTERNAL_UPLOAD_COMMAND", "actions": ["LOG", "CREATE_EVIDENCE", "REQUIRE_REVIEW"], "redaction": "REDACT_MATCH", "fixture_handling": "MARK_TEST_FIXTURE_NON_ACTIONABLE", "severity": "CRITICAL"}
+  ],
+  "false_positive_process": "Record detector, sanitized path and line, owner review, rationale, expiration, and reviewer; never allowlist a real secret value.",
+  "allowlisted_contexts": ["Explicit placeholders", "Detection regex construction", "Prohibited-example documentation", "TEST_FIXTURE records generated only under ignored runtime"],
+  "limitations": ["No blocking, quarantine, deletion, modification, credential rotation, external service, AI classifier, or complete DLP claim."]
+}

@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: grant-expiry
+  namespace: control-service
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: grant-expiry
+        spec:
+          restartPolicy: Never
+          serviceAccountName: grant-expiry
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            fsGroup: 65532
+            seccompProfile: {type: RuntimeDefault}
+          containers:
+            - name: expire
+              image: registry.example.com/iaas/grant-api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+              imagePullPolicy: IfNotPresent
+              command: ["python", "-m", "grant_api.expire_worker"]
+              env:
+                - {name: AUTH_MODE, value: oidc}
+                - {name: GRANT_API_INTERNAL_URL, value: "http://grant-api:8002"}
+                - {name: SERVICE_TOKEN_URL, value: "https://keycloak.control.internal/realms/iaas/protocol/openid-connect/token"}
+                - {name: SERVICE_CLIENT_ID, value: grant-expiry-worker}
+                - {name: SERVICE_CLIENT_SECRET_FILE, value: /etc/service-oauth/client-secret}
+                - {name: SERVICE_SCOPE, value: "grant:write"}
+                - {name: CALLBACK_TIMEOUT_SECONDS, value: "5"}
+                - {name: SSL_CERT_FILE, value: /etc/service-ca/ca.crt}
+              resources:
+                requests: {cpu: 50m, memory: 64Mi}
+                limits: {cpu: 250m, memory: 192Mi}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: ["ALL"]}
+              volumeMounts:
+                - {name: runtime, mountPath: /tmp}
+                - {name: service-ca, mountPath: /etc/service-ca, readOnly: true}
+                - {name: service-oauth, mountPath: /etc/service-oauth, readOnly: true}
+          volumes:
+            - name: runtime
+              emptyDir: {sizeLimit: 32Mi}
+            - name: service-ca
+              secret:
+                secretName: service-trust-bundle
+                defaultMode: 0440
+            - name: service-oauth
+              secret:
+                secretName: grant-expiry-oauth
+                defaultMode: 0440

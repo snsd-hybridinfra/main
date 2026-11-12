@@ -1,0 +1,5 @@
+.state/
+.secrets/
+input/sanitized/*.jsonl
+input/sanitized/*.log
+.env

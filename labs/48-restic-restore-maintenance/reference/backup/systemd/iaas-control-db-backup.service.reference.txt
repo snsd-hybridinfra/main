@@ -1,0 +1,33 @@
+[Unit]
+Description=IaaS control-db logical backup to Restic
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=iaas-backup
+Group=iaas-backup
+UMask=0077
+EnvironmentFile=/etc/iaas-backup/common.env
+EnvironmentFile=/etc/iaas-backup/control-db.env
+LoadCredential=pgpass:/etc/iaas-backup/control-db.pgpass
+LoadCredential=restic-password:/etc/iaas-backup/restic-backup-password
+LoadCredential=restic-repository:/etc/iaas-backup/restic-backup-repository
+Environment=PGPASSFILE=%d/pgpass
+Environment=RESTIC_PASSWORD_FILE=%d/restic-password
+Environment=RESTIC_REPOSITORY_FILE=%d/restic-repository
+ExecStart=/opt/iaas-service/backup/scripts/backup-postgres.sh control-db
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/iaas-backup /var/cache/iaas-restic
+TimeoutStartSec=2h

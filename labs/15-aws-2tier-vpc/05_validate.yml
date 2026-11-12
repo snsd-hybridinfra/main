@@ -1,0 +1,81 @@
+---
+- name: validate aws vpc lab
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: "{{ playbook_dir }}/output"
+
+  vars_files:
+    - "{{ playbook_dir }}/output/base_network.yml"
+    - "{{ playbook_dir }}/output/security_groups.yml"
+    - "{{ playbook_dir }}/output/compute.yml"
+    - "{{ playbook_dir }}/output/alb.yml"
+
+  tasks:
+    - name: check ec2 instance states
+      amazon.aws.ec2_instance_info:
+        region: "{{ base_network.region }}"
+        filters:
+          instance-id:
+            - "{{ compute.bastion.instance_id }}"
+            - "{{ compute.web_servers.web_1.instance_id }}"
+            - "{{ compute.web_servers.web_2.instance_id }}"
+      register: ec2_info
+
+    - name: check target group health
+      command: >
+        aws elbv2 describe-target-health
+        --target-group-arn {{ alb.target_group.arn }}
+        --region {{ base_network.region }}
+      register: target_health_raw
+      changed_when: false
+
+    - name: request alb endpoint
+      uri:
+        url: "http://{{ alb.dns_name }}"
+        method: GET
+        return_content: yes
+        status_code: 200
+      register: alb_http_result
+      retries: 10
+      delay: 15
+      until: alb_http_result.status == 200
+
+    - name: set validation summary
+      set_fact:
+        validation_summary:
+          vpc_id: "{{ base_network.vpc_id }}"
+          alb_dns_name: "{{ alb.dns_name }}"
+          bastion_instance_id: "{{ compute.bastion.instance_id }}"
+          web_1_instance_id: "{{ compute.web_servers.web_1.instance_id }}"
+          web_2_instance_id: "{{ compute.web_servers.web_2.instance_id }}"
+          ec2_instance_count: "{{ ec2_info.instances | length }}"
+          target_health_raw: "{{ target_health_raw.stdout }}"
+          alb_http_status: "{{ alb_http_result.status }}"
+          alb_response_body: "{{ alb_http_result.content }}"
+
+    - name: save validation result
+      copy:
+        dest: "{{ output_dir }}/validation.yml"
+        content: |
+          validation:
+            vpc_id: "{{ validation_summary.vpc_id }}"
+            alb_dns_name: "{{ validation_summary.alb_dns_name }}"
+
+            instances:
+              bastion_instance_id: "{{ validation_summary.bastion_instance_id }}"
+              web_1_instance_id: "{{ validation_summary.web_1_instance_id }}"
+              web_2_instance_id: "{{ validation_summary.web_2_instance_id }}"
+              ec2_instance_count: "{{ validation_summary.ec2_instance_count }}"
+
+            alb_http:
+              status: "{{ validation_summary.alb_http_status }}"
+              response_body: "{{ validation_summary.alb_response_body }}"
+
+    - name: show validation summary
+      debug:
+        var: validation_summary

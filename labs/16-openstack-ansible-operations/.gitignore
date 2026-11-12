@@ -1,0 +1,13 @@
+# Never commit real environment config, generated backup artifacts, identity or secrets.
+ansible/inventory.ini
+inventory.ini
+clouds.yaml
+openrc*
+*.pem
+*.key
+*.retry
+*.log
+backup/
+output/
+.runtime/
+__pycache__/

@@ -1,0 +1,92 @@
+---
+- name: create aws application load balancer
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: "{{ playbook_dir }}/output"
+    alb_name: ansible-jjh-alb
+    target_group_name: ansible-jjh-tg
+
+  vars_files:
+    - "{{ playbook_dir }}/output/base_network.yml"
+    - "{{ playbook_dir }}/output/security_groups.yml"
+    - "{{ playbook_dir }}/output/compute.yml"
+
+  tasks:
+    - name: create target group
+      community.aws.elb_target_group:
+        name: "{{ target_group_name }}"
+        protocol: http
+        port: 80
+        vpc_id: "{{ base_network.vpc_id }}"
+        region: "{{ base_network.region }}"
+        health_check_protocol: http
+        health_check_path: /
+        health_check_port: traffic-port
+        successful_response_codes: "200"
+        targets:
+          - Id: "{{ compute.web_servers.web_1.instance_id }}"
+            Port: 80
+          - Id: "{{ compute.web_servers.web_2.instance_id }}"
+            Port: 80
+        state: present
+      register: target_group_result
+
+    - name: create application load balancer
+      amazon.aws.elb_application_lb:
+        name: "{{ alb_name }}"
+        region: "{{ base_network.region }}"
+        subnets:
+          - "{{ base_network.public_subnets.public_subnet_1 }}"
+          - "{{ base_network.public_subnets.public_subnet_2 }}"
+        security_groups:
+          - "{{ security_groups.alb_sg_id }}"
+        scheme: internet-facing
+        listeners:
+          - Protocol: HTTP
+            Port: 80
+            DefaultActions:
+              - Type: forward
+                TargetGroupName: "{{ target_group_name }}"
+        state: present
+        wait: yes
+        tags:
+          Name: "{{ alb_name }}"
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: alb_result
+
+    - name: set alb summary
+      set_fact:
+        alb_summary:
+          alb_name: "{{ alb_name }}"
+          alb_dns_name: "{{ alb_result.dns_name }}"
+          target_group_name: "{{ target_group_name }}"
+          target_group_arn: "{{ target_group_result.target_group_arn }}"
+          web_1_instance_id: "{{ compute.web_servers.web_1.instance_id }}"
+          web_2_instance_id: "{{ compute.web_servers.web_2.instance_id }}"
+
+    - name: save alb variables
+      copy:
+        dest: "{{ output_dir }}/alb.yml"
+        content: |
+          alb:
+            name: "{{ alb_summary.alb_name }}"
+            dns_name: "{{ alb_summary.alb_dns_name }}"
+
+            target_group:
+              name: "{{ alb_summary.target_group_name }}"
+              arn: "{{ alb_summary.target_group_arn }}"
+
+            targets:
+              web_1_instance_id: "{{ alb_summary.web_1_instance_id }}"
+              web_2_instance_id: "{{ alb_summary.web_2_instance_id }}"
+
+    - name: show alb summary
+      debug:
+        var: alb_summary

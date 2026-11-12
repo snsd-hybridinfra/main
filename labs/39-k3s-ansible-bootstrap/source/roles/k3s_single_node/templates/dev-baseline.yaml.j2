@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: dev
+spec:
+  hard:
+    requests.cpu: "{{ k3s_quota_requests_cpu }}"
+    requests.memory: "{{ k3s_quota_requests_memory }}"
+    limits.cpu: "{{ k3s_quota_limits_cpu }}"
+    limits.memory: "{{ k3s_quota_limits_memory }}"
+    pods: "{{ k3s_quota_pods }}"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: dev-limits
+  namespace: dev
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 64Mi
+      default:
+        cpu: 500m
+        memory: 512Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: dev
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]

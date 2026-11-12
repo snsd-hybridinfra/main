@@ -1,0 +1,463 @@
+{
+  "architecture_package": "ZT-ARC-001",
+  "phases": [
+    {
+      "id": "PHASE_1",
+      "name": "Foundation and Verification Operations",
+      "boundary": "ZT-RV-001",
+      "boundary_status": "BOUNDED_EC4_ACCEPTED",
+      "actual_packages": [
+        "ZT-FND-001",
+        "ZT-NET-001",
+        "ZT-VIS-001",
+        "ZT-ID-001",
+        "ZT-CV-001",
+        "ZT-RV-001",
+        "ZT-DEV-001",
+        "ZT-APP-001",
+        "ZT-DATA-001",
+        "ZT-SYS-001",
+        "ZT-AUTO-001"
+      ],
+      "candidate_packages": [],
+      "packages": [],
+      "implementation_status": "PARTIAL",
+      "validation_status": "PARTIALLY_VALIDATED",
+      "completion_status": "COMPLETED_WITH_GAPS",
+      "acceptance_decision_status": "ACCEPTED_WITH_GAPS",
+      "accepted_exception": "P1-RV-FRESHNESS-001",
+      "deferred_final_risk": "STALE_RV_EVIDENCE",
+      "acceptance_decision_record": "docs/zero-trust/recovery/P1-ACC-001/acceptance-decision-with-gaps.yaml",
+      "entry_criteria": [
+        "locked scenario model exists"
+      ],
+      "exit_criteria": [
+        "restricted validation and evidence governance are runtime evidenced",
+        "Phase 1 acceptance decision is recorded with the scoped freshness exception without EC5",
+        "Fresh RV evidence is mandatory before the final scheduling and acceptance gate"
+      ],
+      "current_state": "COMPLETED_WITH_GAPS"
+    },
+    {
+      "id": "PHASE_2",
+      "name": "Centralized Identity and Visibility",
+      "packages": [
+        "ZT-USE-001",
+        "ZT-ID-002",
+        "ZT-APP-002",
+        "ZT-ACC-001",
+        "ZT-PEP-001",
+        "ZT-VIS-002",
+        "ZT-EFF-001"
+      ],
+      "entry_criteria": [
+        "Phase 1 architecture boundary recorded",
+        "monitoring base available or dependency-tracked",
+        "identity base dependency-tracked",
+        "no blocking repository hygiene issue",
+        "protected Grafana use case approved"
+      ],
+      "exit_criteria": [
+        "monitoring stack runtime validated",
+        "identity stack runtime validated",
+        "OIDC validated",
+        "MFA validated",
+        "role mapping validated",
+        "allow and deny validated",
+        "access-decision telemetry validated",
+        "evidence sanitized"
+      ],
+      "current_state": "IN_PROGRESS_PARTIAL_RUNTIME"
+    },
+    {
+      "id": "PHASE_3",
+      "name": "Cross-Domain Policy Enforcement",
+      "packages": [
+        "ZT-PIP-001",
+        "ZT-POL-002",
+        "ZT-NET-002",
+        "ZT-SYS-002",
+        "ZT-DEV-002",
+        "ZT-COR-001",
+        "ZT-INC-001",
+        "ZT-AUTO-002",
+        "ZT-RESP-001",
+        "ZT-REC-001"
+      ],
+      "entry_criteria": [
+        "Phase 2 exit gate passes"
+      ],
+      "exit_criteria": [
+        "selected cross-domain signals connected",
+        "policy-decision model validated",
+        "selected PEP validated",
+        "deterministic correlation validated",
+        "response approval boundary validated",
+        "recovery validation completed"
+      ],
+      "current_state": "NOT_STARTED"
+    },
+    {
+      "id": "PHASE_4",
+      "name": "IaC, Configuration as Code, and Policy as Code Convergence",
+      "packages": [
+        "ZT-ONB-001",
+        "ZT-IAC-001",
+        "ZT-IAC-002",
+        "ZT-CFG-001",
+        "ZT-PAC-001",
+        "ZT-PAC-002",
+        "ZT-PAC-003",
+        "ZT-PAC-004",
+        "ZT-DRIFT-001",
+        "ZT-PLN-001",
+        "ZT-DEP-001"
+      ],
+      "entry_criteria": [
+        "Phase 3 exit gate passes",
+        "provider and host contracts approved"
+      ],
+      "exit_criteria": [
+        "target profile validated",
+        "one IaC path validated",
+        "existing VM or physical-server onboarding validated",
+        "Configuration as Code idempotency tested",
+        "Policy as Code deny test validated",
+        "deployment gate validated",
+        "drift detection validated",
+        "approved reconciliation validated"
+      ],
+      "current_state": "NOT_STARTED"
+    },
+    {
+      "id": "PHASE_5",
+      "name": "Portability, Runbooks, Handoff, and Advanced Acceptance",
+      "packages": [
+        "ZT-RUN-001",
+        "ZT-HOF-001",
+        "ZT-MAT-001",
+        "ZT-PLT-001",
+        "ZT-SCH-001"
+      ],
+      "entry_criteria": [
+        "Phase 4 exit gate passes"
+      ],
+      "exit_criteria": [
+        "clean deployment validated",
+        "rollback validated",
+        "backup and restore validated",
+        "operator handoff validated",
+        "runbooks validated",
+        "selected capability maturity reassessed",
+        "deferred scheduled validation accepted or explicitly blocks the final decision",
+        "no unsupported maturity claim remains"
+      ],
+      "current_state": "NOT_STARTED"
+    },
+    {
+      "id": "FUTURE_PHASE_6",
+      "name": "Optimal-Maturity Expansion",
+      "packages": [
+        "ZT-RISK-001",
+        "ZT-BA-001",
+        "ZT-PDP-002",
+        "ZT-PEP-002",
+        "ZT-AUTO-003",
+        "ZT-OPT-001",
+        "ZT-OPT-002"
+      ],
+      "entry_criteria": [
+        "Phase 5 exit gate passes",
+        "separate scope approval exists"
+      ],
+      "exit_criteria": [
+        "future criteria require separate approval"
+      ],
+      "current_state": "ROADMAP_ONLY"
+    }
+  ],
+  "package_status": {
+    "ZT-SCH-001": {
+      "package_state": "PRESENT",
+      "phase": "FINAL_PROJECT_GATE",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "LOCAL_VALIDATED",
+      "runtime_validation_status": "NOT_VALIDATED",
+      "runtime_acceptance_status": "PENDING",
+      "runtime_scope": "INSTALLED_DISABLED_0_ACCEPTED_DATES",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "DEFERRED_FINAL_CONFIGURATION_PACKAGE"
+    },
+    "ZT-USE-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-ID-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "RUNTIME_VALIDATED",
+      "runtime_validation_status": "VALIDATED",
+      "runtime_acceptance_status": "ACCEPTED",
+      "runtime_scope": "BOUNDED_NON_PRODUCTION_TARGET",
+      "maturity_status": "UNASSESSED",
+      "phase_2_dependency_status": "OPEN",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-DEV-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_scope": "ONE_MANDATORY_NON_PRODUCTION_VM",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-APP-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_scope": "ONE_EXISTING_NON_CRITICAL_ALLOY_PILOT",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-DATA-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_scope": "SEVEN_METADATA_ASSETS_AND_ONE_SYNTHETIC_RESTORE",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-SYS-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_scope": "SEVEN_SYSTEMS_EXISTING_FIXED_READ_ONLY_VALIDATORS_AND_FIVE_SAFE_CONFIGURATION_HASHES",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-AUTO-001": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_1_CURRENT",
+      "implementation_status": "IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_scope": "SINGLE_WORKSTATION_FIXED_R0_R3_HANDLERS_AND_ONE_PARTIAL_CROSS_DOMAIN_READ_ONLY_EXECUTION",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "BOUNDED_RUNTIME_PACKAGE"
+    },
+    "ZT-ID-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-APP-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-ACC-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PEP-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-VIS-002": {
+      "package_state": "PRESENT",
+      "phase": "PHASE_2_CURRENT",
+      "implementation_status": "PARTIALLY_IMPLEMENTED",
+      "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+      "runtime_validation_status": "PARTIALLY_VALIDATED",
+      "runtime_acceptance_status": "PARTIALLY_ACCEPTED",
+      "evidence_status": "PARTIAL_RUNTIME_RECORDED",
+      "maturity_status": "UNASSESSED",
+      "roadmap_status": "IN_PROGRESS_PARTIAL_RUNTIME",
+      "protected": true
+    },
+    "ZT-EFF-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PIP-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-POL-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-NET-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-SYS-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-DEV-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-COR-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-INC-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-AUTO-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-RESP-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-REC-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-ONB-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-IAC-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-IAC-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-CFG-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PAC-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PAC-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PAC-003": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PAC-004": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-DRIFT-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PLN-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-DEP-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-RUN-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-HOF-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-MAT-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-PLT-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "PLANNED"
+    },
+    "ZT-RISK-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-BA-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-PDP-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-PEP-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-AUTO-003": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-OPT-001": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    },
+    "ZT-OPT-002": {
+      "implementation_status": "NOT_STARTED",
+      "validation_status": "UNASSESSED",
+      "roadmap_status": "ROADMAP_ONLY"
+    }
+  },
+  "constraints": [
+    "No package is promoted by architecture documentation.",
+    "ZT-ID-001 is an implemented and runtime-validated Phase 1 package for one bounded non-production endpoint; ZT-ID-002 is a separate later Phase 2 roadmap candidate.",
+    "ZT-ID-001 runtime acceptance does not establish centralized identity, MFA, OIDC, application RBAC, production validation, maturity, or Phase 1 completion.",
+    "ZT-DEV-001 is implemented and partially runtime validated for six classified aliases and one mandatory non-production VM; it does not establish broad endpoint management, EDR/XDR, patch automation, device authorization, maturity, or Phase 1 completion.",
+    "ZT-APP-001 is implemented and partially runtime validated for two applications, four workloads, a partial direct-image SBOM, and one unchanged non-critical Alloy pilot; it does not establish immutable provenance, signing, transitive vulnerability coverage, broad deployment enforcement, maturity, or Phase 1 completion.",
+    "ZT-DATA-001 is implemented and partially runtime validated for seven metadata-only assets, manual labels, detection-only DLP, and one synthetic restore; it does not establish enterprise governance, dynamic access, platform encryption, live backup/restore, blocking DLP, maturity, or Phase 1 completion.",
+    "ZT-SYS-001 is implemented and partially runtime validated for seven bounded systems, five safe matched configuration authorities, and existing fixed read-only validators; OpenStack remains CURRENT_DEGRADED and the package does not establish complete PAM, credential lifecycle, continuous FIM, broad hardening, full system recovery, maturity, or Phase 1 completion.",
+    "ZT-AUTO-001 is implemented and partially runtime validated for fixed R0-R3 handlers, default-deny policy, deterministic planning, proposal-only governance, and one partial cross-domain read-only execution; it does not establish arbitrary execution, mutation authority, external notification, autonomous response, SOAR, repeatability, scheduling, maturity, or Phase 1 completion.",
+    "ZT-SCH-001 is implemented and locally validated for one installed disabled limited interactive-token task; eleven retained candidates and zero accepted scheduled dates do not establish runtime validation, EC5, maturity, or Phase 1 completion, and the package is deferred to the final Phase 5 gate.",
+    "ZT-VIS-002 is partially implemented, partially runtime validated, and partially accepted for one bounded private non-production OpenStack monitoring VM; protected runtime traces remain untracked non-authorities, no ZT-VIS-001 runtime acceptance is inherited, and completion remains blocked by alert-delivery, elapsed-retention, and full Cinder snapshot-restore gaps."
+  ]
+}

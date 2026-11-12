@@ -1,0 +1,91 @@
+name: snsd-zt-vis-002
+
+services:
+  loki:
+    image: "{{ zt_vis_002_images.loki }}"
+    command: ["-config.file=/etc/loki/config.yaml"]
+    restart: always
+    read_only: true
+    security_opt: ["no-new-privileges=true"]
+    cap_drop: ["ALL"]
+    ports: ["127.0.0.1:3100:3100"]
+    volumes:
+      - "{{ zt_vis_002_root }}/config/loki-config.yaml:/etc/loki/config.yaml:ro"
+      - "{{ zt_vis_002_root }}/data/loki:/loki:U"
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    networks: ["visibility"]
+
+  alloy:
+    image: "{{ zt_vis_002_images.alloy }}"
+    command: ["run", "--server.http.listen-addr=0.0.0.0:12345", "--storage.path=/var/lib/alloy", "/etc/alloy/config.alloy"]
+    restart: always
+    read_only: true
+    security_opt: ["no-new-privileges=true"]
+    cap_drop: ["ALL"]
+    ports: ["127.0.0.1:12345:12345"]
+    volumes:
+      - "{{ zt_vis_002_root }}/config/alloy-config.alloy:/etc/alloy/config.alloy:ro"
+      - "{{ zt_vis_002_root }}/input/sanitized:/var/log/snsd-validation:ro"
+      - "{{ zt_vis_002_root }}/data/alloy:/var/lib/alloy:U"
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    depends_on: ["loki"]
+    networks: ["visibility"]
+
+  prometheus:
+    image: "{{ zt_vis_002_images.prometheus }}"
+    command: ["--config.file=/etc/prometheus/prometheus.yaml", "--storage.tsdb.path=/prometheus", "--storage.tsdb.retention.time=14d"]
+    restart: always
+    read_only: true
+    security_opt: ["no-new-privileges=true"]
+    cap_drop: ["ALL"]
+    ports: ["127.0.0.1:9090:9090"]
+    volumes:
+      - "{{ zt_vis_002_root }}/config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro"
+      - "{{ zt_vis_002_root }}/data/prometheus:/prometheus:U"
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    depends_on: ["blackbox"]
+    networks: ["visibility"]
+
+  blackbox:
+    image: "{{ zt_vis_002_images.blackbox }}"
+    command: ["--config.file=/etc/blackbox/blackbox.yaml"]
+    restart: always
+    read_only: true
+    security_opt: ["no-new-privileges=true"]
+    cap_drop: ["ALL"]
+    ports: ["127.0.0.1:9115:9115"]
+    volumes:
+      - "{{ zt_vis_002_root }}/config/blackbox.yaml:/etc/blackbox/blackbox.yaml:ro"
+    tmpfs: ["/tmp:size=16m,mode=1777"]
+    networks: ["visibility"]
+
+  grafana:
+    image: "{{ zt_vis_002_images.grafana }}"
+    restart: always
+    read_only: true
+    security_opt: ["no-new-privileges=true"]
+    cap_drop: ["ALL"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_ORG_CREATE: "false"
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_SECURITY_COOKIE_SECURE: "true"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+    secrets: ["grafana_admin_password"]
+    ports: ["127.0.0.1:3000:3000"]
+    volumes:
+      - "{{ zt_vis_002_root }}/data/grafana:/var/lib/grafana:U"
+      - "{{ zt_vis_002_root }}/config/grafana/provisioning:/etc/grafana/provisioning:ro"
+    tmpfs: ["/tmp:size=64m,mode=1777"]
+    depends_on: ["loki", "prometheus"]
+    networks: ["visibility"]
+
+networks:
+  visibility:
+    driver: bridge
+
+secrets:
+  grafana_admin_password:
+    file: "{{ zt_vis_002_root }}/secrets/grafana_admin_password"

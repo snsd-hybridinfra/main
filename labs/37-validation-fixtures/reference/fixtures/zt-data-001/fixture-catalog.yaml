@@ -1,0 +1,20 @@
+{
+  "fixture_authority": "TEST_FIXTURE",
+  "non_functional": true,
+  "materialization_boundary": ".runtime/zero-trust/data/",
+  "fixtures": [
+    {"id": "FIX-PRIVATE-KEY", "detector": "PRIVATE_KEY_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-PASSWORD", "detector": "PASSWORD_ASSIGNMENT", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-CLOUD-KEY", "detector": "CLOUD_ACCESS_KEY_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-API-TOKEN", "detector": "API_TOKEN_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-DATABASE", "detector": "DATABASE_CREDENTIAL_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-MFA", "detector": "MFA_SECRET_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-PERSONAL", "detector": "PERSONAL_IDENTIFIER_TEST_PATTERN", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-RESTRICTED", "detector": "RESTRICTED_DATA_LABEL", "construction": "SAFE_RUNTIME_COMPONENTS"},
+    {"id": "FIX-UNCLASSIFIED", "validator": "UNCLASSIFIED_ACTIVE_DATA"},
+    {"id": "FIX-MISSING-OWNER", "validator": "SENSITIVE_OWNER_REQUIRED"},
+    {"id": "FIX-UNSUPPORTED-ENCRYPTION", "validator": "ENCRYPTION_EVIDENCE_REQUIRED"},
+    {"id": "FIX-BACKUP-NO-RESTORE", "validator": "RESTORE_EVIDENCE_REQUIRED"},
+    {"id": "FIX-ENCRYPTED-BACKUP-RECORD", "validator": "CONFIGURATION_RECORD_ONLY_NOT_RUNTIME_CLAIM"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "package_id": "ZT-ID-001",
+  "package_name": "Bounded Identity Inventory, Role, Authentication, and Access Validation",
+  "package_type": "IDENTITY_VALIDATION",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "RUNTIME_VALIDATED",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "runtime_validation_status": "VALIDATED",
+  "runtime_acceptance_status": "ACCEPTED",
+  "runtime_scope": "BOUNDED_NON_PRODUCTION_TARGET",
+  "maturity_status": "UNASSESSED",
+  "current_maturity": "UNASSESSED",
+  "validator": "tools/validate_zt_id_001.py",
+  "local_validation_record": "docs/evidence/zero-trust/zt-id-001-local-validation.yaml",
+  "capability_ids": ["ZT-1.1.1", "ZT-1.1.2", "ZT-1.2.1", "ZT-1.4.1", "ZT-1.4.2"],
+  "identity_provider_deployed": false,
+  "mfa_enforced": false,
+  "oidc_deployed": false,
+  "centralized_rbac_enforced": false,
+  "action_runtime_executed": true,
+  "action_live_identity_changed": true,
+  "execution_record": "docs/evidence/zero-trust/zt-id-001-runtime-validation.yaml",
+  "latest_revalidation_record": "docs/evidence/zero-trust/zt-id-001-runtime-revalidation-20260730.sanitized.txt",
+  "latest_revalidation_timestamp": "2026-07-30T00:44:01.088566Z",
+  "limitations": [
+    "Runtime acceptance is limited to one bounded non-production EVE-NG validator endpoint.",
+    "Centralized identity, MFA, federation, PAM, and application RBAC remain outside the accepted boundary.",
+    "The current EVE base validator has no failures and two non-blocking warnings because no Dynamips or QEMU node process is running.",
+    "Phase 1 is PARTIAL, PARTIALLY_VALIDATED, and COMPLETED_WITH_GAPS under P1-RV-FRESHNESS-001; stale RV evidence remains mandatory final-gate work and ZT-SCH-001 is deferred to Phase 5."
+  ]
+}

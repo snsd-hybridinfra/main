@@ -1,0 +1,38 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: request-api-default-deny
+  namespace: user-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: request-api
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: request-api-approved-callers
+  namespace: user-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: request-api
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/edge-system/sa/edge-gateway
+              - cluster.local/ns/mesh-system/sa/mesh-ingress-gateway
+      to:
+        - operation:
+            methods: ["GET", "POST"]
+            paths: ["/api/v1/*", "/healthz", "/readyz"]
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/mesh-system/sa/hybrid-callback-gateway
+      to:
+        - operation:
+            methods: ["POST"]
+            paths: ["/internal/v1/*"]

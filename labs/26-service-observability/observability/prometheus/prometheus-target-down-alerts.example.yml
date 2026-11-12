@@ -1,0 +1,15 @@
+---
+# NON-PRODUCTION EXAMPLE. Placeholder alert only.
+groups:
+  - name: snsd-target-down-placeholder
+    rules:
+      - alert: SNSDTargetDownPlaceholder
+        expr: up{job="<scrape-job-name-placeholder>"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          scenario: retired-numbered-case
+        annotations:
+          summary: "Target down placeholder"
+          description: "A symbolic target is down for the placeholder duration."
+          runbook: "<runbook-placeholder>"

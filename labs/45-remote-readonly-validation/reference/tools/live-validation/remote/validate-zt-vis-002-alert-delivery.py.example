@@ -1,0 +1,421 @@
+#!/usr/bin/env python3
+"""One-time fail-closed ZT-VIS-002 alert-rule and delivery validator."""
+
+from __future__ import annotations
+
+import base64
+import hashlib
+import http.client
+import ipaddress
+import json
+import os
+import re
+import secrets
+import socket
+import stat
+import subprocess
+import sys
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import quote
+
+GRAFANA_HOST = "127.0.0.1"
+GRAFANA_PORT = 3000
+EXPECTED_GRAFANA_VERSION = "13.1.0"
+PASSWORD_FILE = Path("/opt/snsd-zt-vis-002/secrets/grafana_admin_password")
+PODMAN_NETWORK = "snsd-zt-vis-002_visibility"
+ALERT_RULE_COLLECTION = "/api/v1/provisioning/alert-rules"
+RECEIVER_TEST = "/apis/notifications.alerting.grafana.app/v1beta1/namespaces/default/receivers/-/test"
+AUTHORIZATION_ENV = (
+    "ZT_VIS_002_ALERT_VALIDATION_AUTHORIZED",
+    "ZT_VIS_002_ALERT_RULE_MUTATION_AUTHORIZED",
+    "ZT_VIS_002_NOTIFICATION_DELIVERY_AUTHORIZED",
+    "ZT_VIS_002_ALERT_CLEANUP_AUTHORIZED",
+)
+
+
+class ValidationError(RuntimeError):
+    pass
+
+
+def require(condition: bool) -> None:
+    if not condition:
+        raise ValidationError("bounded alert validation failed")
+
+
+def api_request(method: str, path: str, body: object | None = None, authorization: str | None = None) -> tuple[int, bytes]:
+    encoded = None if body is None else json.dumps(body, separators=(",", ":")).encode("utf-8")
+    headers = {"Accept": "application/json"}
+    if encoded is not None:
+        headers["Content-Type"] = "application/json"
+    if authorization is not None:
+        headers["Authorization"] = authorization
+    connection = http.client.HTTPConnection(GRAFANA_HOST, GRAFANA_PORT, timeout=15)
+    try:
+        connection.request(method, path, body=encoded, headers=headers)
+        response = connection.getresponse()
+        payload = response.read(1024 * 1024)
+        return response.status, payload
+    except (OSError, http.client.HTTPException) as exc:
+        raise ValidationError("Grafana API request failed") from exc
+    finally:
+        connection.close()
+
+
+def json_body(payload: bytes) -> object:
+    try:
+        return json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValidationError("Grafana API returned invalid JSON") from exc
+
+
+def discover_gateway() -> str:
+    try:
+        result = subprocess.run(
+            ["/usr/bin/podman", "network", "inspect", PODMAN_NETWORK],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        networks = json.loads(result.stdout)
+        subnets = networks[0]["subnets"]
+        gateways = [item["gateway"] for item in subnets if item.get("gateway")]
+    except (OSError, subprocess.SubprocessError, json.JSONDecodeError, KeyError, IndexError, TypeError) as exc:
+        raise ValidationError("package network gateway discovery failed") from exc
+    require(len(gateways) == 1)
+    address = ipaddress.ip_address(gateways[0])
+    require(address.version == 4 and address.is_private and not address.is_loopback)
+    return str(address)
+
+
+def basic_authorization(password: str) -> str:
+    encoded = base64.b64encode(f"admin:{password}".encode("utf-8")).decode("ascii")
+    return f"Basic {encoded}"
+
+
+def read_password() -> str:
+    metadata = PASSWORD_FILE.stat()
+    require(stat.S_IMODE(metadata.st_mode) == 0o600)
+    require(metadata.st_uid == 0)
+    value = PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    require(bool(value) and "\n" not in value and "\r" not in value)
+    return value
+
+
+def cleanup_single_owned_stale_pair(authorization: str) -> tuple[bool, int, int]:
+    rule_status, rule_payload = api_request("GET", ALERT_RULE_COLLECTION, authorization=authorization)
+    folder_status, folder_payload = api_request("GET", "/api/folders?limit=1000", authorization=authorization)
+    rules = json_body(rule_payload)
+    folders = json_body(folder_payload)
+    require(rule_status == 200 and isinstance(rules, list))
+    require(folder_status == 200 and isinstance(folders, list))
+    owned_rules = [
+        item
+        for item in rules
+        if isinstance(item, dict)
+        and re.fullmatch(r"p2visalt[0-9a-f]{12}", str(item.get("uid", ""))) is not None
+        and re.fullmatch(r"p2visaltfolder[0-9a-f]{12}", str(item.get("folderUID", ""))) is not None
+        and str(item.get("title", "")).startswith("ZT-VIS-002 bounded alert validation ")
+        and item.get("isPaused") is True
+        and item.get("labels", {}).get("package_id") == "ZT-VIS-002"
+        and item.get("labels", {}).get("validation_class") == "SANITIZED_SYNTHETIC"
+    ]
+    owned_folders = [
+        item
+        for item in folders
+        if isinstance(item, dict)
+        and re.fullmatch(r"p2visaltfolder[0-9a-f]{12}", str(item.get("uid", ""))) is not None
+        and str(item.get("title", "")).startswith("ZT-VIS-002 bounded alert validation ")
+    ]
+    require(len(owned_rules) <= 1 and len(owned_folders) <= 1)
+    require(len(owned_rules) == len(owned_folders))
+    if not owned_rules:
+        return False, 0, 0
+    rule = owned_rules[0]
+    folder = owned_folders[0]
+    require(rule.get("folderUID") == folder.get("uid"))
+    stale_rule_path = f"{ALERT_RULE_COLLECTION}/{quote(str(rule['uid']), safe='')}"
+    stale_folder_path = f"/api/folders/{quote(str(folder['uid']), safe='')}"
+    rule_delete_status, _ = api_request("DELETE", stale_rule_path, authorization=authorization)
+    folder_delete_status, _ = api_request(
+        "DELETE", stale_folder_path + "?forceDeleteRules=true", authorization=authorization
+    )
+    require(rule_delete_status in {200, 202, 204, 404})
+    require(folder_delete_status in {200, 202, 204, 404})
+    require(api_request("GET", stale_rule_path, authorization=authorization)[0] == 404)
+    require(api_request("GET", stale_folder_path, authorization=authorization)[0] == 404)
+    return True, rule_delete_status, folder_delete_status
+
+
+def start_receiver(gateway: str, expected_path: str) -> tuple[ThreadingHTTPServer, threading.Thread, dict[str, bool]]:
+    state = {"received": False, "expected_label": False}
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_POST(self) -> None:  # noqa: N802
+            if self.path != expected_path:
+                self.send_response(404)
+                self.end_headers()
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if length < 1 or length > 1024 * 1024:
+                    raise ValueError
+                payload = json.loads(self.rfile.read(length).decode("utf-8"))
+                labels = [item.get("labels", {}) for item in payload.get("alerts", [])]
+                state["expected_label"] = any(
+                    item.get("alertname") == "ZT_VIS_002_ALERT_DELIVERY_TEST"
+                    and item.get("validation_class") == "SANITIZED_SYNTHETIC"
+                    for item in labels
+                )
+                state["received"] = True
+                self.send_response(204)
+                self.end_headers()
+            except (ValueError, UnicodeDecodeError, json.JSONDecodeError, AttributeError):
+                self.send_response(400)
+                self.end_headers()
+
+        def log_message(self, format: str, *args: object) -> None:
+            return
+
+    receiver = ThreadingHTTPServer((gateway, 0), Handler)
+    require(receiver.server_address[0] == gateway)
+    thread = threading.Thread(target=receiver.serve_forever, daemon=True)
+    thread.start()
+    return receiver, thread, state
+
+
+def wrong_path_denied(gateway: str, port: int) -> bool:
+    connection = http.client.HTTPConnection(gateway, port, timeout=5)
+    try:
+        connection.request("POST", "/invalid", body=b"{}", headers={"Content-Type": "application/json"})
+        response = connection.getresponse()
+        response.read()
+        return response.status == 404
+    except (OSError, http.client.HTTPException):
+        return False
+    finally:
+        connection.close()
+
+
+def main() -> int:
+    validation_id = sys.argv[1] if len(sys.argv) == 2 else ""
+    rule_created = False
+    folder_created = False
+    receiver: ThreadingHTTPServer | None = None
+    receiver_thread: threading.Thread | None = None
+    authorization: str | None = None
+    rule_uid = ""
+    folder_uid = ""
+    cleanup_passed = False
+    cleanup_rule_absent = False
+    cleanup_folder_absent = False
+    failure_stage = "NONE"
+    failure_class = "NONE"
+    stale_rule_delete_status = 0
+    stale_folder_delete_status = 0
+    delivery_http_status = 0
+    delivery_result_is_dict = False
+    delivery_result_status_success = False
+    delivery_result_has_receivers = False
+    receiver_received = False
+    receiver_expected_label = False
+    stage = "PREFLIGHT"
+    markers: list[str] = []
+    try:
+        require(os.geteuid() == 0)
+        require(re.fullmatch(r"P2VISALT-[0-9]{8}T[0-9]{6}Z", validation_id) is not None)
+        require(all(os.environ.get(name) == "YES" for name in AUTHORIZATION_ENV))
+        password = read_password()
+        authorization = basic_authorization(password)
+
+        stage = "GRAFANA_HEALTH"
+        status, payload = api_request("GET", "/api/health")
+        health = json_body(payload)
+        require(status == 200 and isinstance(health, dict))
+        require(health.get("version") == EXPECTED_GRAFANA_VERSION and health.get("database") == "ok")
+        markers.append(f"grafana_version={EXPECTED_GRAFANA_VERSION}")
+
+        stage = "NEGATIVE_AUTHENTICATION"
+        missing_status, _ = api_request("GET", ALERT_RULE_COLLECTION)
+        invalid_status, _ = api_request("GET", ALERT_RULE_COLLECTION, authorization="Basic aW52YWxpZDppbnZhbGlk")
+        require(missing_status in {401, 403} and invalid_status in {401, 403})
+        markers.append("negative_authentication=PASS")
+
+        stage = "STALE_RESOURCE_CLEANUP"
+        stale_cleaned, stale_rule_delete_status, stale_folder_delete_status = cleanup_single_owned_stale_pair(
+            authorization
+        )
+        if stale_cleaned:
+            markers.append("stale_resource_cleanup=PASS")
+
+        suffix = hashlib.sha256(validation_id.encode("ascii")).hexdigest()[:12]
+        rule_uid = f"p2visalt{suffix}"
+        folder_uid = f"p2visaltfolder{suffix}"
+        title = f"ZT-VIS-002 bounded alert validation {suffix}"
+        rule_path = f"{ALERT_RULE_COLLECTION}/{quote(rule_uid, safe='')}"
+        folder_path = f"/api/folders/{quote(folder_uid, safe='')}"
+        stage = "PREEXISTENCE_CHECK"
+        require(api_request("GET", rule_path, authorization=authorization)[0] == 404)
+        require(api_request("GET", folder_path, authorization=authorization)[0] == 404)
+
+        stage = "FOLDER_CREATE"
+        folder_status, _ = api_request(
+            "POST",
+            "/api/folders",
+            {"uid": folder_uid, "title": title},
+            authorization,
+        )
+        require(folder_status == 200)
+        folder_created = True
+
+        rule = {
+            "title": title,
+            "ruleGroup": "zt-vis-002-bounded-validation",
+            "folderUID": folder_uid,
+            "noDataState": "OK",
+            "execErrState": "Error",
+            "for": "0s",
+            "orgId": 1,
+            "uid": rule_uid,
+            "condition": "A",
+            "isPaused": True,
+            "annotations": {"summary": "Bounded sanitized rule lifecycle validation"},
+            "labels": {"package_id": "ZT-VIS-002", "validation_class": "SANITIZED_SYNTHETIC"},
+            "data": [{
+                "refId": "A",
+                "queryType": "",
+                "relativeTimeRange": {"from": 0, "to": 0},
+                "datasourceUid": "__expr__",
+                "model": {
+                    "conditions": [],
+                    "datasource": {"type": "__expr__", "uid": "__expr__"},
+                    "expression": "1 == 1",
+                    "hide": False,
+                    "intervalMs": 1000,
+                    "maxDataPoints": 43200,
+                    "refId": "A",
+                    "type": "math",
+                },
+            }],
+        }
+        stage = "RULE_CREATE"
+        rule_status, _ = api_request("POST", ALERT_RULE_COLLECTION, rule, authorization)
+        require(rule_status == 201)
+        rule_created = True
+        read_status, read_payload = api_request("GET", rule_path, authorization=authorization)
+        read_rule = json_body(read_payload)
+        require(read_status == 200 and isinstance(read_rule, dict))
+        require(
+            read_rule.get("uid") == rule_uid
+            and read_rule.get("folderUID") == folder_uid
+            and read_rule.get("condition") == "A"
+            and read_rule.get("isPaused") is True
+        )
+        markers.append("alert_rule_lifecycle=PASS")
+
+        stage = "RECEIVER_START"
+        gateway = discover_gateway()
+        one_time_path = "/" + secrets.token_urlsafe(32)
+        receiver, receiver_thread, receiver_state = start_receiver(gateway, one_time_path)
+        port = int(receiver.server_address[1])
+        require(wrong_path_denied(gateway, port))
+        markers.append("bypass=PASS")
+
+        stage = "NOTIFICATION_DELIVERY"
+        delivery_body = {
+            "integration": {
+                "type": "webhook",
+                "version": "v1",
+                "disableResolveMessage": True,
+                "settings": {"url": f"http://{gateway}:{port}{one_time_path}", "httpMethod": "POST"},
+            },
+            "alert": {
+                "labels": {"alertname": "ZT_VIS_002_ALERT_DELIVERY_TEST", "validation_class": "SANITIZED_SYNTHETIC"},
+                "annotations": {"summary": "Bounded sanitized notification delivery validation"},
+            },
+        }
+        delivery_status, delivery_payload = api_request("POST", RECEIVER_TEST, delivery_body, authorization)
+        delivery_http_status = delivery_status
+        delivery_result = json_body(delivery_payload)
+        delivery_result_is_dict = isinstance(delivery_result, dict)
+        if delivery_result_is_dict:
+            delivery_result_status_success = delivery_result.get("status") == "success"
+            delivery_result_has_receivers = isinstance(delivery_result.get("receivers"), list)
+        require(delivery_status in {200, 201} and delivery_result_is_dict)
+        require(delivery_result_status_success)
+        for _ in range(50):
+            if receiver_state["received"]:
+                break
+            threading.Event().wait(0.1)
+        receiver_received = receiver_state["received"]
+        receiver_expected_label = receiver_state["expected_label"]
+        require(receiver_received and receiver_expected_label)
+        markers.append("notification_delivery=PASS")
+    except (OSError, ValidationError, ValueError) as exc:
+        failure_stage = stage
+        failure_class = type(exc).__name__
+    finally:
+        try:
+            if receiver is not None:
+                receiver.shutdown()
+                receiver.server_close()
+            if receiver_thread is not None:
+                receiver_thread.join(timeout=5)
+            if authorization is not None and rule_uid and folder_uid:
+                rule_path = f"{ALERT_RULE_COLLECTION}/{quote(rule_uid, safe='')}"
+                folder_path = f"/api/folders/{quote(folder_uid, safe='')}"
+                if rule_created:
+                    rule_delete_status, _ = api_request("DELETE", rule_path, authorization=authorization)
+                    require(rule_delete_status in {200, 202, 204, 404})
+                if folder_created:
+                    folder_delete_status, _ = api_request(
+                        "DELETE", folder_path + "?forceDeleteRules=true", authorization=authorization
+                    )
+                    require(folder_delete_status in {200, 202, 204, 404})
+                cleanup_rule_absent = api_request("GET", rule_path, authorization=authorization)[0] == 404
+                cleanup_folder_absent = api_request("GET", folder_path, authorization=authorization)[0] == 404
+                cleanup_passed = cleanup_rule_absent and cleanup_folder_absent
+            else:
+                cleanup_passed = not rule_created and not folder_created
+                cleanup_rule_absent = not rule_created
+                cleanup_folder_absent = not folder_created
+        except (OSError, ValidationError, ValueError):
+            cleanup_passed = False
+
+    if cleanup_passed:
+        markers.append("cleanup=PASS")
+    success = cleanup_passed and {
+        "grafana_version=13.1.0",
+        "negative_authentication=PASS",
+        "alert_rule_lifecycle=PASS",
+        "notification_delivery=PASS",
+        "bypass=PASS",
+    }.issubset(set(markers))
+    if success:
+        markers.append("validation=PASS")
+        digest = hashlib.sha256("\n".join(markers).encode("utf-8")).hexdigest()
+        for marker in markers:
+            print(marker)
+        print(f"sanitized_result_sha256={digest}")
+        return 0
+    print(f"failure_stage={failure_stage}")
+    print(f"failure_class={failure_class}")
+    print(f"stale_rule_delete_status={stale_rule_delete_status}")
+    print(f"stale_folder_delete_status={stale_folder_delete_status}")
+    print(f"delivery_http_status={delivery_http_status}")
+    print(f"delivery_result_is_dict={'PASS' if delivery_result_is_dict else 'FAIL'}")
+    print(f"delivery_result_status_success={'PASS' if delivery_result_status_success else 'FAIL'}")
+    print(f"delivery_result_has_receivers={'PASS' if delivery_result_has_receivers else 'FAIL'}")
+    print(f"receiver_received={'PASS' if receiver_received else 'FAIL'}")
+    print(f"receiver_expected_label={'PASS' if receiver_expected_label else 'FAIL'}")
+    print(f"cleanup_rule_absent={'PASS' if cleanup_rule_absent else 'FAIL'}")
+    print(f"cleanup_folder_absent={'PASS' if cleanup_folder_absent else 'FAIL'}")
+    print("cleanup=PASS" if cleanup_passed else "cleanup=FAIL")
+    print("validation=FAIL")
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

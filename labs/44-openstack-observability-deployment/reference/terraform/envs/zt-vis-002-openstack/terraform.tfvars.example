@@ -1,0 +1,13 @@
+openstack_cloud     = "<external-clouds-yaml-entry>"
+region              = "<approved-region>"
+name                = "zt-vis-002-monitoring"
+network_id          = "<existing-private-network-id>"
+security_group_ids  = ["<existing-security-group-id>"]
+image_id            = "<approved-glance-image-id>"
+flavor_id           = "<approved-flavor-id>"
+keypair_name        = "<existing-recovery-keypair-name>"
+volume_size_gib     = 100
+volume_type         = null
+availability_zone   = null
+approval_reference  = "<approved-change-record>"
+tags                = ["review-required"]

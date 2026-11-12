@@ -1,0 +1,17 @@
+# SAMPLE / NON-PRODUCTION — VIOLATION SAMPLE ONLY
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: <violation-deployment-placeholder>, namespace: <namespace-placeholder>}
+spec:
+  template:
+    spec:
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      containers:
+        - name: <container-name-placeholder>
+          image: <image-placeholder>:latest
+          securityContext: {allowPrivilegeEscalation: true, privileged: true, runAsUser: 0}
+          # resource requests/limits and probes intentionally missing in this VIOLATION SAMPLE
+          volumeMounts: [{name: <hostpath-volume-placeholder>, mountPath: <mount-path-placeholder>}]
+      volumes: [{name: <hostpath-volume-placeholder>, hostPath: {path: <symbolic-hostpath-placeholder>}}]

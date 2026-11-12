@@ -1,0 +1,32 @@
+# SSH private/public keys
+ansible-jjh-key
+ansible-jjh-key.pub
+*.pem
+*.key
+
+# Generated inventory
+inventory.ini
+
+# Generated output files
+output/*.yml
+output/*.yaml
+output/*.json
+
+# Allow sanitized examples
+!output/example/
+!output/example/*.yml
+
+# Ansible retry files
+*.retry
+
+# OS/editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Generated report may contain real AWS resource IDs
+output/report.md

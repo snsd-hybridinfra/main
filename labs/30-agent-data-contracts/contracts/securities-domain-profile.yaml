@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "domain_id": "VIRTUAL_SECURITIES_COMPANY",
+  "status": {
+    "design": "LOCAL_VALIDATED",
+    "catalog_binding": "PARTIALLY_IMPLEMENTED_LOCAL",
+    "runtime": "NOT_VALIDATED"
+  },
+  "data_boundary": {
+    "allowed": [
+      "SYNTHETIC_MARKET_DATA",
+      "SYNTHETIC_CUSTOMER_AND_ACCOUNT_DATA",
+      "SYNTHETIC_ORDER_AND_EXECUTION_DATA",
+      "SANITIZED_NON_PRODUCTION_TEST_DATA"
+    ],
+    "prohibited": [
+      "REAL_CUSTOMER_OR_ACCOUNT_DATA",
+      "REAL_SECURITIES_ORDERS",
+      "REAL_EXCHANGE_OR_BROKER_CONNECTIVITY",
+      "LIVE_MARKET_DATA_REDISTRIBUTION",
+      "PRODUCTION_CLEARING_OR_SETTLEMENT"
+    ]
+  },
+  "capabilities": [
+    {
+      "capability_id": "SECURITIES_ORDER_API_SIMULATION",
+      "description": "합성 계좌·주문·체결 데이터를 사용하는 주문 API 개발 및 검증",
+      "blueprint_id": "API_DEVELOPMENT_STACK"
+    },
+    {
+      "capability_id": "SECURITIES_POST_TRADE_SIMULATION",
+      "description": "합성 체결 결과를 사용하는 사후처리·대사·결제 흐름 개발 및 검증",
+      "blueprint_id": "API_DEVELOPMENT_STACK"
+    },
+    {
+      "capability_id": "SECURITIES_PORTFOLIO_RISK_SIMULATION",
+      "description": "합성 포지션과 가격을 사용하는 포트폴리오·리스크 배치 분석",
+      "blueprint_id": "DATA_PROCESSING_LAB"
+    },
+    {
+      "capability_id": "SECURITIES_MARKET_DATA_SIMULATION",
+      "description": "합성 시세 피드와 제한된 멀티캐스트를 사용하는 시장데이터 검증",
+      "blueprint_id": "SYNTHETIC_MARKET_DATA_LAB"
+    }
+  ],
+  "controls": {
+    "non_production_only": true,
+    "synthetic_data_default": true,
+    "real_order_execution": false,
+    "external_market_connectivity": false,
+    "regulated_personal_data": false,
+    "runtime_authorized": false
+  }
+}

@@ -1,0 +1,19 @@
+# NON-PRODUCTION EXAMPLE VALUES FOR standalone-lab REPOSITORY REVIEW ONLY
+
+vpc_name                  = "snsd-validation-vpc"
+vpc_cidr                  = "10.10.0.0/16"
+public_subnet_name        = "snsd-validation-public-subnet"
+public_subnet_cidr        = "10.10.1.0/24"
+private_subnet_name       = "snsd-validation-private-subnet"
+private_subnet_cidr       = "10.10.11.0/24"
+internet_gateway_name     = "snsd-validation-igw"
+internet_destination_cidr = "0.0.0.0/0"
+public_route_table_name   = "snsd-validation-public-rt"
+private_route_table_name  = "snsd-validation-private-rt"
+security_group_name       = "snsd-validation-baseline-sg"
+
+common_tags = {
+  Environment = "validation"
+  ManagedBy   = "terraform-example"
+  Scenario    = "standalone-lab"
+}

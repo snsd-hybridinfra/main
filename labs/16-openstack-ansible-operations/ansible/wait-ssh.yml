@@ -1,0 +1,20 @@
+---
+# STATUS: CURRENT BASELINE
+# Purpose:
+#   Wait for SSH connectivity after OpenStack provisioning.
+
+- name: Wait for SSH on managed nodes
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Wait for SSH port
+      ansible.builtin.wait_for:
+        host: "{{ ansible_host | default(inventory_hostname) }}"
+        port: 22
+        timeout: 300
+        state: started
+      delegate_to: localhost
+
+    - name: Check Ansible ping
+      ansible.builtin.ping:

@@ -1,0 +1,13 @@
+validation:
+  vpc_id: "vpc-xxxxxxxxxxxxxxxxx"
+  alb_dns_name: "ansible-jjh-alb-xxxxxxxx.ap-northeast-2.elb.amazonaws.com"
+
+  instances:
+    bastion_instance_id: "i-xxxxxxxxxxxxxxxxx"
+    web_1_instance_id: "i-xxxxxxxxxxxxxxxxx"
+    web_2_instance_id: "i-xxxxxxxxxxxxxxxxx"
+    ec2_instance_count: "3"
+
+  alb_http:
+    status: "200"
+    response_body: "Hello from ansible-jjh-web-1"

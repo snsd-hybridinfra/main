@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly REQUESTED_COMMAND="${SSH_ORIGINAL_COMMAND:-}"
+case "$REQUESTED_COMMAND" in
+    validate-routing)
+        exec /usr/bin/sudo -n /usr/local/sbin/validate-snsd-r1-readonly
+        ;;
+    "")
+        printf '%s\n' "Interactive shell access is disabled."
+        exit 1
+        ;;
+    *)
+        printf '%s\n' "Command is not permitted."
+        exit 1
+        ;;
+esac

@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily IaaS identity-db backup
+
+[Timer]
+OnCalendar=*-*-* 02:50:00 Asia/Seoul
+RandomizedDelaySec=15m
+Persistent=true
+Unit=iaas-identity-db-backup.service
+
+[Install]
+WantedBy=timers.target

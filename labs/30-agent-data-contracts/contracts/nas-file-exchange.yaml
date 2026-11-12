@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "status": "IMPLEMENTED_LOCAL_SIMULATION",
+  "runtime_validation_status": "NOT_VALIDATED",
+  "decision": "docs/adr/0025-nas-file-exchange-gateway.md",
+  "reference_source": {
+    "title": "Final프로젝트 보고서 오빤져쓰7 최종 190605",
+    "reused_objectives": ["SYNOLOGY_NAS", "SMB3_ENCRYPTION", "UPLOAD_INSPECTION", "EXTENSION_AND_CONTENT_BLOCKING", "FOLDER_AUTHORIZATION", "CIFS_PORT_AND_SOURCE_RESTRICTION", "PROTECTED_ADMIN_UI"]
+  },
+  "topology": {
+    "external_drop_share": "SEPARATE_WRITE_ONLY_STAGE",
+    "quarantine": "IMMUTABLE_SCAN_STAGE",
+    "approval": "DIGEST_BOUND_HUMAN_DECISION",
+    "internal_delivery_share": "SEPARATE_READ_ONLY_STAGE",
+    "shared_writable_mount_across_zones": false,
+    "hardware_data_diode_claim": false
+  },
+  "protocol": {
+    "allowed": ["SMB_3_1_1"],
+    "encryption_required": true,
+    "signing_required": true,
+    "smb1_enabled": false,
+    "smb2_enabled": false,
+    "public_internet_exposure": false
+  },
+  "state_machine": ["RECEIVED", "QUARANTINED", "SCANNING", "PENDING_APPROVAL", "RELEASED", "REJECTED", "EXPIRED"],
+  "state_transitions": {
+    "RECEIVED": ["QUARANTINED"],
+    "QUARANTINED": ["SCANNING"],
+    "SCANNING": ["PENDING_APPROVAL", "REJECTED"],
+    "PENDING_APPROVAL": ["RELEASED", "REJECTED"],
+    "RELEASED": ["EXPIRED"],
+    "REJECTED": ["EXPIRED"],
+    "EXPIRED": []
+  },
+  "local_simulation": {
+    "module": "applications/internal-iaas-portal/services/request-api/request_api/nas_exchange.py",
+    "tests": "applications/internal-iaas-portal/tests/api/test_nas_exchange.py",
+    "persistence": "MEMORY_ONLY",
+    "file_bytes_accessed": false,
+    "nas_mount_performed": false,
+    "scanner_invoked": false,
+    "runtime_credit": "NONE"
+  },
+  "scanner_contract": {
+    "allowed_inputs": ["DETECTED_EXTENSION", "DETECTED_MEDIA_TYPE", "DIGEST_VERIFIED", "MALWARE_DETECTED", "CONTENT_POLICY_PASSED", "ARCHIVE_DEPTH", "SCAN_LATENCY_SECONDS", "OBSERVED_AT"],
+    "prohibited_inputs": ["FILENAME", "FILE_CONTENT", "RAW_SCANNER_OUTPUT", "USER_NAME", "IP_ADDRESS", "SECRET"],
+    "allowed_file_types": ["CSV", "JSON", "PDF", "TEXT"],
+    "policy_max_bytes": 104857600,
+    "maximum_archive_depth": 3,
+    "self_approval_allowed": false,
+    "reviewer_mfa_required": true,
+    "approval_digest_binding_required": true
+  },
+  "required_controls": ["OIDC_MFA_REVIEWER", "SHORT_LIVED_SHARE_GRANT", "SOURCE_NETWORK_ALLOWLIST", "MALWARE_SCAN", "FILE_TYPE_AND_EXTENSION_POLICY", "ARCHIVE_DEPTH_AND_SIZE_LIMIT", "CONTENT_POLICY", "SHA256_DIGEST_BINDING", "IMMUTABLE_AUDIT", "RETENTION_AND_SECURE_DELETE", "ISOLATED_MANAGEMENT_INTERFACE"],
+  "monitoring": {
+    "allowed_metrics": ["FILES_RECEIVED", "FILES_RELEASED", "FILES_REJECTED", "SCAN_LATENCY_SECONDS", "QUEUE_DEPTH", "CAPACITY_PERCENT", "AUTH_FAILURES"],
+    "llm_assistant_input": "AGGREGATED_NUMERIC_SIGNALS_ONLY",
+    "llm_file_content_access": false,
+    "llm_filename_access": false
+  },
+  "data_boundary": {
+    "synthetic_or_sanitized_non_production_only": true,
+    "real_customer_or_account_data": false,
+    "real_order_or_market_data": false
+  },
+  "runtime_blockers": ["APPROVED_NAS_TARGET", "SEPARATE_ZONE_INTERFACES", "EXTERNAL_SECRET_PROVIDER", "MALWARE_AND_CONTENT_SCANNER", "OIDC_GROUP_MAPPING", "BACKUP_AND_RESTORE_TARGET"]
+}

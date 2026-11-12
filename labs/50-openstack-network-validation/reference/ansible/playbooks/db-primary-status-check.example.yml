@@ -1,0 +1,9 @@
+---
+# NON-PRODUCTION EXAMPLE. Documentation-only; does not connect to a database or manage a service.
+- name: Document DB primary status evidence inputs
+  hosts: db_primary_placeholder
+  gather_facts: false
+  tasks:
+    - name: Explain the sanitized status contract
+      ansible.builtin.debug:
+        msg: "Collect Primary role and replica status through a separately authorized procedure; no SQL, stop/start, or promotion is implemented."

@@ -1,0 +1,85 @@
+{
+  "contract_id": "P2-VIS-001-DEPLOYMENT-CONTRACT",
+  "package_id": "ZT-VIS-002",
+  "action_id": "P2-VIS-001",
+  "contract_status": "BOUNDED_DEPLOYMENT_AND_LIVE_VALIDATOR_PARTIALLY_ACCEPTED",
+  "provider": "OPENSTACK",
+  "environment": "NON_PRODUCTION_LAB",
+  "deployment_authorized": true,
+  "runtime_validation_status": "PARTIALLY_VALIDATED",
+  "infrastructure_prerequisite": {
+    "cinder_lvm_status": "RUNTIME_VALIDATED",
+    "dedicated_storage_boundary": "NEW_100_GIB_THIN_DISK_ONLY",
+    "existing_nova_storage_preserved": true,
+    "full_infrastructure_rollback_executed": false
+  },
+  "topology": {
+    "placement": "DEDICATED_PRIVATE_OPENSTACK_MONITORING_VM",
+    "network": "EXISTING_APPROVED_PRIVATE_NETWORK_ONLY",
+    "public_endpoint_allowed": false,
+    "floating_ip_allowed": false,
+    "existing_network_resources_only": true,
+    "candidate_resource_types": [
+      "openstack_networking_port_v2",
+      "openstack_compute_instance_v2",
+      "openstack_blockstorage_volume_v3",
+      "openstack_compute_volume_attach_v2"
+    ]
+  },
+  "components": ["Grafana", "Loki", "Alloy", "Prometheus", "Blackbox Exporter"],
+  "access_contract": {
+    "authenticated_reverse_proxy_required": true,
+    "authentication_method": "MUTUAL_TLS_AT_PROXY_PLUS_GRAFANA_LOGIN",
+    "anonymous_grafana_allowed": false,
+    "administrator_role_required": true,
+    "recovery_access_required": true,
+    "role_separation": ["VISIBILITY_VIEWER", "VISIBILITY_ADMINISTRATOR", "RECOVERY_OPERATOR"],
+    "oidc_status": "DEFERRED_TO_P2_OIDC_001",
+    "design_status": "RUNTIME_MTLS_AND_AUTHENTICATION_VALIDATOR_PASSED"
+  },
+  "secret_contract": {
+    "openstack_configuration": "EXTERNAL_CLOUDS_YAML",
+    "runtime_secrets": "EXTERNAL_SECRET_FILES_OR_ENVIRONMENT",
+    "repository_credentials_allowed": false,
+    "terraform_state_tracked": false,
+    "kubeconfig_tracked": false
+  },
+  "data_contract": {
+    "initial_source_scope": "SANITIZED_PORTAL_DECISION_LIFECYCLE_AND_SERVICE_HEALTH_ONLY",
+    "sanitized_ingestion_required": true,
+    "forbidden_fields": ["credentials", "tokens", "private_keys", "personal_data", "raw_runtime_output"],
+    "retention_candidate": "PT336H",
+    "retention_approved": false,
+    "retention_design_selected": true,
+    "primary_storage": "DEDICATED_CINDER_VOLUME",
+    "restore_method": "REATTACH_PRESERVED_VOLUME_TO_REBUILT_MONITORING_VM",
+    "rollback_checkpoint": "CINDER_SNAPSHOT_BEFORE_BOUNDED_DEPLOYMENT_TEST",
+    "backup_restore_approved": false,
+    "design_status": "RUNTIME_RESTART_PERSISTENCE_AND_STACK_RECOVERY_VALIDATED_SNAPSHOT_RESTORE_PENDING"
+  },
+  "acceptance_cases": [
+    {"case_type": "POSITIVE", "required_result": "AUTHORIZED_SANITIZED_SIGNAL_INGESTED"},
+    {"case_type": "NEGATIVE", "required_result": "UNAUTHORIZED_ACCESS_DENIED"},
+    {"case_type": "BYPASS", "required_result": "DIRECT_OR_ANONYMOUS_PATH_DENIED"},
+    {"case_type": "PERSISTENCE", "required_result": "APPROVED_CONFIGURATION_AND_DATA_SURVIVE_RESTART"},
+    {"case_type": "ROLLBACK", "required_result": "DEPLOYMENT_REMOVAL_RESTORES_REVIEWED_BASELINE"},
+    {"case_type": "EVIDENCE_INTEGRITY", "required_result": "ONLY_SANITIZED_HASHED_EVIDENCE_IS_REVIEWABLE"}
+  ],
+  "live_gates": [
+    {"gate": "OpenStack quota and monitoring VM sizing", "status": "BOUNDED_DEPLOYMENT_EXECUTED"},
+    {"gate": "Private network, security groups, image and flavor inputs", "status": "BOUNDED_DEPLOYMENT_EXECUTED"},
+    {"gate": "Digest-pinned component artifacts", "status": "RUNTIME_ARTIFACT_LOAD_VERIFIED"},
+    {"gate": "Persistent storage, retention and restore design", "status": "RUNTIME_RESTART_PERSISTENCE_AND_STACK_RECOVERY_VALIDATED_SNAPSHOT_RESTORE_PENDING"},
+    {"gate": "Authenticated proxy and administrator role design", "status": "RUNTIME_MTLS_AND_AUTHENTICATION_VALIDATED"},
+    {"gate": "Separate live deployment and validator authorization", "status": "LIVE_VALIDATOR_PARTIAL_STATUS_PROMOTED"}
+  ],
+  "protected_non_authorities": [".runtime/zero-trust/zt-vis-002", "platform"],
+  "runtime_executed": true,
+  "prerequisite_runtime_executed": true,
+  "live_target_changed": true,
+  "central_monitoring_completed": false,
+  "package_runtime_promoted": true,
+  "maturity_assessed": false,
+  "compliance_assessed": false,
+  "next_action": "Close the alert-delivery, elapsed-retention, and full Cinder snapshot rebuild and reattachment gaps before P2-VIS-001 completion or full acceptance."
+}

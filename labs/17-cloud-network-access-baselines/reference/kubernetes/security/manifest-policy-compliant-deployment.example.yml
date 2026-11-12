@@ -1,0 +1,20 @@
+# SAMPLE / NON-PRODUCTION
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: <deployment-name-placeholder>, namespace: <namespace-placeholder>, labels: {app: <app-label-placeholder>}, annotations: {policy-reference: <policy-id-placeholder>}}
+spec:
+  template:
+    metadata: {labels: {app: <app-label-placeholder>}}
+    spec:
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext: {runAsNonRoot: true}
+      containers:
+        - name: <container-name-placeholder>
+          image: <image-placeholder>:v1-placeholder
+          securityContext: {allowPrivilegeEscalation: false, privileged: false, readOnlyRootFilesystem: true}
+          resources: {requests: {cpu: <cpu-request-placeholder>, memory: <memory-request-placeholder>}, limits: {cpu: <cpu-limit-placeholder>, memory: <memory-limit-placeholder>}}
+          livenessProbe: {httpGet: {path: <health-path-placeholder>, port: <service-port-placeholder>}}
+          readinessProbe: {httpGet: {path: <ready-path-placeholder>, port: <service-port-placeholder>}}
+          env: [{name: CONFIG_REFERENCE, valueFrom: {configMapKeyRef: {name: <configmap-placeholder>, key: <config-key-placeholder>}}}]

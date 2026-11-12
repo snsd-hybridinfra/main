@@ -1,0 +1,13 @@
+# NON-PRODUCTION EXAMPLE - static validation input only.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: snsd-example-monitoring-readonly
+  namespace: snsd-example
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "endpoints"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch"]

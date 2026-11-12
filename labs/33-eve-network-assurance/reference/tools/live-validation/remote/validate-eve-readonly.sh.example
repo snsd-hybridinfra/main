@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+# Non-production template. Replace placeholders only in the root-owned remote
+# copy; do not commit runtime addresses or credentials.
+readonly OPENSTACK_HOST="<OPENSTACK_MANAGEMENT_HOST>"
+readonly OPENSTACK_SSH_PORT="<OPENSTACK_SSH_PORT>"
+readonly OPENSTACK_API_PORT="<OPENSTACK_API_PORT>"
+readonly MANAGEMENT_PREFIX="<EVE_MANAGEMENT_SUBNET_PREFIX>"
+readonly ROOT_CRITICAL_PERCENT=90
+readonly EVE_CRITICAL_PERCENT=90
+
+PASS_COUNT=0
+WARN_COUNT=0
+FAIL_COUNT=0
+
+pass() { printf '[PASS] %s\n' "$1"; PASS_COUNT=$((PASS_COUNT + 1)); }
+warn() { printf '[WARN] %s\n' "$1"; WARN_COUNT=$((WARN_COUNT + 1)); }
+fail() { printf '[FAIL] %s\n' "$1"; FAIL_COUNT=$((FAIL_COUNT + 1)); }
+
+check_command() {
+    command -v "$1" >/dev/null 2>&1 || {
+        fail "Required command is unavailable: $1"
+        return 1
+    }
+}
+
+check_interface() {
+    local interface="$1"
+    if [[ ! -e "/sys/class/net/$interface" ]]; then
+        fail "Required interface is missing: $interface"
+        return
+    fi
+    local state
+    state="$(cat "/sys/class/net/$interface/operstate" 2>/dev/null || true)"
+    if [[ "$state" == "up" || "$state" == "unknown" ]]; then
+        pass "Required interface is operational: $interface"
+    else
+        fail "Required interface is not operational: $interface"
+    fi
+}
+
+check_bridge_member() {
+    local bridge="$1"
+    local member="$2"
+    if [[ -e "/sys/class/net/$bridge/brif/$member" ]]; then
+        pass "Bridge mapping is present: $bridge to $member"
+    else
+        fail "Bridge mapping is missing: $bridge to $member"
+    fi
+}
+
+check_tcp() {
+    local label="$1"
+    local host="$2"
+    local port="$3"
+    if timeout 4 bash -c "</dev/tcp/$host/$port" >/dev/null 2>&1; then
+        pass "$label"
+    else
+        fail "$label"
+    fi
+}
+
+CONFIG_ERROR=0
+for command in hostname uptime df free awk grep ip timeout cut pgrep ping; do
+    check_command "$command" || CONFIG_ERROR=1
+done
+
+if (( CONFIG_ERROR > 0 )); then
+    printf 'PASS count: %d\nWARN count: %d\nFAIL count: %d\n' "$PASS_COUNT" "$WARN_COUNT" "$FAIL_COUNT"
+    exit 2
+fi
+
+hostname >/dev/null 2>&1 && pass "Hostname is available" || fail "Hostname is unavailable"
+uptime >/dev/null 2>&1 && pass "Uptime is available" || fail "Uptime is unavailable"
+free -b >/dev/null 2>&1 && pass "Memory state is available" || fail "Memory state is unavailable"
+cut -d ' ' -f 1-3 /proc/loadavg >/dev/null 2>&1 && pass "Load average is available" || fail "Load average is unavailable"
+
+ROOT_USE="$(df -P / 2>/dev/null | awk 'NR==2 {gsub(/%/, "", $5); print $5}')"
+if [[ "$ROOT_USE" =~ ^[0-9]+$ && "$ROOT_USE" -lt "$ROOT_CRITICAL_PERCENT" ]]; then
+    pass "Root filesystem is below the critical threshold"
+else
+    fail "Root filesystem is at or above the critical threshold"
+fi
+
+if [[ -d /opt/unetlab ]]; then
+    EVE_USE="$(df -P /opt/unetlab 2>/dev/null | awk 'NR==2 {gsub(/%/, "", $5); print $5}')"
+    if [[ "$EVE_USE" =~ ^[0-9]+$ && "$EVE_USE" -lt "$EVE_CRITICAL_PERCENT" ]]; then
+        pass "EVE image storage is below the critical threshold"
+    else
+        fail "EVE image storage is at or above the critical threshold"
+    fi
+else
+    fail "EVE image storage path is unavailable"
+fi
+
+for index in 0 1 2 3 4 5 6 7; do
+    check_interface "eth$index"
+    check_interface "pnet$index"
+    check_bridge_member "pnet$index" "eth$index"
+done
+
+if ip -4 addr show dev pnet1 2>/dev/null | grep -Fq "$MANAGEMENT_PREFIX"; then
+    pass "pnet1 has the approved management-subnet prefix"
+else
+    fail "pnet1 does not have the approved management-subnet prefix"
+fi
+
+if ip -4 addr show dev pnet0 2>/dev/null | grep -q 'inet '; then
+    pass "pnet0 has an IPv4 bootstrap or NAT address"
+else
+    fail "pnet0 has no IPv4 bootstrap or NAT address"
+fi
+
+if ip route show default 2>/dev/null | grep -q .; then
+    pass "A default route exists"
+else
+    fail "A default route is unavailable"
+fi
+
+[[ -e /dev/kvm ]] && pass "KVM device is available" || fail "KVM device is unavailable"
+if grep -Eq '^kvm(_amd|_intel)? ' /proc/modules 2>/dev/null; then
+    pass "KVM module is loaded"
+else
+    fail "KVM module is unavailable"
+fi
+
+command -v dynamips >/dev/null 2>&1 && pass "Dynamips capability is available" || fail "Dynamips capability is unavailable"
+command -v qemu-system-x86_64 >/dev/null 2>&1 && pass "QEMU capability is available" || fail "QEMU capability is unavailable"
+
+if pgrep -f '[d]ynamips' >/dev/null 2>&1; then
+    pass "A Dynamips node process is running"
+else
+    warn "Dynamips capability is available but no node process is running"
+fi
+if pgrep -f '[q]emu-system' >/dev/null 2>&1; then
+    pass "A QEMU node process is running"
+else
+    warn "QEMU capability is available but no node process is running"
+fi
+
+if ping -c 1 -W 3 "$OPENSTACK_HOST" >/dev/null 2>&1; then
+    pass "OpenStack management host is reachable"
+else
+    fail "OpenStack management host is unreachable"
+fi
+check_tcp "OpenStack SSH port is reachable" "$OPENSTACK_HOST" "$OPENSTACK_SSH_PORT"
+check_tcp "OpenStack API endpoint is reachable" "$OPENSTACK_HOST" "$OPENSTACK_API_PORT"
+
+printf 'PASS count: %d\n' "$PASS_COUNT"
+printf 'WARN count: %d\n' "$WARN_COUNT"
+printf 'FAIL count: %d\n' "$FAIL_COUNT"
+
+if (( FAIL_COUNT > 0 )); then
+    exit 1
+fi
+exit 0

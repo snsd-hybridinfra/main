@@ -1,0 +1,67 @@
+---
+- name: Execute the separately authorized ZT-VIS-002 bounded alert validation
+  hosts: zt_vis_002
+  become: true
+  gather_facts: false
+  serial: 1
+  any_errors_fatal: true
+  vars:
+    zt_vis_002_alert_validation_authorized: false
+    zt_vis_002_alert_rule_mutation_authorized: false
+    zt_vis_002_notification_delivery_authorized: false
+    zt_vis_002_alert_cleanup_authorized: false
+    zt_vis_002_alert_validation_id: ""
+    zt_vis_002_alert_validator_source: ""
+    zt_vis_002_alert_validator_path: /usr/local/sbin/snsd-zt-vis-002-alert-validator
+  tasks:
+    - name: Require all four explicit alert-validation authorizations
+      ansible.builtin.assert:
+        that:
+          - zt_vis_002_alert_validation_authorized | bool
+          - zt_vis_002_alert_rule_mutation_authorized | bool
+          - zt_vis_002_notification_delivery_authorized | bool
+          - zt_vis_002_alert_cleanup_authorized | bool
+          - zt_vis_002_alert_validation_id is match('^P2VISALT-[0-9]{8}T[0-9]{6}Z$')
+          - zt_vis_002_alert_validator_source | length > 0
+        fail_msg: Separate validation, rule-mutation, delivery, and cleanup authorization is required
+
+    - name: Install the temporary fixed alert validator
+      ansible.builtin.copy:
+        src: "{{ zt_vis_002_alert_validator_source }}"
+        dest: "{{ zt_vis_002_alert_validator_path }}"
+        owner: root
+        group: root
+        mode: '0700'
+
+    - name: Execute and verify the bounded alert-validation campaign
+      block:
+        - name: Validate temporary alert rule lifecycle and notification delivery
+          ansible.builtin.command:
+            argv:
+              - /usr/bin/python3
+              - "{{ zt_vis_002_alert_validator_path }}"
+              - "{{ zt_vis_002_alert_validation_id }}"
+          environment:
+            ZT_VIS_002_ALERT_VALIDATION_AUTHORIZED: 'YES'
+            ZT_VIS_002_ALERT_RULE_MUTATION_AUTHORIZED: 'YES'
+            ZT_VIS_002_NOTIFICATION_DELIVERY_AUTHORIZED: 'YES'
+            ZT_VIS_002_ALERT_CLEANUP_AUTHORIZED: 'YES'
+          changed_when: true
+          register: zt_vis_002_alert_validation
+
+        - name: Require every sanitized alert-validation marker
+          ansible.builtin.assert:
+            that:
+              - "'grafana_version=13.1.0' in zt_vis_002_alert_validation.stdout"
+              - "'negative_authentication=PASS' in zt_vis_002_alert_validation.stdout"
+              - "'alert_rule_lifecycle=PASS' in zt_vis_002_alert_validation.stdout"
+              - "'notification_delivery=PASS' in zt_vis_002_alert_validation.stdout"
+              - "'bypass=PASS' in zt_vis_002_alert_validation.stdout"
+              - "'cleanup=PASS' in zt_vis_002_alert_validation.stdout"
+              - "'validation=PASS' in zt_vis_002_alert_validation.stdout"
+            fail_msg: One or more bounded alert-validation markers are missing
+      always:
+        - name: Remove the temporary target alert validator
+          ansible.builtin.file:
+            path: "{{ zt_vis_002_alert_validator_path }}"
+            state: absent

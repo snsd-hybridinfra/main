@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0.0",
+  "status": "LOCAL_INTEGRATION_CONTRACT_VALIDATED",
+  "selected_blueprint": "VM_APPLICATION_STACK",
+  "selected_execution_profile": "DEV-OS-VM-S",
+  "blueprint_resolution_status": "VM_APPLICATION_REQUEST_PATH_LOCAL_IMPLEMENTED",
+  "deployment_authorized": false,
+  "runtime_validation_status": "NOT_VALIDATED",
+  "sources": {
+    "catalog": {
+      "path": "applications/internal-iaas-portal/terraform/catalog.json",
+      "sha256": "b38867ae9ea1736bef994d02378a27876c0e91de2dc21ce6e534333a8e4a22f6"
+    },
+    "protection_profile": {
+      "path": "applications/internal-iaas-portal/zero-trust-protection-profile.yaml",
+      "sha256": "30f1c250e954799e63de116032cc9ca136e8a10fa8903b4289702ef3c2f45380"
+    }
+  },
+  "state_machines": {
+    "request": {
+      "PENDING": ["APPROVED", "CANCELLED", "REJECTED"],
+      "APPROVED": ["GRANTED"],
+      "GRANTED": ["EXPIRED", "REVOKED"]
+    },
+    "resource": {
+      "PROVISIONING": ["PROVISION_FAILED", "RUNNING", "TERMINATING"],
+      "RUNNING": ["TERMINATING"],
+      "PROVISION_FAILED": ["PROVISIONING", "TERMINATING"],
+      "TERMINATING": ["TERMINATED", "TERMINATION_FAILED"],
+      "TERMINATION_FAILED": ["TERMINATING"]
+    },
+    "job_success_path": ["QUEUED", "PLANNING", "APPLYING", "SUCCEEDED"],
+    "destroy_success_path": ["QUEUED", "PLANNING", "DESTROYING", "TERMINATED"]
+  },
+  "golden_path": [
+    "request selects an approved composite blueprint and bounded inputs",
+    "the blueprint is resolved into a pinned internal execution profile and immutable manifest",
+    "policy validation normalizes server-owned product parameters",
+    "a separate approver records APPROVED and queues APPLY",
+    "the bounded runner re-hashes the approved module and plans",
+    "policy permits exactly one private Neutron port and one Nova instance",
+    "apply is followed by post-apply state validation",
+    "any failure after apply starts triggers an inspected automatic destroy plan",
+    "rollback success requires a verified empty Terraform state",
+    "resource becomes RUNNING only when validation_passed is true",
+    "Grant is issued only after the validated RUNNING result",
+    "revoke or expiry blocks the Grant before queuing DESTROY",
+    "destroy reaches TERMINATED or remains an explicit failure"
+  ],
+  "local_acceptance": {
+    "portal_validator": "22_PASS_0_FAIL",
+    "portal_test_suite": "183_PASS_9_DEPENDENCY_DEPRECATION_WARNINGS",
+    "recovery_focused_suite": "68_PASS_2_DEPENDENCY_DEPRECATION_WARNINGS",
+    "test_scope": [
+      "positive",
+      "negative",
+      "bypass",
+      "persistence",
+      "post_apply_policy_failure",
+      "verified_rollback",
+      "rollback_failure",
+      "operator_retry",
+      "recovery_audit"
+    ],
+    "runtime_credit": "NONE"
+  },
+  "failure_recovery": {
+    "post_apply_failure_action": "AUTOMATIC_DESTROY",
+    "success_claim_requires": "TERRAFORM_STATE_EMPTY",
+    "rollback_failure_status": "ROLLBACK_FAILED",
+    "retry_requires_operator_action": true,
+    "grant_allowed_after_failure": false,
+    "audit_stream": "provisioning-job",
+    "runtime_validation_status": "NOT_VALIDATED"
+  },
+  "live_gates": [
+    "separate explicit live authorization",
+    "external OpenStack clouds.yaml and named cloud",
+    "approved private network security groups image keypair and flavor",
+    "protected external Terraform state root",
+    "reviewed plan with zero public or control-plane resources",
+    "independent recovery and destroy path",
+    "sanitized evidence review"
+  ],
+  "stop_conditions": [
+    "blueprint catalog execution-profile catalog or module digest mismatch",
+    "requester can supply provider identifiers or arbitrary HCL",
+    "plan creates a Floating IP network router security group or identity",
+    "state or credential path resolves inside Git",
+    "post-apply validation does not pass",
+    "destroy or rollback cannot be proven",
+    "runtime output cannot be sanitized"
+  ]
+}

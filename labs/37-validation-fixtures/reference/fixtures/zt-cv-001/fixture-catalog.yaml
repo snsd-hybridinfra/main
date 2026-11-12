@@ -1,0 +1,23 @@
+{
+  "fixture_scope": "TEST_FIXTURE_ONLY_NON_EXECUTABLE",
+  "fixtures": [
+    {"id":"FUTURE_TIMESTAMP","value":"2099-01-01T00:00:00Z"},
+    {"id":"MALFORMED_TIMESTAMP","value":"TEST_FIXTURE_BAD_TIME"},
+    {"id":"FRESH_EVIDENCE","value":"PT1H"},
+    {"id":"AGING_EVIDENCE","value":"P8D"},
+    {"id":"STALE_EVIDENCE","value":"P12D"},
+    {"id":"EXPIRED_EVIDENCE","value":"P31D"},
+    {"id":"DUPLICATE_EXECUTION","value":"TEST-FIXTURE-DUPLICATE"},
+    {"id":"FAILED_EXECUTION","value":"FAIL"},
+    {"id":"UNSANITIZED_EXECUTION","value":"FAIL"},
+    {"id":"UNRECORDED_PLAN_HASH","value":"NOT_RECORDED"},
+    {"id":"THREE_STABLE_RUNS","value":"TEST_FIXTURE_PLAN_HASH"},
+    {"id":"SCHEDULE_REFERENCE_ONLY","value":"DAILY_REFERENCE"},
+    {"id":"THREE_SCHEDULED_DATES","value":"TEST_FIXTURE_SCHEDULED_TRIGGER"},
+    {"id":"MISSING_EVIDENCE","value":"tests/fixtures/zt-cv-001/absent.txt"},
+    {"id":"HASH_DRIFT","value":"0000000000000000000000000000000000000000000000000000000000000000"},
+    {"id":"UNRESOLVED_VALIDATOR","value":"ZTCV-VAL-TEST-MISSING"},
+    {"id":"GATE_CYCLE","value":"ZT-TEST-A_TO_ZT-TEST-B_TO_ZT-TEST-A"},
+    {"id":"AUTHORITATIVE_MATURITY_WRITE","value":"TEST_FIXTURE_PROHIBITED_WRITE"}
+  ]
+}

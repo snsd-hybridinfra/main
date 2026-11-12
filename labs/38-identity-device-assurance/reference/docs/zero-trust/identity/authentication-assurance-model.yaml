@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-ID-001",
+  "policy_version": "1.0.0",
+  "identity_provider_deployed": false,
+  "mfa_enforced": false,
+  "oidc_deployed": false,
+  "runtime_authentication_validated": false,
+  "authentication_methods": [
+    {"method": "SSH_KEY", "policy_status": "CATEGORY_DEFINED", "deployed_by_package": false},
+    {"method": "LOCAL_CREDENTIAL", "policy_status": "CATEGORY_DEFINED", "deployed_by_package": false},
+    {"method": "FEDERATED_OIDC", "policy_status": "REQUIRED_NOT_IMPLEMENTED", "deployed_by_package": false},
+    {"method": "SERVICE_TOKEN", "policy_status": "CATEGORY_DEFINED_EXTERNAL_REFERENCE_ONLY", "deployed_by_package": false},
+    {"method": "CERTIFICATE", "policy_status": "CATEGORY_DEFINED_EXTERNAL_REFERENCE_ONLY", "deployed_by_package": false},
+    {"method": "MFA_PROTECTED_INTERACTIVE", "policy_status": "REQUIRED_NOT_IMPLEMENTED", "deployed_by_package": false},
+    {"method": "BREAK_GLASS_CREDENTIAL", "policy_status": "REQUIRED_NOT_IMPLEMENTED", "deployed_by_package": false}
+  ],
+  "assurance_requirements": [
+    {
+      "subject_class": "PRIVILEGED_INTERACTIVE_IDENTITY",
+      "required_methods": ["MFA_PROTECTED_INTERACTIVE"],
+      "mfa_requirement": "REQUIRED_NOT_IMPLEMENTED",
+      "interactive_access": true,
+      "external_secret_reference_required": true,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    },
+    {
+      "subject_class": "NON_PRIVILEGED_HUMAN_IDENTITY",
+      "required_methods": ["SSH_KEY", "LOCAL_CREDENTIAL", "FEDERATED_OIDC"],
+      "mfa_requirement": "RISK_AND_TARGET_DEPENDENT",
+      "interactive_access": true,
+      "external_secret_reference_required": false,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    },
+    {
+      "subject_class": "AUTOMATION_IDENTITY",
+      "required_methods": ["SERVICE_TOKEN", "CERTIFICATE"],
+      "mfa_requirement": "NOT_APPLICABLE_NON_INTERACTIVE",
+      "interactive_access": false,
+      "external_secret_reference_required": true,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    },
+    {
+      "subject_class": "SERVICE_IDENTITY",
+      "required_methods": ["SERVICE_TOKEN", "CERTIFICATE"],
+      "mfa_requirement": "NOT_APPLICABLE_NON_INTERACTIVE",
+      "interactive_access": false,
+      "external_secret_reference_required": true,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    },
+    {
+      "subject_class": "VALIDATOR_IDENTITY",
+      "required_methods": ["SSH_KEY", "CERTIFICATE"],
+      "mfa_requirement": "NOT_APPLICABLE_NON_INTERACTIVE",
+      "interactive_access": false,
+      "external_secret_reference_required": true,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    },
+    {
+      "subject_class": "EMERGENCY_IDENTITY",
+      "required_methods": ["BREAK_GLASS_CREDENTIAL"],
+      "mfa_requirement": "REQUIRED_NOT_IMPLEMENTED",
+      "interactive_access": true,
+      "external_secret_reference_required": true,
+      "runtime_acceptance": "PENDING_SEPARATE_APPROVAL"
+    }
+  ],
+  "external_secret_reference_schemes": [
+    "env://",
+    "file-ref://",
+    "vault-ref://",
+    "external-secret://"
+  ],
+  "limitations": [
+    "Categories express target assurance policy only.",
+    "No real secret is resolved or validated.",
+    "No MFA, OIDC, certificate, token, or credential is provisioned or tested."
+  ]
+}

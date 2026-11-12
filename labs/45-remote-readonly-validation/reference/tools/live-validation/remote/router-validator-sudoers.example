@@ -1,0 +1,2 @@
+# NON-PRODUCTION TEMPLATE. The validator identity may run one fixed wrapper only.
+codex-router-validator ALL=(root) NOPASSWD: /usr/local/sbin/validate-snsd-r1-readonly

@@ -1,0 +1,4 @@
+# SAMPLE / NON-PRODUCTION — VIOLATION SAMPLE ONLY
+unsafe_example: {kind: Service, metadata: {name: <service-name-placeholder>, namespace: <namespace-placeholder>}, spec: {type: NodePort}}
+approved_internal_example: {kind: Service, metadata: {name: <internal-service-placeholder>, namespace: <namespace-placeholder>}, spec: {type: ClusterIP}}
+final_expected_judgment: K8S_POLICY_FAIL

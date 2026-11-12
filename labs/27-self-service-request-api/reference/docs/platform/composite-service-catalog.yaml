@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0.0",
+  "status": "PARTIALLY_IMPLEMENTED_LOCAL",
+  "model": "APPROVED_COMPOSITE_BLUEPRINTS",
+  "portal_integration_status": "VM_APPLICATION_REQUEST_PATH_LOCAL_IMPLEMENTED",
+  "runtime_validation_status": "NOT_VALIDATED",
+  "construction_policy": {
+    "components_user_selectable": false,
+    "free_form_composition": false,
+    "arbitrary_hcl": false,
+    "raw_provider_identifiers": false,
+    "blueprint_selection_only": true,
+    "resolved_manifest_immutable": true,
+    "deployment_transaction": "ALL_OR_NOTHING",
+    "rollback_order": "REVERSE_DEPENDENCY_ORDER"
+  },
+  "components": [
+    {"component_id": "COMPUTE_VM", "owner": "PRIVATE_IAAS", "provider_binding": "OPENSTACK_NOVA", "user_visible": false},
+    {"component_id": "VDI_WORKSPACE", "owner": "DEVELOPER_EXPERIENCE", "provider_binding": "OPENSTACK_PRIVATE_DESKTOP", "user_visible": false},
+    {"component_id": "K3S_RUNTIME", "owner": "PAAS", "provider_binding": "OPENSTACK_K3S", "user_visible": false},
+    {"component_id": "APPLICATION_RUNTIME", "owner": "PAAS", "provider_binding": "K3S_DEPLOYMENT_AND_SERVICE_ADAPTER", "user_visible": false},
+    {"component_id": "POSTGRESQL", "owner": "DATA_SERVICES", "provider_binding": "MANAGED_OR_K3S_ADAPTER", "user_visible": false},
+    {"component_id": "CACHE", "owner": "DATA_SERVICES", "provider_binding": "REDIS_K3S_OR_MANAGED_ADAPTER", "user_visible": false},
+    {"component_id": "MESSAGE_QUEUE", "owner": "DATA_SERVICES", "provider_binding": "PRIVATE_MESSAGE_QUEUE_ADAPTER", "user_visible": false},
+    {"component_id": "OBJECT_STORAGE", "owner": "DATA_SERVICES", "provider_binding": "PRIVATE_S3_ADAPTER", "user_visible": false},
+    {"component_id": "NAS_FILE_EXCHANGE", "owner": "DATA_SERVICES", "provider_binding": "SMB_3_1_1_DUAL_STAGE_TRANSFER_GATEWAY", "user_visible": false},
+    {"component_id": "LOAD_BALANCER", "owner": "PRIVATE_IAAS", "provider_binding": "OPENSTACK_OR_K3S_INGRESS_ADAPTER", "user_visible": false},
+    {"component_id": "NETWORK_POLICY", "owner": "FINANCIAL_NETWORK", "provider_binding": "NEUTRON_AND_K3S_POLICY", "user_visible": false},
+    {"component_id": "OPERATIONS_PROFILE", "owner": "INTEGRATED_OPERATIONS", "provider_binding": "OBSERVABILITY_BACKUP_AUDIT_COST", "user_visible": false}
+  ],
+  "blueprints": [
+    {
+      "blueprint_id": "DEVELOPER_WORKSPACE",
+      "display_name": "Developer Workspace",
+      "user_summary": "격리된 비운영 개발 데스크톱과 개인 작업공간",
+      "components": ["VDI_WORKSPACE", "OBJECT_STORAGE", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVATE_DEVELOPER_ACCESS",
+      "allowed_environments": ["DEV", "TEST"],
+      "allowed_sizes": ["SMALL", "STANDARD"],
+      "allowed_duration_hours": [4, 8, 24, 72]
+    },
+    {
+      "blueprint_id": "SECURE_ADMIN_WORKSPACE",
+      "display_name": "Secure Admin Workspace",
+      "user_summary": "관리영역 접근을 제한한 단기 특권 작업공간",
+      "components": ["VDI_WORKSPACE", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVILEGED_MANAGEMENT_ISOLATED",
+      "allowed_environments": ["DEV", "TEST"],
+      "allowed_sizes": ["STANDARD"],
+      "allowed_duration_hours": [4, 8]
+    },
+    {
+      "blueprint_id": "WEB_APPLICATION_STACK",
+      "display_name": "Web Application Stack",
+      "user_summary": "비공개 웹 애플리케이션 개발·검증 실행환경",
+      "components": ["K3S_RUNTIME", "POSTGRESQL", "LOAD_BALANCER", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVATE_WEB_INGRESS",
+      "allowed_environments": ["DEV", "TEST", "STG"],
+      "allowed_sizes": ["SMALL", "STANDARD"],
+      "allowed_duration_hours": [8, 24, 72, 168]
+    },
+    {
+      "blueprint_id": "API_DEVELOPMENT_STACK",
+      "display_name": "Financial SaaS Development PaaS",
+      "user_summary": "증권 주문 API·사후처리를 포함한 금융 SaaS의 DEV·TEST·STG 표준 PaaS",
+      "business_domain_profiles": ["SECURITIES_ORDER_API_SIMULATION", "SECURITIES_POST_TRADE_SIMULATION"],
+      "components": ["K3S_RUNTIME", "APPLICATION_RUNTIME", "POSTGRESQL", "CACHE", "MESSAGE_QUEUE", "OBJECT_STORAGE", "NAS_FILE_EXCHANGE", "LOAD_BALANCER", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVATE_SAAS_INGRESS",
+      "allowed_environments": ["DEV", "TEST", "STG"],
+      "allowed_sizes": ["SMALL", "STANDARD"],
+      "allowed_duration_hours": [8, 24, 72, 168]
+    },
+    {
+      "blueprint_id": "VM_APPLICATION_STACK",
+      "display_name": "VM Application Stack",
+      "user_summary": "OpenStack 기반 비공개 애플리케이션 VM 환경",
+      "components": ["COMPUTE_VM", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVATE_APPLICATION",
+      "allowed_environments": ["DEV", "TEST", "STG"],
+      "allowed_sizes": ["SMALL", "STANDARD", "LARGE"],
+      "allowed_duration_hours": [4, 8, 24, 72, 168]
+    },
+    {
+      "blueprint_id": "AI_AGENT_SANDBOX",
+      "display_name": "Persistent AI Agent Sandbox",
+      "user_summary": "승인·예산·격리를 적용한 장기 비동기 개발 작업",
+      "components": ["K3S_RUNTIME", "OBJECT_STORAGE", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "AI_AGENT_EGRESS_BROKERED",
+      "allowed_environments": ["DEV", "TEST"],
+      "allowed_sizes": ["STANDARD", "LARGE"],
+      "allowed_duration_hours": [1, 4, 8, 24]
+    },
+    {
+      "blueprint_id": "DATA_PROCESSING_LAB",
+      "display_name": "Data Processing Lab",
+      "user_summary": "합성 포지션 기반 증권 포트폴리오·리스크 분석과 저장소 연동 격리 랩",
+      "business_domain_profiles": ["SECURITIES_PORTFOLIO_RISK_SIMULATION"],
+      "components": ["COMPUTE_VM", "POSTGRESQL", "OBJECT_STORAGE", "NAS_FILE_EXCHANGE", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "PRIVATE_DATA_ISOLATED",
+      "allowed_environments": ["DEV", "TEST"],
+      "allowed_sizes": ["STANDARD", "LARGE"],
+      "allowed_duration_hours": [8, 24, 72]
+    },
+    {
+      "blueprint_id": "SYNTHETIC_MARKET_DATA_LAB",
+      "display_name": "Synthetic Market Data Lab",
+      "user_summary": "증권 합성 시세 데이터와 제한된 멀티캐스트 검증 랩",
+      "business_domain_profiles": ["SECURITIES_MARKET_DATA_SIMULATION"],
+      "components": ["K3S_RUNTIME", "OBJECT_STORAGE", "NETWORK_POLICY", "OPERATIONS_PROFILE"],
+      "network_profile": "SYNTHETIC_MULTICAST_BOUNDED",
+      "allowed_environments": ["TEST"],
+      "allowed_sizes": ["STANDARD"],
+      "allowed_duration_hours": [4, 8]
+    }
+  ],
+  "allowed_user_inputs": ["blueprint_id", "environment", "size", "duration_hours", "purpose"],
+  "mandatory_blueprint_components": ["NETWORK_POLICY", "OPERATIONS_PROFILE"],
+  "execution_profile_catalog": {
+    "path": "applications/internal-iaas-portal/terraform/catalog.json",
+    "role": "INTERNAL_PROVIDER_BOUND_EXECUTION_PROFILES",
+    "direct_user_exposure": "SERVICE_ONLY"
+  },
+  "prohibited_scope": [
+    "PRODUCTION_FINANCIAL_DATA",
+    "REAL_SECURITIES_ORDERS",
+    "REAL_MARKET_CONNECTIVITY",
+    "REAL_CUSTOMER_OR_ACCOUNT_DATA",
+    "PRODUCTION_CLEARING_OR_SETTLEMENT",
+    "USER_DEFINED_COMPONENT_GRAPH",
+    "USER_SUPPLIED_PROVIDER_ID",
+    "USER_SUPPLIED_HCL",
+    "PARTIAL_SUCCESS_GRANT",
+    "MULTI_SITE_DR",
+    "ACTIVE_PUBLIC_CLOUD_PROVIDER"
+  ]
+}

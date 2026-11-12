@@ -1,0 +1,189 @@
+{
+  "architecture_package": "ZT-ARC-001",
+  "title": "Advanced-Maturity IaC, Configuration as Code, and Policy as Code Target Architecture with Optimal-Ready Extension Design",
+  "project_positioning": "IaC, Configuration as Code, and Policy as Code-driven Advanced Zero Trust Secure Operations Platform with an Optimal-Ready Extension Architecture",
+  "public_positioning": "Hybrid and Multicloud-Ready Secure Operations Platform",
+  "implementation_status": "DESIGN_ONLY",
+  "validation_status": "LOCAL_VALIDATED",
+  "current_maturity": "UNASSESSED",
+  "target_boundary": "ADVANCED_TARGET",
+  "architecture_designation": {
+    "value": "OPTIMAL_READY",
+    "official_maturity_level": false
+  },
+  "official_maturity_levels": [
+    "TRADITIONAL",
+    "INITIAL",
+    "ADVANCED",
+    "OPTIMAL"
+  ],
+  "repository_assessment_states": [
+    "UNASSESSED",
+    "NOT_APPLICABLE"
+  ],
+  "selection_counts": {
+    "ADVANCED_PRIMARY_TARGET": 21,
+    "ADVANCED_SUPPORTING_TARGET": 15,
+    "DESIGN_ONLY": 5,
+    "INITIAL_TARGET": 4,
+    "OPTIMAL_ROADMAP_ONLY": 7
+  },
+  "selected_capability_ids": {
+    "ADVANCED_PRIMARY_TARGET": [
+      "ZT-1.1.2",
+      "ZT-1.2.1",
+      "ZT-1.4.1",
+      "ZT-1.4.2",
+      "ZT-3.1.1",
+      "ZT-3.3.1",
+      "ZT-3.4.1",
+      "ZT-4.1.1",
+      "ZT-4.2.2",
+      "ZT-4.3.1",
+      "ZT-4.4.1",
+      "ZT-5.1.1",
+      "ZT-5.4.1",
+      "ZT-6.2.1",
+      "ZT-6.3.1",
+      "ZT-6.4.1",
+      "ZT-7.1",
+      "ZT-7.2",
+      "ZT-8.1",
+      "ZT-8.2",
+      "ZT-8.5"
+    ],
+    "ADVANCED_SUPPORTING_TARGET": [
+      "ZT-1.1.1",
+      "ZT-2.1.1",
+      "ZT-2.3.1",
+      "ZT-2.4.2",
+      "ZT-3.2.1",
+      "ZT-3.5.1",
+      "ZT-4.2.1",
+      "ZT-5.2.1",
+      "ZT-5.3.1",
+      "ZT-5.4.2",
+      "ZT-5.5.2",
+      "ZT-6.1.1",
+      "ZT-6.5.2",
+      "ZT-7.3",
+      "ZT-8.6"
+    ],
+    "INITIAL_TARGET": [
+      "ZT-1.2.2",
+      "ZT-2.2.1",
+      "ZT-3.1.2",
+      "ZT-6.5.1"
+    ],
+    "DESIGN_ONLY": [
+      "ZT-1.3.1",
+      "ZT-2.3.2",
+      "ZT-3.1.3",
+      "ZT-5.5.1",
+      "ZT-6.1.2"
+    ],
+    "OPTIMAL_ROADMAP_ONLY": [
+      "ZT-1.3.2",
+      "ZT-2.4.1",
+      "ZT-7.4",
+      "ZT-7.5",
+      "ZT-7.6",
+      "ZT-8.3",
+      "ZT-8.4"
+    ]
+  },
+  "responsibilities": {
+    "iac": [
+      "network",
+      "subnet",
+      "router",
+      "security-group",
+      "port",
+      "virtual-machine-for-openstack-only",
+      "volume",
+      "metadata",
+      "role-tags",
+      "generated-inventory"
+    ],
+    "cac": [
+      "operating-system-baseline",
+      "approved-package-state",
+      "docker-engine",
+      "docker-buildx",
+      "docker-compose",
+      "host-firewall",
+      "directory-layout",
+      "ownership",
+      "file-permissions",
+      "service-accounts",
+      "grafana",
+      "loki",
+      "alloy",
+      "keycloak",
+      "mariadb",
+      "nginx",
+      "internal-https",
+      "oidc-structure",
+      "mfa-policy-structure",
+      "logging",
+      "validators",
+      "backup",
+      "recovery"
+    ],
+    "pac": [
+      "environment-profile-policy",
+      "iac-source-policy",
+      "iac-plan-policy",
+      "rendered-configuration-policy",
+      "deployment-change-policy",
+      "runtime-state-policy",
+      "drift-policy",
+      "evidence-quality-policy"
+    ]
+  },
+  "policy_default": "DENY_BY_DEFAULT_FOR_UNREGISTERED_CHANGE",
+  "provider_adapters": [
+    {
+      "id": "openstack",
+      "status": "TARGET",
+      "provisions_compute": true
+    },
+    {
+      "id": "existing-vm",
+      "status": "TARGET",
+      "provisions_compute": false
+    },
+    {
+      "id": "physical-server",
+      "status": "TARGET",
+      "provisions_compute": false
+    },
+    {
+      "id": "aws",
+      "status": "ROADMAP_ONLY",
+      "provisions_compute": false
+    },
+    {
+      "id": "azure",
+      "status": "ROADMAP_ONLY",
+      "provisions_compute": false
+    },
+    {
+      "id": "kubernetes",
+      "status": "ROADMAP_ONLY",
+      "provisions_compute": false
+    },
+    {
+      "id": "additional-openstack",
+      "status": "ROADMAP_ONLY",
+      "provisions_compute": false
+    }
+  ],
+  "limitations": [
+    "Architecture readiness does not establish maturity.",
+    "No roadmap package is implemented by ZT-ARC-001.",
+    "No repository-wide Advanced or Optimal assessment exists.",
+    "AWS and Azure adapters remain roadmap-only despite locked scenario placeholders.",
+    "Active monitoring runtime work under .runtime/zero-trust/zt-vis-002 is protected and is not promoted by this architecture."
+  ]
+}

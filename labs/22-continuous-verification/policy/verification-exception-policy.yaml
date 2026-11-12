@@ -1,0 +1,6 @@
+{
+  "metadata": {"environment":"BOUNDED_NON_PRODUCTION_LAB","policy_version":"1.0.0","authority":"ZT-CV-001","allowed_states":["PROPOSED","APPROVED","ACTIVE","EXPIRED","REJECTED","CLOSED"],"limitations":["No real exception is approved by this package.","Exceptions never convert FAIL to PASS, authorize prohibited actions, or establish maturity."]},
+  "required_fields": ["exception_id","scope","reason","owner","approver_role","affected_capability_ids","affected_controls","risk","compensating_controls","start_date","expiration_date","review_frequency","evidence","current_status"],
+  "rules": ["Every exception has an expiration date.","ACTIVE requires approval evidence and cannot outlive expiration.","ACCEPTED_WITH_LIMITATION is allowed only by an explicit package gate.","Historical failures and evidence are retained.","R8 destructive action remains prohibited."],
+  "exceptions": []
+}

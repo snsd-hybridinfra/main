@@ -1,0 +1,121 @@
+---
+- name: generate sanitized example output files
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    example_dir: "{{ playbook_dir }}/output/example"
+
+  tasks:
+    - name: ensure example output directory exists
+      file:
+        path: "{{ example_dir }}"
+        state: directory
+
+    - name: generate base network example
+      copy:
+        dest: "{{ example_dir }}/base_network.example.yml"
+        content: |
+          base_network:
+            region: "ap-northeast-2"
+            vpc_id: "vpc-xxxxxxxxxxxxxxxxx"
+
+            public_subnets:
+              public_subnet_1: "subnet-xxxxxxxxxxxxxxxxx"
+              public_subnet_2: "subnet-xxxxxxxxxxxxxxxxx"
+
+            private_subnets:
+              private_subnet_1: "subnet-xxxxxxxxxxxxxxxxx"
+              private_subnet_2: "subnet-xxxxxxxxxxxxxxxxx"
+
+            internet_gateway_id: "igw-xxxxxxxxxxxxxxxxx"
+            nat_gateway_id: "nat-xxxxxxxxxxxxxxxxx"
+
+            route_tables:
+              public_route_table_id: "rtb-xxxxxxxxxxxxxxxxx"
+              private_route_table_id: "rtb-xxxxxxxxxxxxxxxxx"
+
+          common_tags:
+            Project: "ansible-vpc-lab"
+            Owner: "jjh"
+            ManagedBy: "ansible"
+
+    - name: generate security groups example
+      copy:
+        dest: "{{ example_dir }}/security_groups.example.yml"
+        content: |
+          security_groups:
+            alb_sg_id: "sg-xxxxxxxxxxxxxxxxx"
+            bastion_sg_id: "sg-xxxxxxxxxxxxxxxxx"
+            web_sg_id: "sg-xxxxxxxxxxxxxxxxx"
+
+    - name: generate compute example
+      copy:
+        dest: "{{ example_dir }}/compute.example.yml"
+        content: |
+          compute:
+            key_name: "ansible-jjh-key"
+            key_private_path: "{{ playbook_dir }}/ansible-jjh-key"
+            ami_id: "ami-xxxxxxxxxxxxxxxxx"
+
+            bastion:
+              instance_id: "i-xxxxxxxxxxxxxxxxx"
+              public_ip: "x.x.x.x"
+              private_ip: "10.21.1.x"
+
+            web_servers:
+              web_1:
+                instance_id: "i-xxxxxxxxxxxxxxxxx"
+                private_ip: "10.21.11.x"
+                subnet_id: "subnet-xxxxxxxxxxxxxxxxx"
+
+              web_2:
+                instance_id: "i-xxxxxxxxxxxxxxxxx"
+                private_ip: "10.21.12.x"
+                subnet_id: "subnet-xxxxxxxxxxxxxxxxx"
+
+    - name: generate alb example
+      copy:
+        dest: "{{ example_dir }}/alb.example.yml"
+        content: |
+          alb:
+            name: "ansible-jjh-alb"
+            dns_name: "ansible-jjh-alb-xxxxxxxx.ap-northeast-2.elb.amazonaws.com"
+
+            target_group:
+              name: "ansible-jjh-tg"
+              arn: "arn:aws:elasticloadbalancing:ap-northeast-2:ACCOUNT_ID:targetgroup/ansible-jjh-tg/xxxxxxxx"
+
+            targets:
+              web_1_instance_id: "i-xxxxxxxxxxxxxxxxx"
+              web_2_instance_id: "i-xxxxxxxxxxxxxxxxx"
+
+    - name: generate validation example
+      copy:
+        dest: "{{ example_dir }}/validation.example.yml"
+        content: |
+          validation:
+            vpc_id: "vpc-xxxxxxxxxxxxxxxxx"
+            alb_dns_name: "ansible-jjh-alb-xxxxxxxx.ap-northeast-2.elb.amazonaws.com"
+
+            instances:
+              bastion_instance_id: "i-xxxxxxxxxxxxxxxxx"
+              web_1_instance_id: "i-xxxxxxxxxxxxxxxxx"
+              web_2_instance_id: "i-xxxxxxxxxxxxxxxxx"
+              ec2_instance_count: "3"
+
+            alb_http:
+              status: "200"
+              response_body: "Hello from ansible-jjh-web-1"
+
+    - name: show generated example files
+      debug:
+        msg:
+          - "generated: {{ example_dir }}/base_network.example.yml"
+          - "generated: {{ example_dir }}/security_groups.example.yml"
+          - "generated: {{ example_dir }}/compute.example.yml"
+          - "generated: {{ example_dir }}/alb.example.yml"
+          - "generated: {{ example_dir }}/validation.example.yml"

@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-ID-001",
+  "policy_version": "1.0.0",
+  "default_policy": "DENY_BY_DEFAULT_FOR_UNREGISTERED_IDENTITY",
+  "actions": [
+    {"action": "IDENTITY_READ", "classification": "READ_ONLY", "runtime_access": false, "secret_access": false},
+    {"action": "POLICY_VALIDATE", "classification": "VALIDATION", "runtime_access": false, "secret_access": false},
+    {"action": "DECISION_EVALUATE", "classification": "VALIDATION", "runtime_access": false, "secret_access": false},
+    {"action": "EVIDENCE_READ", "classification": "EVIDENCE_READ", "runtime_access": false, "secret_access": false},
+    {"action": "EVIDENCE_REVIEW", "classification": "EVIDENCE_REVIEW", "runtime_access": false, "secret_access": false},
+    {"action": "PACKAGE_REVIEW", "classification": "APPROVAL", "runtime_access": false, "secret_access": false},
+    {"action": "PACKAGE_APPROVE", "classification": "APPROVAL", "runtime_access": false, "secret_access": false},
+    {"action": "IDENTITY_MUTATE", "classification": "MUTATING", "runtime_access": false, "secret_access": false},
+    {"action": "EMERGENCY_ACCESS", "classification": "EMERGENCY", "runtime_access": true, "secret_access": true},
+    {"action": "FUTURE_FEDERATED_AUTHENTICATION", "classification": "PHASE_2_RUNTIME", "runtime_access": true, "secret_access": false}
+  ],
+  "roles": [
+    {
+      "role_name": "IDENTITY_READER",
+      "allowed_actions": ["IDENTITY_READ"],
+      "prohibited_actions": ["IDENTITY_MUTATE", "PACKAGE_APPROVE", "EMERGENCY_ACCESS"],
+      "approval_requirements": [],
+      "interactive_access_boundary": "BOUNDED_READ_ONLY",
+      "mutating_access_boundary": "PROHIBITED",
+      "evidence_access_boundary": "NONE",
+      "runtime_access_boundary": "PROHIBITED",
+      "secret_access_boundary": "PROHIBITED",
+      "separation_of_duties_conflicts": ["MUTATING_OPERATOR"]
+    },
+    {
+      "role_name": "VALIDATION_OPERATOR",
+      "allowed_actions": ["IDENTITY_READ", "POLICY_VALIDATE", "DECISION_EVALUATE"],
+      "prohibited_actions": ["PACKAGE_APPROVE", "IDENTITY_MUTATE", "EMERGENCY_ACCESS"],
+      "approval_requirements": [],
+      "interactive_access_boundary": "LOCAL_VALIDATION_ONLY",
+      "mutating_access_boundary": "PROHIBITED",
+      "evidence_access_boundary": "SANITIZED_RESULTS_ONLY",
+      "runtime_access_boundary": "PROHIBITED_WITHOUT_SEPARATE_APPROVAL",
+      "secret_access_boundary": "PROHIBITED",
+      "separation_of_duties_conflicts": ["PACKAGE_APPROVER"]
+    },
+    {
+      "role_name": "EVIDENCE_REVIEWER",
+      "allowed_actions": ["EVIDENCE_READ", "EVIDENCE_REVIEW"],
+      "prohibited_actions": ["IDENTITY_MUTATE", "PACKAGE_APPROVE", "EMERGENCY_ACCESS"],
+      "approval_requirements": [],
+      "interactive_access_boundary": "SANITIZED_EVIDENCE_ONLY",
+      "mutating_access_boundary": "PROHIBITED",
+      "evidence_access_boundary": "SANITIZED_EVIDENCE_REVIEW",
+      "runtime_access_boundary": "PROHIBITED",
+      "secret_access_boundary": "PROHIBITED",
+      "separation_of_duties_conflicts": []
+    },
+    {
+      "role_name": "PACKAGE_APPROVER",
+      "allowed_actions": ["PACKAGE_REVIEW", "PACKAGE_APPROVE"],
+      "prohibited_actions": ["POLICY_VALIDATE", "IDENTITY_MUTATE", "EMERGENCY_ACCESS"],
+      "approval_requirements": ["INDEPENDENT_REVIEW_RECORD"],
+      "interactive_access_boundary": "REPOSITORY_REVIEW_ONLY",
+      "mutating_access_boundary": "PROHIBITED",
+      "evidence_access_boundary": "SANITIZED_EVIDENCE_REVIEW",
+      "runtime_access_boundary": "PROHIBITED",
+      "secret_access_boundary": "PROHIBITED",
+      "separation_of_duties_conflicts": ["VALIDATION_OPERATOR", "MUTATING_OPERATOR"]
+    },
+    {
+      "role_name": "MUTATING_OPERATOR",
+      "allowed_actions": ["IDENTITY_READ", "IDENTITY_MUTATE"],
+      "prohibited_actions": ["PACKAGE_APPROVE", "EMERGENCY_ACCESS"],
+      "approval_requirements": ["EXPLICIT_CHANGE_APPROVAL", "ROLLBACK_OWNER_CONFIRMED"],
+      "interactive_access_boundary": "FIXTURE_ONLY_IN_THIS_PACKAGE",
+      "mutating_access_boundary": "SEPARATE_APPROVAL_REQUIRED",
+      "evidence_access_boundary": "SANITIZED_CHANGE_RECORD_ONLY",
+      "runtime_access_boundary": "PROHIBITED_IN_P1_ID_001",
+      "secret_access_boundary": "EXTERNAL_REFERENCE_ONLY",
+      "separation_of_duties_conflicts": ["IDENTITY_READER", "PACKAGE_APPROVER"]
+    },
+    {
+      "role_name": "BREAK_GLASS_OPERATOR",
+      "allowed_actions": ["EMERGENCY_ACCESS"],
+      "prohibited_actions": ["PACKAGE_APPROVE", "POLICY_VALIDATE"],
+      "approval_requirements": ["EXPLICIT_EMERGENCY_APPROVAL", "EXPIRATION", "LOGGING", "RECOVERY_PROCEDURE", "ROLLBACK_OWNER_CONFIRMED"],
+      "interactive_access_boundary": "TIME_BOUNDED_EMERGENCY_ONLY",
+      "mutating_access_boundary": "EMERGENCY_SCOPE_ONLY",
+      "evidence_access_boundary": "SANITIZED_EMERGENCY_RECORD_REQUIRED",
+      "runtime_access_boundary": "NOT_IMPLEMENTED_SEPARATE_APPROVAL_REQUIRED",
+      "secret_access_boundary": "EXTERNAL_REFERENCE_ONLY",
+      "separation_of_duties_conflicts": ["PACKAGE_APPROVER"]
+    }
+  ]
+}

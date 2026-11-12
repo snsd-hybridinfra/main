@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily IaaS request-db backup
+
+[Timer]
+OnCalendar=*-*-* 02:10:00 Asia/Seoul
+RandomizedDelaySec=15m
+Persistent=true
+Unit=iaas-request-db-backup.service
+
+[Install]
+WantedBy=timers.target

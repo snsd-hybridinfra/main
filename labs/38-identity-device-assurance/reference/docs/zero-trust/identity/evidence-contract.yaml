@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-ID-001",
+  "policy_version": "1.1.0",
+  "evidence_schema": "schemas/zero-trust-identity-evidence.schema.json",
+  "required_execution_authority": "USER_APPROVED_CODEX_EXECUTION",
+  "required_execution_mode": "BOUNDED_NON_PRODUCTION_ENFORCEMENT",
+  "required_target": "NONPROD_VALIDATOR_TARGET_01",
+  "runtime_executed": true,
+  "live_identity_changed": true,
+  "status": "RUNTIME_ACCEPTED",
+  "local_validation_record": "docs/evidence/zero-trust/zt-id-001-local-validation.yaml",
+  "runtime_validation_record": "docs/evidence/zero-trust/zt-id-001-runtime-validation.yaml",
+  "retention_policy": "Retain schemas, synthetic fixtures, deterministic decisions, sanitized runtime counts, control outcomes, validator version, and explicit limitations in Git; keep raw runtime output ignored.",
+  "prohibited_content": [
+    "REAL_USERNAMES",
+    "PERSONAL_EMAIL_ADDRESSES",
+    "PASSWORDS_OR_PASSWORD_HASHES",
+    "TOKENS_OR_CLIENT_SECRETS",
+    "PRIVATE_KEYS_OR_CERTIFICATE_PRIVATE_MATERIAL",
+    "MFA_SEEDS_OR_RECOVERY_CODES",
+    "FULL_PRODUCTION_ACCOUNT_EXPORTS",
+    "COMPLETE_LOGIN_HISTORY",
+    "RAW_RUNTIME_OUTPUT",
+    "CLOUDS_YAML_CONTENT",
+    "PASSWORDS_YML_CONTENT",
+    "REAL_ENV_CONTENT"
+  ],
+  "allowed_secret_reference_schemes": [
+    "env://",
+    "file-ref://",
+    "vault-ref://",
+    "external-secret://"
+  ],
+  "sanitization_rules": [
+    "Use synthetic labels and stable fixture identifiers.",
+    "Record counts and reason codes instead of identity attributes when possible.",
+    "Retain external secret references only and never dereference them.",
+    "Use the non-sensitive target alias and package-owned control labels only.",
+    "Record runtime allow and deny counts without usernames, addresses, complete keys, credentials, or full authentication logs."
+  ],
+  "privacy_requirements": [
+    "PURPOSE_LIMITATION",
+    "MINIMUM_IDENTITY_ATTRIBUTES",
+    "BOUNDED_NON_PRODUCTION_SCOPE_ONLY",
+    "NO_UNNECESSARY_PERSONAL_DATA",
+    "SANITIZED_EVIDENCE_ONLY",
+    "NON_SENSITIVE_TARGET_LABELS"
+  ],
+  "limitations": [
+    "Runtime evidence supports only the bounded non-production validator endpoint.",
+    "Centralized identity, MFA, OIDC, application RBAC, production validation, and capability maturity remain unassessed."
+  ]
+}

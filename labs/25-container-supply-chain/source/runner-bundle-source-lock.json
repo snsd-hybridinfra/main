@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "bundle_version": "1.0.7",
+  "platform": "linux-x86_64",
+  "release_tag": "idp-runner-bundle-v1.0.7",
+  "release_asset": "idp-runner-bundle-1.0.7-linux-x86_64.tar.gz",
+  "sources": [
+    {
+      "id": "actions-runner",
+      "version": "2.337.0",
+      "file": "actions-runner-linux-x64-2.337.0.tar.gz",
+      "url": "https://github.com/actions/runner/releases/download/v2.337.0/actions-runner-linux-x64-2.337.0.tar.gz",
+      "sha256": "70920811a4f8ad4328818682bca5c6469c1c942fab52448868071d0063816613",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "docker",
+      "version": "29.4.3",
+      "file": "docker-29.4.3.tgz",
+      "url": "https://download.docker.com/linux/static/stable/x86_64/docker-29.4.3.tgz",
+      "sha256": "bc9734a89d3edd15eeca8620961f6499ba69948814c85d7ac3488e34b3e16d01",
+      "trust": "OFFICIAL_HTTPS_ACQUISITION_PINNED"
+    },
+    {
+      "id": "docker-buildx",
+      "version": "0.37.0",
+      "file": "buildx-v0.37.0.linux-amd64",
+      "url": "https://github.com/docker/buildx/releases/download/v0.37.0/buildx-v0.37.0.linux-amd64",
+      "sha256": "ae43fa08c796b44efc86d7a63c55f73f7c35f3101188dea7bf93bcd6f99577ba",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "trivy",
+      "version": "0.74.0",
+      "file": "trivy_0.74.0_Linux-64bit.tar.gz",
+      "url": "https://github.com/aquasecurity/trivy/releases/download/v0.74.0/trivy_0.74.0_Linux-64bit.tar.gz",
+      "sha256": "2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "syft",
+      "version": "1.51.1",
+      "file": "syft_1.51.1_linux_amd64.tar.gz",
+      "url": "https://github.com/anchore/syft/releases/download/v1.51.1/syft_1.51.1_linux_amd64.tar.gz",
+      "sha256": "8fcb33017a0dc1058298c923c436d19dfa68ae93968e0b423248542e3afb9fc3",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "cosign",
+      "version": "3.1.3",
+      "file": "cosign-linux-amd64",
+      "url": "https://github.com/sigstore/cosign/releases/download/v3.1.3/cosign-linux-amd64",
+      "sha256": "4629c757b7618056f8ddd7e2625ae9fdd94c0372a65049520bc7d9df9efc7f71",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "gh",
+      "version": "2.100.0",
+      "file": "gh_2.100.0_linux_amd64.tar.gz",
+      "url": "https://github.com/cli/cli/releases/download/v2.100.0/gh_2.100.0_linux_amd64.tar.gz",
+      "sha256": "e4d4bb4498e8d007abe545b6568926793ace1b6447da598294a610018cb164be",
+      "trust": "GITHUB_RELEASE_ASSET_DIGEST_VERIFIED"
+    },
+    {
+      "id": "git",
+      "version": "2.43.0-1ubuntu7.3",
+      "file": "git_2.43.0-1ubuntu7.3_amd64.deb",
+      "url": "https://security.ubuntu.com/ubuntu/pool/main/g/git/git_2.43.0-1ubuntu7.3_amd64.deb",
+      "sha256": "099bb129f543adc4c14203334b0fa0a909f8bf038c4d56bc9cc7c774ebf78f87",
+      "trust": "UBUNTU_SECURITY_HTTPS_ACQUISITION_PINNED"
+    }
+  ]
+}

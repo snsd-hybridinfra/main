@@ -1,0 +1,12 @@
+---
+- name: Validate ZT-VIS-002 nginx configuration
+  ansible.builtin.command:
+    argv: [/usr/sbin/nginx, -t]
+  changed_when: false
+  listen: Validate and reload ZT-VIS-002 nginx
+
+- name: Reload ZT-VIS-002 nginx configuration
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+  listen: Validate and reload ZT-VIS-002 nginx

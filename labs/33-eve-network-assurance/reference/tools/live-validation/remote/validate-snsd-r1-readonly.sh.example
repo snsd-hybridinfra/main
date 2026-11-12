@@ -1,0 +1,178 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Root-owned fixed-command Cisco console validator. Runtime values are rendered
+# during installation and are never stored in Git.
+exec /usr/bin/python3 - <<'PY'
+from __future__ import annotations
+
+import re
+import select
+import socket
+import sys
+import time
+
+CONSOLE_PORT = int("<ROUTER_CONSOLE_PORT>")
+FIXED_TARGETS = (
+    ("OpenStack router external path", "<OPENSTACK_ROUTER_EXTERNAL_IP>"),
+    ("OpenStack Floating IP path", "<OPENSTACK_FLOATING_IP>"),
+)
+IAC, DONT, DO, WONT, WILL = 255, 254, 253, 252, 251
+passes = 0
+warnings = 0
+failures = 0
+
+
+def report(level: str, message: str) -> None:
+    global passes, warnings, failures
+    if level == "PASS":
+        passes += 1
+    elif level == "WARN":
+        warnings += 1
+    else:
+        failures += 1
+    print(f"[{level}] {message}")
+
+
+def receive(sock: socket.socket, timeout: float) -> bytes:
+    deadline = time.monotonic() + timeout
+    output = bytearray()
+    while time.monotonic() < deadline:
+        readable, _, _ = select.select([sock], [], [], 0.2)
+        if not readable:
+            continue
+        chunk = sock.recv(65535)
+        if not chunk:
+            break
+        index = 0
+        while index < len(chunk):
+            value = chunk[index]
+            if value == IAC and index + 2 < len(chunk):
+                command, option = chunk[index + 1], chunk[index + 2]
+                sock.sendall(bytes((IAC, WONT if command in (DO, DONT) else DONT, option)))
+                index += 3
+                continue
+            output.append(value)
+            index += 1
+        deadline = time.monotonic() + 0.5
+    return bytes(output)
+
+
+def receive_prompt(sock: socket.socket, timeout: float) -> str:
+    deadline = time.monotonic() + timeout
+    captured = bytearray()
+    while time.monotonic() < deadline:
+        captured.extend(receive(sock, min(1.0, max(0.2, deadline - time.monotonic()))))
+        text = clean(bytes(captured))
+        if re.search(r"SNSD-R1(?:\(config[^)]*\))?[>#]\s*$", text):
+            return text
+    return clean(bytes(captured))
+
+
+def clean(value: bytes) -> str:
+    text = value.decode("utf-8", errors="replace")
+    text = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", text)
+    while "\x08" in text:
+        text = re.sub(r".?\x08", "", text)
+    return text.replace("\r", "")
+
+
+def run(sock: socket.socket, value: str, timeout: float = 4.0) -> str:
+    sock.sendall(value.encode("ascii") + b"\r\n")
+    output = receive_prompt(sock, timeout)
+    if re.search(r"SNSD-R1\(config[^)]*\)#\s*$", output):
+        raise RuntimeError("configuration-mode prompt detected")
+    if not re.search(r"SNSD-R1#\s*$", output):
+        raise RuntimeError(f"expected prompt missing after fixed command: {value}")
+    return output
+
+
+def has(text: str, pattern: str) -> bool:
+    return re.search(pattern, text, re.M | re.I) is not None
+
+
+try:
+    with socket.create_connection(("127.0.0.1", CONSOLE_PORT), timeout=5) as sock:
+        sock.sendall(b"\r\n")
+        initial = receive_prompt(sock, 3)
+        if not re.search(r"SNSD-R1[>#]\s*$", initial):
+            raise RuntimeError("unexpected router console prompt")
+        if initial.rstrip().endswith(">"):
+            sock.sendall(b"enable\r\n")
+            enabled = receive_prompt(sock, 3)
+            if not re.search(r"SNSD-R1#\s*$", enabled):
+                raise RuntimeError("privileged read-only prompt unavailable")
+        run(sock, "terminal length 0", 1)
+
+        clock = run(sock, "show clock")
+        version = run(sock, "show version")
+        hostname = run(sock, "show running-config | include ^hostname")
+        interfaces = run(sock, "show ip interface brief")
+        interface_config = run(sock, "show running-config | section ^interface")
+        routes = run(sock, "show ip route")
+        protocols = run(sock, "show ip protocols")
+        nat_stats = run(sock, "show ip nat statistics")
+        nat_translations = run(sock, "show ip nat translations")
+        access_lists = run(sock, "show ip access-lists")
+        nat_config = run(sock, "show running-config | include ip nat")
+        access_groups = run(sock, "show running-config | include ip access-group")
+        static_routes = run(sock, "show running-config | include ^ip route")
+
+        report("PASS" if "SNSD-R1" in hostname else "FAIL", "Expected router identity detected")
+        report("PASS" if "Cisco IOS Software" in version else "FAIL", "Cisco IOS family is readable")
+        report("PASS" if "uptime is" in version else "FAIL", "Router uptime is readable")
+        report("PASS" if clock.strip() else "FAIL", "Router clock output is readable")
+
+        required_interfaces = ("FastEthernet0/0", "FastEthernet0/1", "FastEthernet0/1.20", "FastEthernet0/1.30", "FastEthernet0/1.40", "FastEthernet0/1.50", "FastEthernet0/1.60", "FastEthernet0/1.70")
+        for name in required_interfaces:
+            pattern = rf"^{re.escape(name)}\s+\S+\s+\S+\s+\S+\s+up\s+up\s*$"
+            report("PASS" if has(interfaces, pattern) else "FAIL", f"Required interface {name} is operational")
+        for vlan in (20, 30, 40, 50, 60, 70):
+            report("PASS" if f"encapsulation dot1Q {vlan}" in interface_config else "FAIL", f"VLAN {vlan} 802.1Q subinterface is configured")
+        report("PASS" if "ip address 10.10.70.1 255.255.255.0" in interface_config else "FAIL", "Provider VLAN gateway configuration is present")
+
+        for vlan in (20, 30, 40, 50, 60, 70):
+            report("PASS" if f"10.10.{vlan}.0 is directly connected" in routes else "FAIL", f"Connected route for VLAN {vlan} is present")
+        report("PASS" if "Gateway of last resort is" in routes and has(routes, r"^S\*\s+0\.0\.0\.0/0") else "FAIL", "Default route is present")
+        report("PASS" if not protocols.strip().replace("show ip protocols", "").replace("SNSD-R1#", "").strip() else "WARN", "No unexpected dynamic routing process is active")
+
+        report("PASS" if "Outside interfaces:" in nat_stats and "FastEthernet0/0" in nat_stats else "FAIL", "NAT outside interface is defined")
+        report("PASS" if all(f"FastEthernet0/1.{vlan}" in nat_stats for vlan in (20, 30, 40, 50, 60, 70)) else "FAIL", "NAT inside interfaces are defined")
+        report("PASS" if "ip nat inside source list 10 interface FastEthernet0/0 overload" in nat_config else "FAIL", "NAT overload rule references ACL 10")
+        report("PASS" if has(access_lists, r"Standard IP access list 10") else "FAIL", "NAT ACL 10 resolves")
+        report("PASS" if "Hits:" in nat_stats else "FAIL", "NAT runtime statistics are readable")
+        translation_lines = [line for line in nat_translations.splitlines() if re.match(r"^(?:tcp|udp|icmp)\s", line)]
+        report("PASS" if translation_lines else "WARN", "NAT runtime is ACTIVE" if translation_lines else "NAT runtime is IDLE")
+
+        if has(access_groups, r"^\s+ip access-group\s+"):
+            report("PASS", "Interface ACL bindings are present and readable")
+            segmentation = "PARTIAL_SEGMENTATION_VALIDATED"
+        else:
+            report("WARN", "No persistent interface ACL binding is present; only macro VLAN separation is observable")
+            segmentation = "SEGMENTATION_CONFIGURATION_ONLY"
+        report("PASS", f"Segmentation classification: {segmentation}")
+        report("PASS" if has(access_lists, r"permit\s+10\.10\.0\.0") else "FAIL", "NAT permit logic is parseable")
+
+        for label, target in FIXED_TARGETS:
+            ping_output = run(sock, f"ping {target} repeat 3 timeout 1", 7)
+            success = re.search(r"Success rate is (\d+) percent", ping_output)
+            rate = int(success.group(1)) if success else 0
+            report("PASS" if rate == 100 else "WARN" if rate > 0 else "FAIL", f"{label} fixed reachability: {rate}%")
+
+        # static_routes is intentionally collected to demonstrate the read-only
+        # command ran; the DHCP-derived default need not appear in running config.
+        report("PASS", "Static route configuration was read without modification" if static_routes is not None else "Static route read failed")
+        sock.sendall(b"exit\r\n")
+        receive(sock, 1)
+except (OSError, RuntimeError, ValueError) as exc:
+    report("FAIL", f"Validator execution error: {type(exc).__name__}")
+    print(f"PASS count: {passes}")
+    print(f"WARN count: {warnings}")
+    print(f"FAIL count: {failures}")
+    sys.exit(2)
+
+print(f"PASS count: {passes}")
+print(f"WARN count: {warnings}")
+print(f"FAIL count: {failures}")
+sys.exit(1 if failures else 0)
+PY

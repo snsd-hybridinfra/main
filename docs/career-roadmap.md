@@ -23,4 +23,4 @@
 4. 실제 출력과 예상이 달랐던 부분은 무엇인가?
 5. 결과를 대표 프로젝트에 적용할 수 있는 범위와 한계는 무엇인가?
 
-[snsd-multicloud-ops](https://github.com/snsd-hybirdinfra/snsd-multicloud-ops)는 이 로드맵의 연결된 서브 프로젝트입니다. 해당 저장소의 설계·로컬 검증·실제 런타임 상태는 그 저장소의 권위 문서에 따릅니다.
+현재 단일 실습 저장소는 [main](https://github.com/snsd-hybridinfra/main)입니다. [15 AWS VPC](../labs/15-aws-2tier-vpc/README.md), [16 OpenStack Ansible](../labs/16-openstack-ansible-operations/README.md), [17 Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md)는 이전 실험 저장소에서 이관했으나 재검증 전입니다. 기술 영역별 랩이 독립적으로 검증된 뒤에만 통합 프로젝트를 기획합니다. [이관 대장](migration-register.md)에서 원본 출처와 미이관 범위를 확인할 수 있습니다.

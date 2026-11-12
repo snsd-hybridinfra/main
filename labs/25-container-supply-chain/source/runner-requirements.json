@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "status": "REQUIRED_NOT_PROVISIONED",
+  "runner": {
+    "operating_system": "HARDENED_LINUX_X86_64",
+    "github_labels": ["self-hosted", "linux", "x64", "idp-supply-chain"],
+    "ephemeral_registration_required": true,
+    "maximum_jobs_per_registration": 1,
+    "clean_workspace_required": true,
+    "interactive_login_allowed": false,
+    "kubeconfig_allowed": false,
+    "long_lived_registry_credential_allowed": false
+  },
+  "toolchain": [
+    {"name": "docker", "sha256_environment": "IDP_TOOL_DOCKER_SHA256"},
+    {"name": "docker-buildx", "path": "/usr/local/lib/docker/cli-plugins/docker-buildx", "sha256_environment": "IDP_TOOL_DOCKER_BUILDX_SHA256"},
+    {"name": "trivy", "sha256_environment": "IDP_TOOL_TRIVY_SHA256"},
+    {"name": "syft", "sha256_environment": "IDP_TOOL_SYFT_SHA256"},
+    {"name": "cosign", "sha256_environment": "IDP_TOOL_COSIGN_SHA256"},
+    {"name": "git", "sha256_environment": "IDP_TOOL_GIT_SHA256"},
+    {"name": "gh", "sha256_environment": "IDP_TOOL_GH_SHA256"}
+  ],
+  "base_image_inputs": [
+    "IDP_BASE_PYTHON_IMAGE",
+    "IDP_BASE_NGINX_IMAGE",
+    "IDP_BASE_CRS_IMAGE",
+    "IDP_BASE_TERRAFORM_IMAGE"
+  ],
+  "identity": {
+    "github_oidc_required": true,
+    "cosign_keyless_required": true,
+    "registry_workload_identity_required": true,
+    "static_signing_key_allowed": false
+  },
+  "network": {
+    "default_egress": "DENY",
+    "approved_classes": [
+      "GITHUB_ACTIONS_CONTROL",
+      "APPROVED_SOURCE_FETCH",
+      "APPROVED_PRIVATE_REGISTRY",
+      "SIGSTORE_FULCIO_REKOR",
+      "APPROVED_VULNERABILITY_DATABASE"
+    ],
+    "kubernetes_api_egress_allowed": false
+  },
+  "artifact_boundary": {
+    "runtime_root": ".runtime/container-supply-chain",
+    "raw_reports_in_git": false,
+    "credentials_in_git": false,
+    "sanitized_gitops_release_only": true
+  },
+  "provisioning": {
+    "provisioner": "tools/local-vm/New-IdpSupplyChainRunnerVm.ps1",
+    "bundle_builder": "tools/supply-chain/Build-IdpSupplyChainRunnerBundle.ps1",
+    "bundle_source_lock": "applications/internal-iaas-portal/supply-chain/runner-bundle-source-lock.json",
+    "reviewed_bundle_required": true,
+    "bundle_install_contract": "HASH_VERIFIED_SINGLE_ARCHIVE",
+    "bundle_transport": "READ_ONLY_ISO_WITH_PRIVATE_GITHUB_RELEASE_AUTHORITY",
+    "jit_dispatch_contract": "RESTRICTED_SSH_STDIN_ONLY"
+  }
+}

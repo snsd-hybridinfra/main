@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+[[ $(id -u) -eq 0 ]] || exit 77
+[[ $(iptables -w -S OUTPUT | head -n 1) == '-P OUTPUT DROP' ]]
+iptables -w -C OUTPUT -j IDP_EGRESS
+iptables -w -C IDP_EGRESS -j REJECT
+iptables -w -C DOCKER-USER -j IDP_DOCKER_EGRESS
+iptables -w -C IDP_DOCKER_EGRESS -j REJECT
+systemctl is-active --quiet squid.service
+systemctl is-active --quiet docker.service
+! iptables -w -C IDP_EGRESS -d 10.0.0.0/8 -p tcp --dport 6443 -j ACCEPT 2>/dev/null
+! test -e /etc/rancher/k3s/k3s.yaml
+! test -e /home/idprunner/.kube/config

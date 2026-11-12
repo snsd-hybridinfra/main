@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-portal
+  namespace: admin-service
+  labels:
+    app.kubernetes.io/name: admin-portal
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: admin-portal
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: admin-portal
+    spec:
+      serviceAccountName: admin-portal
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      nodeSelector:
+        zero-trust.snsd.local/workload-class: application
+      tolerations:
+        - {key: workload, operator: Equal, value: app, effect: NoSchedule}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels: {app.kubernetes.io/name: admin-portal}
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels: {app.kubernetes.io/name: admin-portal}
+      containers:
+        - name: admin-portal
+          image: registry.example.com/iaas/admin-portal@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          imagePullPolicy: IfNotPresent
+          ports:
+            - {name: http, containerPort: 8081, protocol: TCP}
+          readinessProbe:
+            httpGet: {path: /, port: http}
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: {path: /, port: http}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests: {cpu: 50m, memory: 64Mi}
+            limits: {cpu: 250m, memory: 128Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: ["ALL"]}
+          volumeMounts:
+            - {name: runtime, mountPath: /tmp}
+      volumes:
+        - name: runtime
+          emptyDir: {sizeLimit: 32Mi}

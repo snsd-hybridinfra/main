@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-ID-001",
+  "policy_version": "1.0.0",
+  "states": [
+    "PROPOSED",
+    "APPROVED",
+    "ACTIVE",
+    "SUSPENDED",
+    "REVOKED",
+    "EXPIRED",
+    "REVIEW_REQUIRED"
+  ],
+  "transitions": [
+    {"from": "PROPOSED", "to": "APPROVED", "requirements": ["ACCOUNTABLE_OWNER", "APPROVAL_RECORD"]},
+    {"from": "APPROVED", "to": "ACTIVE", "requirements": ["TARGET_SCOPE", "ROLE_ASSIGNMENT", "AUTHENTICATION_REQUIREMENT"]},
+    {"from": "ACTIVE", "to": "SUSPENDED", "requirements": ["SUSPENSION_REASON", "OWNER_NOTIFICATION"]},
+    {"from": "SUSPENDED", "to": "ACTIVE", "requirements": ["REAPPROVAL", "REVIEW_COMPLETE"]},
+    {"from": "ACTIVE", "to": "REVIEW_REQUIRED", "requirements": ["REVIEW_DUE"]},
+    {"from": "REVIEW_REQUIRED", "to": "ACTIVE", "requirements": ["REVIEW_COMPLETE", "REAPPROVAL"]},
+    {"from": "ACTIVE", "to": "REVOKED", "requirements": ["REVOCATION_RECORD", "ACTIVE_ROLES_REMOVED"]},
+    {"from": "SUSPENDED", "to": "REVOKED", "requirements": ["REVOCATION_RECORD", "ACTIVE_ROLES_REMOVED"]},
+    {"from": "APPROVED", "to": "EXPIRED", "requirements": ["EXPIRATION_REACHED"]},
+    {"from": "ACTIVE", "to": "EXPIRED", "requirements": ["EXPIRATION_REACHED", "ACTIVE_ROLES_REMOVED"]}
+  ],
+  "acceptance_rules": [
+    {"rule_id": "LIFECYCLE-001", "rule": "ACTIVE identities require an accountable owner and APPROVED approval status.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-002", "rule": "REVOKED identities cannot retain assigned roles.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-003", "rule": "Expired identities cannot receive ALLOW decisions.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-004", "rule": "SUSPENDED identities cannot receive positive authorization.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-005", "rule": "Past-due privileged identities fail; other past-due identities receive REVIEW_REQUIRED.", "failure_level": "WARN_OR_FAIL_BY_PRIVILEGE"},
+    {"rule_id": "LIFECYCLE-006", "rule": "Break-glass identities require explicit expiration.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-007", "rule": "Automation identities require a target scope and non-human accountable owner role.", "failure_level": "FAIL"},
+    {"rule_id": "LIFECYCLE-008", "rule": "Service identities are non-interactive unless separately justified and approved.", "failure_level": "FAIL"}
+  ],
+  "review_policy": {
+    "fixture_time_authority": "DOCUMENTED_FIXTURE_TIME",
+    "past_due_non_privileged_result": "REVIEW_REQUIRED",
+    "past_due_privileged_result": "DENY",
+    "expired_result": "DENY",
+    "suspended_result": "DENY",
+    "revoked_result": "DENY"
+  },
+  "limitations": [
+    "Transitions are policy rules and are not connected to a runtime identity store.",
+    "The validator evaluates synthetic records only."
+  ]
+}

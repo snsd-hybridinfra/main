@@ -1,0 +1,117 @@
+{
+  "readiness_id": "P2-VIS-001-READINESS-001",
+  "package_id": "ZT-VIS-002",
+  "action_id": "P2-VIS-001",
+  "decision_date": "2026-08-21",
+  "status": "NO_APPLY_PLAN_VALIDATED_LIVE_DEPLOYMENT_PENDING",
+  "target_platform": {
+    "os": "LINUX",
+    "architecture": "AMD64",
+    "container_runtime": "PODMAN",
+    "network_boundary": "PRIVATE_OPENSTACK_NETWORK_NO_FLOATING_IP"
+  },
+  "artifact_policy": {
+    "decision": "LOCAL_SELECTION_VALIDATED",
+    "registry_verification": "READ_ONLY_DISTRIBUTION_MANIFEST_RESOLVED",
+    "verified_at": "2026-08-21",
+    "images": [
+      {
+        "component": "Grafana",
+        "version": "13.1.0",
+        "tag_reference": "docker.io/grafana/grafana:13.1.0",
+        "runtime_reference": "docker.io/grafana/grafana@sha256:6ea068891652aa6a65ca9065c26b89de939653803c836426970305c11fd00534"
+      },
+      {
+        "component": "Loki",
+        "version": "3.7.0",
+        "tag_reference": "docker.io/grafana/loki:3.7.0",
+        "runtime_reference": "docker.io/grafana/loki@sha256:ac6ad1d73bd4c3c38edc93f91ebc217672fa657c20a5dc7b4b0e25baeec7bebb"
+      },
+      {
+        "component": "Alloy",
+        "version": "v1.18.0",
+        "tag_reference": "docker.io/grafana/alloy:v1.18.0",
+        "runtime_reference": "docker.io/grafana/alloy@sha256:eb21f4c0858edffcdd1b385910ddeef26f692fc2c282f61baa724fc09d274a17"
+      },
+      {
+        "component": "Prometheus",
+        "version": "v3.9.1",
+        "tag_reference": "docker.io/prom/prometheus:v3.9.1",
+        "runtime_reference": "docker.io/prom/prometheus@sha256:2024d7bdfc559f6254de22d65e62d799eaa8eb818fe5dbeca212d3f200b70890"
+      },
+      {
+        "component": "Blackbox Exporter",
+        "version": "v0.28.0",
+        "tag_reference": "docker.io/prom/blackbox-exporter:v0.28.0",
+        "runtime_reference": "docker.io/prom/blackbox-exporter@sha256:43027b43fb785b7c5adc53bd3b5dbc1a258270a2e8aff24f477b45c4e38dac68"
+      }
+    ],
+    "tag_only_allowed": false,
+    "mutable_fallback_allowed": false,
+    "pre_deploy_registry_revalidation_required": true,
+    "signature_verified": false,
+    "vulnerability_assessed": false
+  },
+  "access_policy": {
+    "design_status": "LOCAL_VALIDATED_RUNTIME_PENDING",
+    "ingress": "PRIVATE_TLS_REVERSE_PROXY_ONLY",
+    "authentication": "MUTUAL_TLS_AT_PROXY_PLUS_GRAFANA_LOGIN",
+    "anonymous_access_allowed": false,
+    "direct_service_access_allowed": false,
+    "roles": [
+      {
+        "role": "VISIBILITY_VIEWER",
+        "access": "READ_ONLY_DASHBOARDS",
+        "host_recovery_allowed": false
+      },
+      {
+        "role": "VISIBILITY_ADMINISTRATOR",
+        "access": "VISIBILITY_APPLICATION_ADMINISTRATION",
+        "host_recovery_allowed": false
+      },
+      {
+        "role": "RECOVERY_OPERATOR",
+        "access": "KEY_ONLY_HOST_RECOVERY_AND_CINDER_REATTACHMENT",
+        "host_recovery_allowed": true
+      }
+    ],
+    "oidc_status": "DEFERRED_TO_P2_OIDC_001",
+    "external_material_required": [
+      "TLS_SERVER_CERTIFICATE_AND_KEY",
+      "MTLS_CLIENT_CA",
+      "AUTHORIZED_CLIENT_CERTIFICATE",
+      "GRAFANA_ADMINISTRATOR_SECRET"
+    ]
+  },
+  "retention_restore_policy": {
+    "design_status": "LOCAL_VALIDATED_RUNTIME_PENDING",
+    "retention": "PT336H",
+    "primary_storage": "DEDICATED_CINDER_VOLUME",
+    "recovery_method": "REATTACH_PRESERVED_VOLUME_TO_REBUILT_MONITORING_VM",
+    "rollback_checkpoint": "CINDER_SNAPSHOT_BEFORE_BOUNDED_DEPLOYMENT_TEST",
+    "independent_backup_backend": "NONE_APPROVED",
+    "retention_runtime_accepted": false,
+    "restore_runtime_accepted": false,
+    "rpo": "NOT_CLAIMED",
+    "rto": "NOT_CLAIMED"
+  },
+  "external_input_contract": {
+    "cloud_profile": "EXTERNAL_CLOUDS_YAML_OUTSIDE_GIT",
+    "terraform_values": "EXTERNAL_TFVARS_OUTSIDE_GIT",
+    "ansible_inventory": "EXTERNAL_INVENTORY_OUTSIDE_GIT",
+    "ansible_values": "EXTERNAL_VARS_OUTSIDE_GIT",
+    "repository_secret_material_allowed": false,
+    "repository_runtime_state_allowed": false,
+    "review_status": "AUTHENTICATED_NO_APPLY_PLAN_POLICY_VALIDATED"
+  },
+  "remaining_gates": [
+    "VERIFY_PROXY_TRUST_MATERIAL_ON_DEPLOYED_TARGET",
+    "AUTHORIZE_LIVE_DEPLOYMENT",
+    "AUTHORIZE_LIVE_VALIDATOR"
+  ],
+  "runtime_executed": false,
+  "central_monitoring_completed": false,
+  "package_runtime_promoted": false,
+  "maturity_assessed": false,
+  "compliance_assessed": false
+}

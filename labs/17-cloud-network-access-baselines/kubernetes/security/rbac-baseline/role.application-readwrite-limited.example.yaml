@@ -1,0 +1,13 @@
+# NON-PRODUCTION EXAMPLE - static validation input only.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: snsd-example-application-limited
+  namespace: snsd-example
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]

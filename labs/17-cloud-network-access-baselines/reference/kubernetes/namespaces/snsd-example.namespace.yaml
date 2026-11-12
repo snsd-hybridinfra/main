@@ -1,0 +1,8 @@
+# NON-PRODUCTION EXAMPLE - static validation input only.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: snsd-example
+  labels:
+    purpose: workload-deployment-validation
+

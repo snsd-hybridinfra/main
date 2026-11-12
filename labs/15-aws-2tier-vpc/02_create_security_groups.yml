@@ -1,0 +1,116 @@
+---
+- name: create aws security groups
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+    output_dir: "{{ playbook_dir }}/output"
+    management_cidr: "{{ lookup('env', 'LAB_MANAGEMENT_CIDR') | default('', true) }}"
+
+  vars_files:
+    - "{{ playbook_dir }}/output/base_network.yml"
+
+  tasks:
+    - name: Require trusted management source for Bastion SSH
+      ansible.builtin.assert:
+        that:
+          - management_cidr | length > 0
+          - management_cidr != '0.0.0.0/0'
+        fail_msg: "Set LAB_MANAGEMENT_CIDR to a trusted admin source CIDR."
+
+    - name: create alb security group
+      amazon.aws.ec2_security_group:
+        name: ansible-jjh-alb-sg
+        description: security group for application load balancer
+        vpc_id: "{{ base_network.vpc_id }}"
+        region: "{{ base_network.region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow http from internet
+        rules_egress:
+          - proto: -1
+            cidr_ip: 0.0.0.0/0
+        tags:
+          Name: ansible-jjh-alb-sg
+          Role: alb
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: alb_sg_result
+
+    - name: create bastion security group
+      amazon.aws.ec2_security_group:
+        name: ansible-jjh-bastion-sg
+        description: security group for bastion host
+        vpc_id: "{{ base_network.vpc_id }}"
+        region: "{{ base_network.region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 22
+            cidr_ip: "{{ management_cidr }}"
+            rule_desc: allow ssh from internet for lab
+        rules_egress:
+          - proto: -1
+            cidr_ip: 0.0.0.0/0
+        tags:
+          Name: ansible-jjh-bastion-sg
+          Role: bastion
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: bastion_sg_result
+
+    - name: create web security group
+      amazon.aws.ec2_security_group:
+        name: ansible-jjh-web-sg
+        description: security group for private web servers
+        vpc_id: "{{ base_network.vpc_id }}"
+        region: "{{ base_network.region }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 22
+            group_id: "{{ bastion_sg_result.group_id }}"
+            rule_desc: allow ssh from bastion sg
+          - proto: tcp
+            ports:
+              - 80
+            group_id: "{{ alb_sg_result.group_id }}"
+            rule_desc: allow http from alb sg
+        rules_egress:
+          - proto: -1
+            cidr_ip: 0.0.0.0/0
+        tags:
+          Name: ansible-jjh-web-sg
+          Role: web
+          Project: "{{ common_tags.Project }}"
+          Owner: "{{ common_tags.Owner }}"
+          ManagedBy: "{{ common_tags.ManagedBy }}"
+      register: web_sg_result
+
+    - name: set security group summary
+      set_fact:
+        security_group_summary:
+          alb_sg_id: "{{ alb_sg_result.group_id }}"
+          bastion_sg_id: "{{ bastion_sg_result.group_id }}"
+          web_sg_id: "{{ web_sg_result.group_id }}"
+
+    - name: save security group variables
+      copy:
+        dest: "{{ output_dir }}/security_groups.yml"
+        content: |
+          security_groups:
+            alb_sg_id: "{{ security_group_summary.alb_sg_id }}"
+            bastion_sg_id: "{{ security_group_summary.bastion_sg_id }}"
+            web_sg_id: "{{ security_group_summary.web_sg_id }}"
+
+    - name: show security group summary
+      debug:
+        var: security_group_summary

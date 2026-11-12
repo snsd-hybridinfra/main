@@ -1,0 +1,30 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+local.file_match "sanitized_validation" {
+  path_targets = [
+    {
+      "__path__"    = "/var/log/snsd-validation/*.jsonl",
+      "job"         = "lab-sanitized-events",
+      "environment" = "disposable-lab",
+    },
+  ]
+  sync_period = "10s"
+}
+
+loki.source.file "sanitized_validation" {
+  targets               = local.file_match.sanitized_validation.targets
+  forward_to            = [loki.write.local.receiver]
+  legacy_positions_file = "/var/lib/alloy/data/positions.yaml"
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+  external_labels = {
+    collector = "alloy",
+    scope     = "bounded-sanitized-events",
+  }
+}

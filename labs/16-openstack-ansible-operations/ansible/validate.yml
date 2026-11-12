@@ -1,0 +1,125 @@
+---
+# STATUS: CURRENT BASELINE
+# Purpose:
+#   Validate core operation state after service deployment.
+
+- name: Validate all managed node connectivity
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Check Ansible connectivity
+      ansible.builtin.ping:
+
+- name: Validate Web node
+  hosts: web
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check Docker service
+      ansible.builtin.command: systemctl is-active docker
+      register: docker_status
+      changed_when: false
+      failed_when: false
+
+    - name: Check Docker containers
+      ansible.builtin.command: docker ps
+      register: docker_ps
+      changed_when: false
+      failed_when: false
+
+    - name: Print Web validation result
+      ansible.builtin.debug:
+        msg:
+          docker: "{{ docker_status.stdout | default('unknown') }}"
+          containers: "{{ docker_ps.stdout_lines | default([]) }}"
+
+- name: Validate Proxy node
+  hosts: proxy
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check HAProxy service
+      ansible.builtin.command: systemctl is-active haproxy
+      register: haproxy_status
+      changed_when: false
+      failed_when: false
+
+    - name: Validate HAProxy configuration
+      ansible.builtin.command: haproxy -c -f /etc/haproxy/haproxy.cfg
+      register: haproxy_config
+      changed_when: false
+      failed_when: false
+
+    - name: Print Proxy validation result
+      ansible.builtin.debug:
+        msg:
+          haproxy: "{{ haproxy_status.stdout | default('unknown') }}"
+          config: "{{ haproxy_config.stdout_lines | default([]) }}"
+
+- name: Validate DB node
+  hosts: db
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check MariaDB service
+      ansible.builtin.command: systemctl is-active mariadb
+      register: mariadb_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print DB validation result
+      ansible.builtin.debug:
+        msg:
+          mariadb: "{{ mariadb_status.stdout | default('unknown') }}"
+
+- name: Validate Monitoring node
+  hosts: monitoring
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check Prometheus service
+      ansible.builtin.command: systemctl is-active prometheus
+      register: prometheus_status
+      changed_when: false
+      failed_when: false
+
+    - name: Check Grafana service
+      ansible.builtin.command: systemctl is-active grafana-server
+      register: grafana_status
+      changed_when: false
+      failed_when: false
+
+    - name: Check Alertmanager service
+      ansible.builtin.command: systemctl is-active alertmanager
+      register: alertmanager_status
+      changed_when: false
+      failed_when: false
+
+    - name: Print Monitoring validation result
+      ansible.builtin.debug:
+        msg:
+          prometheus: "{{ prometheus_status.stdout | default('unknown') }}"
+          grafana: "{{ grafana_status.stdout | default('unknown') }}"
+          alertmanager: "{{ alertmanager_status.stdout | default('unknown') }}"
+
+- name: Validate Backup node
+  hosts: backup
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Check Restic version
+      ansible.builtin.command: restic version
+      register: restic_version
+      changed_when: false
+      failed_when: false
+
+    - name: Print Backup validation result
+      ansible.builtin.debug:
+        msg:
+          restic: "{{ restic_version.stdout | default('not installed or not configured') }}"

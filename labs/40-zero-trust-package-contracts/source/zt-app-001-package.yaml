@@ -1,0 +1,18 @@
+{
+  "package_id": "ZT-APP-001", "package_name": "Application and Workload Inventory, Secure Deployment, and Software Supply Chain Validation Foundation", "package_type": "APPLICATION_WORKLOAD_VALIDATION", "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE", "implementation_status": "IMPLEMENTED", "validation_status": "PARTIALLY_RUNTIME_VALIDATED", "current_maturity": "UNASSESSED", "target_maturity": "INITIAL",
+  "execution_authority": "CODEX_EXECUTED_LIVE_RUNTIME", "execution_record": "docs/evidence/zero-trust/zt-app-001-validation.yaml", "pilot_application": "ZTA-APP-OBSERVABILITY-STACK", "pilot_workload": "ZTA-WORKLOAD-ALLOY",
+  "capability_mappings": [
+    {"id": "ZT-5.4.2", "relationship": "DIRECT_BOUNDED_IMPLEMENTATION", "validation": "PARTIALLY_RUNTIME_VALIDATED"},
+    {"id": "ZT-5.4.1", "relationship": "DIRECT_BOUNDED_IMPLEMENTATION", "validation": "PARTIALLY_RUNTIME_VALIDATED"},
+    {"id": "ZT-5.5.2", "relationship": "DIRECT_PARTIAL_IMPLEMENTATION", "validation": "LOCAL_VALIDATED_ONLY"},
+    {"id": "ZT-5.5.1", "relationship": "POLICY_AND_GATE_IMPLEMENTATION", "validation": "LOCAL_VALIDATED_ONLY"},
+    {"id": "ZT-5.1.1", "relationship": "BOUNDED_CONFIGURATION_MAPPING", "validation": "PARTIALLY_VALIDATED"},
+    {"id": "ZT-7.1", "relationship": "BOUNDED_RUNTIME_LOGGING", "validation": "PARTIALLY_RUNTIME_VALIDATED"},
+    {"id": "ZT-8.1", "relationship": "POLICY_INTEGRATION_LOCAL", "validation": "LOCAL_VALIDATED_ONLY"},
+    {"id": "ZT-8.2", "relationship": "READ_ONLY_VALIDATION_AUTOMATION", "validation": "PARTIALLY_RUNTIME_VALIDATED"}
+  ],
+  "application_count": 2, "workload_count": 4, "running_workload_count": 3, "sbom_status": "PARTIAL", "sbom_component_count": 3,
+  "automatic_deployment": false, "workload_restarted": false, "artifact_signed": false, "image_digests_verified": false, "dedicated_vulnerability_scan": false, "secrets_tracked": false,
+  "limitations": ["The Alloy pilot is one component of the bounded non-production monitoring stack.", "The direct-image SBOM excludes transitive packages and is not complete for scope.", "Image digests, signatures, and dedicated vulnerability scanning are absent.", "Alloy uses container UID 0 with compensating capability, privilege, and filesystem controls.", "No CI/CD enforcement, live deployment, restart, continuous authorization, complete DevSecOps, maturity, or production approval is claimed."]
+}

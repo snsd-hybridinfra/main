@@ -1,0 +1,116 @@
+name: standalone-logging-lab
+
+services:
+  loki:
+    image: grafana/loki:3.7.0
+    command:
+      - -config.file=/etc/loki/config.yaml
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges=true
+    cap_drop:
+      - ALL
+    ports:
+      - 127.0.0.1:3100:3100
+    volumes:
+      - ./loki-config.yaml:/etc/loki/config.yaml:ro
+      - ${LAB_DATA_ROOT:-./.state}/loki:/loki
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    healthcheck:
+      test: ["CMD", "/usr/bin/loki", "-version"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    mem_limit: 768m
+    cpus: 0.75
+    networks:
+      - visibility
+
+  alloy:
+    image: grafana/alloy:v1.18.0
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy
+      - /etc/alloy/config.alloy
+    restart: unless-stopped
+    user: "0:0"
+    read_only: true
+    security_opt:
+      - no-new-privileges=true
+    cap_drop:
+      - ALL
+    depends_on:
+      loki:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:12345:12345
+    volumes:
+      - ./alloy-config.alloy:/etc/alloy/config.alloy:ro
+      - ./input/sanitized:/var/log/snsd-validation:ro
+      - ${LAB_DATA_ROOT:-./.state}/alloy:/var/lib/alloy
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    healthcheck:
+      test: ["CMD", "/bin/alloy", "--version"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    mem_limit: 384m
+    cpus: 0.50
+    networks:
+      - visibility
+
+  grafana:
+    image: grafana/grafana:13.1.0
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges=true
+    cap_drop:
+      - ALL
+    depends_on:
+      loki:
+        condition: service_healthy
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_ORG_CREATE: "false"
+      GF_SECURITY_ADMIN_USER: lab-admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_SECURITY_COOKIE_SECURE: "false"
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_LOG_MODE: console
+    secrets:
+      - grafana_admin_password
+    ports:
+      - 127.0.0.1:3000:3000
+    volumes:
+      - ${LAB_DATA_ROOT:-./.state}/grafana:/var/lib/grafana
+      - ./grafana-provisioning:/etc/grafana/provisioning:ro
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    mem_limit: 768m
+    cpus: 0.75
+    networks:
+      - visibility
+
+networks:
+  visibility:
+    driver: bridge
+
+secrets:
+  grafana_admin_password:
+    file: ./.secrets/grafana_admin_password

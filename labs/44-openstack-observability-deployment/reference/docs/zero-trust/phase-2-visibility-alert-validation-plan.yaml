@@ -1,0 +1,73 @@
+{
+  "plan_id": "P2-VIS-001-ALERT-VALIDATION-PREP",
+  "package_id": "ZT-VIS-002",
+  "action_id": "P2-VIS-001",
+  "status": "EXECUTED_STATUS_REVIEW_PENDING",
+  "environment": "NON_PRODUCTION_LAB",
+  "target": {
+    "grafana_version": "13.1.0",
+    "deployment": "EXISTING_PRIVATE_OPENSTACK_MONITORING_VM",
+    "permanent_component_count": 5,
+    "permanent_receiver_added": false,
+    "public_listener_added": false
+  },
+  "api_contract": {
+    "alert_rule_lifecycle": "/api/v1/provisioning/alert-rules",
+    "notification_delivery_test": "/apis/notifications.alerting.grafana.app/v1beta1/namespaces/default/receivers/-/test",
+    "webhook_integration_version": "v1",
+    "legacy_receiver_test_used": false,
+    "temporary_rule_paused": true,
+    "reason": "Validate bounded rule CRUD and notification delivery without routing a firing rule through an existing notification policy."
+  },
+  "authorization_gates": [
+    {"name": "zt_vis_002_alert_validation_authorized", "default": false},
+    {"name": "zt_vis_002_alert_rule_mutation_authorized", "default": false},
+    {"name": "zt_vis_002_notification_delivery_authorized", "default": false},
+    {"name": "zt_vis_002_alert_cleanup_authorized", "default": false}
+  ],
+  "validation_cases": [
+    {"case": "POSITIVE_RULE_LIFECYCLE", "expected": "TEMPORARY_PAUSED_RULE_CREATE_READ_DELETE_PASS"},
+    {"case": "POSITIVE_NOTIFICATION_DELIVERY", "expected": "ONE_SANITIZED_TEST_NOTIFICATION_RECEIVED"},
+    {"case": "NEGATIVE_AUTHENTICATION", "expected": "MISSING_AND_INVALID_GRAFANA_CREDENTIALS_DENIED"},
+    {"case": "BYPASS", "expected": "WRONG_ONE_TIME_RECEIVER_PATH_DENIED"},
+    {"case": "PERSISTENCE_BOUNDARY", "expected": "NO_PERSISTENT_RECEIVER_OR_SIXTH_COMPONENT_CREATED"},
+    {"case": "ROLLBACK", "expected": "TEMPORARY_RULE_FOLDER_LISTENER_AND_VALIDATOR_REMOVED"}
+  ],
+  "receiver_boundary": {
+    "type": "EPHEMERAL_PYTHON_STDLIB_HTTP_RECEIVER",
+    "bind": "EXACT_PACKAGE_PODMAN_BRIDGE_GATEWAY_ONLY",
+    "path": "RANDOM_ONE_TIME_UNTRACKED",
+    "payload_recording": "SANITIZED_BOOLEAN_AND_EXPECTED_LABEL_MATCH_ONLY",
+    "tracked_runtime_allowed": false
+  },
+  "cleanup_contract": {
+    "always_run": true,
+    "delete_exact_temporary_rule": true,
+    "delete_exact_temporary_folder": true,
+    "stop_ephemeral_receiver": true,
+    "remove_target_validator": true,
+    "verify_absence": true
+  },
+  "execution": {
+    "live_validator_executed": true,
+    "alert_rule_mutated": true,
+    "notification_sent": true,
+    "target_changed": true,
+    "runtime_evidence_recorded": true
+  },
+  "evidence_record": {
+    "path": "docs/evidence/zero-trust/zt-vis-002-alert-validation.sanitized.json",
+    "validation_id": "P2VISALT-20260825T001008Z"
+  },
+  "claim_boundary": {
+    "alert_gap_closed": false,
+    "p2_vis_001_completed": false,
+    "central_visibility_fully_accepted": false,
+    "phase_2_completed": false,
+    "scheduled_or_continuous_validation": false,
+    "maturity_assessed": false,
+    "compliance_assessed": false,
+    "production_readiness_claimed": false
+  },
+  "next_action": "Review the accepted alert evidence and open target-clock finding under separate status authority; retain elapsed-retention and full Cinder snapshot restore as open runtime gaps."
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "lock_version": 1,
+  "status": "LOCAL_CANDIDATE",
+  "runtime_authorized": false,
+  "source_provenance": {
+    "archive_role": "SANITIZED_EVOLUTION_PROVENANCE_ONLY",
+    "archive_sha256": "3cda17c993e17465676f607410a03f16d7ff0648a62ed403abea133950b4edb3e8"
+  },
+  "catalog": {
+    "path": "terraform/catalog.json",
+    "sha256": "b38867ae9ea1736bef994d02378a27876c0e91de2dc21ce6e534333a8e4a22f6"
+  },
+  "engine": {
+    "distribution": "HASHICORP_TERRAFORM_CLI",
+    "version": "1.16.1",
+    "binary_sha256_runtime_required": true,
+    "core_forked": false,
+    "customization": "SNSD_POLICY_WRAPPER"
+  },
+  "provider": {
+    "source": "registry.terraform.io/terraform-provider-openstack/openstack",
+    "version_constraint": "~> 3.4.0",
+    "package_sha256_runtime_required": true,
+    "installation": "FILESYSTEM_MIRROR_ONLY",
+    "direct_registry_egress": false
+  },
+  "modules": {
+    "openstack-dev-vm-small": {
+      "product_id": "DEV-OS-VM-S",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:97f4ece588f80e2ea24524e07d5662c5d6d93b78bcccf75bb935fad99ae090f0",
+      "allowed_resource_types": ["openstack_networking_port_v2", "openstack_compute_instance_v2"],
+      "max_resources": {"openstack_networking_port_v2": 1, "openstack_compute_instance_v2": 1}
+    },
+    "openstack-dev-vm-medium": {
+      "product_id": "DEV-OS-VM-M",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:624d5ff0d50bfc97c733a48b78d2d4e4f3cdf4633898a1b5e52ad4003f28a10a",
+      "allowed_resource_types": ["openstack_networking_port_v2", "openstack_compute_instance_v2"],
+      "max_resources": {"openstack_networking_port_v2": 1, "openstack_compute_instance_v2": 1}
+    },
+    "openstack-dev-vm-large": {
+      "product_id": "DEV-OS-VM-L",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:b09a0e5e839100bfb09e09469738eca9195418bf2e93153e5f03bcc21db2deae",
+      "allowed_resource_types": ["openstack_networking_port_v2", "openstack_compute_instance_v2"],
+      "max_resources": {"openstack_networking_port_v2": 1, "openstack_compute_instance_v2": 1}
+    },
+    "openstack-dev-k3s-small": {
+      "product_id": "DEV-OS-K3S-S",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:fa1542d73dd9f6c3e7981bd9fe6d0c18564180055f7890ed98aa6575e3286960",
+      "configuration_digest": "sha256:27ae92895d90f49a118c2fa5db7e897173e15fa002796090765872769c4a6e18",
+      "allowed_resource_types": ["openstack_networking_port_v2", "openstack_compute_instance_v2"],
+      "max_resources": {"openstack_networking_port_v2": 1, "openstack_compute_instance_v2": 1}
+    },
+    "openstack-dev-k3s-medium": {
+      "product_id": "DEV-OS-K3S-M",
+      "module_version": "1.0.0",
+      "artifact_digest": "sha256:12867fb8f7fef31fe34d63305b13555fb1ef3fd37ea789daa6e67b9a4ba5b03a",
+      "configuration_digest": "sha256:27ae92895d90f49a118c2fa5db7e897173e15fa002796090765872769c4a6e18",
+      "allowed_resource_types": ["openstack_networking_port_v2", "openstack_compute_instance_v2"],
+      "max_resources": {"openstack_networking_port_v2": 1, "openstack_compute_instance_v2": 1}
+    }
+  },
+  "plan_policy": {
+    "apply_actions": [["create"], ["no-op"]],
+    "destroy_actions": [["delete"], ["no-op"]],
+    "replacement_allowed": false,
+    "update_allowed": false,
+    "saved_plan_apply_only": true
+  }
+}

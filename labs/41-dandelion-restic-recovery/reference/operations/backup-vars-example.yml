@@ -1,0 +1,33 @@
+# Backup Node Restic Automation Variables
+# 실제 비밀번호는 ansible-vault 또는 별도 secret vars로 분리할 것
+
+backup_node: backup
+
+restic_repository: /backup/restic-repo
+restic_password_file: /etc/restic/restic-password
+restic_cache_dir: /backup/restic-cache
+
+backup_root: /backup
+staging_dir: /backup/staging
+log_dir: /backup/logs
+script_dir: /backup/scripts
+restore_test_dir: /backup/restore-test
+
+db_host: <synthetic-private-ip>
+db_replica_host: <synthetic-private-ip>
+db_name: wordpress_db
+db_backup_user: wp_backup
+db_backup_password: <set-outside-git>
+
+db_backup_cnf_path: /etc/mysql/backup/wp_backup.cnf
+
+web_host: web
+proxy_host: proxy
+monitoring_host: monitoring
+
+wordpress_image: dandelion-wordpress:v1
+
+backup_script_path: /backup/scripts/dandelion-restic-backup.sh
+restore_test_script_path: /backup/scripts/dandelion-restic-restore-test.sh
+
+cron_schedule: "0 2 * * *"

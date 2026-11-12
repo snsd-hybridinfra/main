@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "ZT-DEV-001",
+  "policy_version": "1.0.0",
+  "freshness_hours": 24,
+  "mandatory_live_assets": ["ZTD-ASSET-MONITORING-VM-01"],
+  "automatic_remediation": false,
+  "automatic_patching": false,
+  "automatic_reboot": false,
+  "default_unknown_asset_decision": "REVIEW_REQUIRED",
+  "profiles": [
+    {
+      "profile_id": "ZTD-PROFILE-OPENSTACK-HOST",
+      "required_controls": ["INVENTORY_PRESENT", "OWNER_ASSIGNED", "RESTRICTED_VALIDATOR_HEALTH"],
+      "optional_controls": ["PATCH_STATE", "VULNERABILITY_SUMMARY"],
+      "unsupported_controls": ["AUTOMATIC_ISOLATION"],
+      "validation_frequency": "ON_DEMAND",
+      "evidence_requirement": "SANITIZED_RESTRICTED_VALIDATOR_RESULT"
+    },
+    {
+      "profile_id": "ZTD-PROFILE-EVE-HOST",
+      "required_controls": ["INVENTORY_PRESENT", "OWNER_ASSIGNED", "RESTRICTED_VALIDATOR_HEALTH", "IDENTITY_BOUNDARY_HEALTH"],
+      "optional_controls": ["PATCH_STATE", "VULNERABILITY_SUMMARY"],
+      "unsupported_controls": ["AUTOMATIC_ISOLATION"],
+      "validation_frequency": "ON_DEMAND",
+      "evidence_requirement": "SANITIZED_RESTRICTED_VALIDATOR_RESULT"
+    },
+    {
+      "profile_id": "ZTD-PROFILE-LINUX-WORKLOAD",
+      "required_controls": ["INVENTORY_PRESENT", "OWNER_ASSIGNED", "OS_IDENTIFIED", "SOFTWARE_SUMMARY", "PATCH_STATE", "VULNERABILITY_SUMMARY", "NO_AUTOMATIC_PATCH", "NO_AUTOMATIC_REBOOT"],
+      "optional_controls": ["ENDPOINT_AGENT_HEALTH"],
+      "unsupported_controls": ["AUTOMATIC_ISOLATION"],
+      "validation_frequency": "DAILY_TARGET_AFTER_SCHEDULER_APPROVAL",
+      "evidence_requirement": "SANITIZED_LIVE_ENDPOINT_SUMMARY"
+    },
+    {
+      "profile_id": "ZTD-PROFILE-WINDOWS-OPERATOR",
+      "required_controls": ["REPOSITORY_SECRET_BOUNDARY", "RUNTIME_IGNORE_BOUNDARY"],
+      "optional_controls": [],
+      "unsupported_controls": ["PERSONAL_APPLICATION_INVENTORY", "PERSONAL_DEVICE_FINGERPRINT"],
+      "validation_frequency": "REPOSITORY_ACTION",
+      "evidence_requirement": "REPOSITORY_VALIDATION_ONLY"
+    },
+    {
+      "profile_id": "ZTD-PROFILE-NETWORK-DEVICE",
+      "required_controls": ["INVENTORY_PRESENT", "OWNER_ASSIGNED", "RESTRICTED_VALIDATOR_HEALTH", "CONFIGURATION_PERSISTENCE"],
+      "optional_controls": ["VENDOR_ADVISORY_REVIEW"],
+      "unsupported_controls": ["LINUX_PACKAGE_CHECK", "ENDPOINT_AGENT"],
+      "validation_frequency": "ON_DEMAND",
+      "evidence_requirement": "SANITIZED_ROUTER_VALIDATOR_RESULT"
+    }
+  ]
+}

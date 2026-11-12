@@ -1,0 +1,17 @@
+# Bounded validator-specific defense in depth.
+Match User codex-validator
+    AuthenticationMethods publickey
+    PasswordAuthentication no
+    KbdInteractiveAuthentication no
+    PubkeyAuthentication yes
+    PermitTTY no
+    AllowAgentForwarding no
+    AllowTcpForwarding no
+    AllowStreamLocalForwarding no
+    X11Forwarding no
+    PermitTunnel no
+    PermitUserRC no
+    ForceCommand /usr/local/sbin/codex-eve-dispatcher
+
+Match all
+

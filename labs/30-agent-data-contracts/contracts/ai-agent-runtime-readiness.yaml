@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "assessed_at": "2026-08-28",
+  "status": "BLOCKED_EXTERNAL_RUNTIME",
+  "implemented_local": [
+    "PERSISTENT_JOB_STATE_MACHINE",
+    "REDIS_STREAMS_ADAPTER",
+    "KUBERNETES_SANDBOX_CONTROLLER",
+    "ATOMIC_BUDGET_RESERVATION",
+    "SANITIZED_TRACE_EVENT_STORE",
+    "CREDENTIAL_LEASE_LIFECYCLE",
+    "BROKERED_EGRESS_DECISION",
+    "ACTIVATION_DIGEST_AND_ROLLBACK_GATES"
+  ],
+  "approved_dependencies": {
+    "redis_python": "6.4.x",
+    "kubernetes_python": "34.1.x",
+    "opentelemetry_sdk": "1.44.x",
+    "otlp_grpc_exporter": "1.44.x"
+  },
+  "runtime_foundation": {
+    "state": "PROVISIONED_BOUNDED_SANDBOX_VALIDATED",
+    "scope": "NON_PRODUCTION_LOCAL_VM",
+    "provider": "VMWARE_WORKSTATION",
+    "operating_system": "UBUNTU_24_04_RELEASE_20260826",
+    "kubernetes": "K3S_V1.36.3_K3S1_READY",
+    "queue_service": "REDIS_ACTIVE_LOCAL_ONLY",
+    "strong_isolation": "KATA_4.0.0_QEMU_RUNTIME_RS_BOUNDED_WORKLOAD_VALIDATED",
+    "runtime_class": "kata-qemu-runtime-rs",
+    "nested_kvm": "AVAILABLE",
+    "operator_privilege": "FIXED_STATUS_AND_VALIDATOR_HELPERS_ONLY",
+    "supply_chain": "SOURCE_AND_CONTAINER_DIGEST_PINNED",
+    "live_sandbox_workload": "BOUNDED_VALIDATOR_PASSED",
+    "acceptance_evidence": "SANITIZED_BOUNDED_DECISION_RECORDED",
+    "request_api_integration": "NOT_CONFIGURED"
+  },
+  "blockers": [
+    {"blocker_id": "MINI-ONA-BLK-001", "condition": "REDIS_ENDPOINT_NOT_PROVIDED", "required_input": "APPROVED_REDIS_STREAMS_SERVICE_AND_EXTERNAL_SECRET_REFERENCE"},
+    {"blocker_id": "MINI-ONA-BLK-002", "condition": "REQUEST_API_KUBERNETES_CONTEXT_NOT_CONFIGURED", "required_input": "APPROVED_K3S_SERVICE_ACCOUNT_AND_CONTEXT_BINDING"},
+    {"blocker_id": "MINI-ONA-BLK-004", "condition": "APPROVED_AGENT_IMAGE_MISSING", "required_input": "DIGEST_PINNED_INTERNAL_REGISTRY_IMAGE"},
+    {"blocker_id": "MINI-ONA-BLK-005", "condition": "GITHUB_AUTH_INVALID_AND_APP_NOT_CONFIGURED", "required_input": "GITHUB_APP_ID_INSTALLATION_ID_AND_EXTERNAL_PRIVATE_KEY_REFERENCE"},
+    {"blocker_id": "MINI-ONA-BLK-006", "condition": "MODEL_BROKER_NOT_CONFIGURED", "required_input": "APPROVED_MODEL_BROKER_ENDPOINT_AND_EXTERNAL_CREDENTIAL_REFERENCE"},
+    {"blocker_id": "MINI-ONA-BLK-007", "condition": "EGRESS_BROKER_NOT_DEPLOYED", "required_input": "AUTHENTICATED_FQDN_AWARE_EGRESS_BROKER"},
+    {"blocker_id": "MINI-ONA-BLK-008", "condition": "CHECKPOINT_OBJECT_STORAGE_NOT_CONFIGURED", "required_input": "ENCRYPTED_PRIVATE_OBJECT_STORAGE_AND_EXTERNAL_CREDENTIAL_REFERENCE"},
+    {"blocker_id": "MINI-ONA-BLK-009", "condition": "OTLP_COLLECTOR_NOT_CONFIGURED", "required_input": "APPROVED_OTLP_GRPC_ENDPOINT"}
+  ],
+  "bounded_validation": {
+    "validated_at": "2026-08-28",
+    "decision": "PASSED",
+    "scope": "MINI_ONA_KATA_LIVE_VALIDATION",
+    "runtime_class": "kata-qemu-runtime-rs",
+    "checks": [
+      "POSITIVE_KATA_POD",
+      "NEGATIVE_PRIVILEGE",
+      "BYPASS_DEFAULT_RUNTIME",
+      "DIRECT_IP_EGRESS_DENIED",
+      "CHECKPOINT_RECREATE",
+      "ACTIVE_DEADLINE_ENFORCED",
+      "SANDBOX_VM_PROCESS",
+      "ROLLBACK_CLEANUP"
+    ],
+    "validator_image": "DIGEST_PINNED_BUSYBOX_AMD64",
+    "raw_runtime_output_stored": false,
+    "limitations": [
+      "VALIDATOR_IMAGE_IS_NOT_THE_AGENT_IMAGE",
+      "REQUEST_API_NOT_CONNECTED",
+      "REDIS_STREAMS_NOT_CONNECTED_TO_REQUEST_API",
+      "FQDN_EGRESS_BROKER_NOT_DEPLOYED",
+      "NO_END_TO_END_AGENT_TASK"
+    ]
+  },
+  "live_execution": {
+    "authorized": true,
+    "performed": true,
+    "runtime_evidence": "SANITIZED_BOUNDED_DECISION_RECORDED"
+  }
+}
