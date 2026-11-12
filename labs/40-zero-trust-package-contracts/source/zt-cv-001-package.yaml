@@ -1,0 +1,57 @@
+{
+  "package_id": "ZT-CV-001",
+  "package_name": "Cross-Capability Validation",
+  "package_type": "CROSS_CAPABILITY_VALIDATION",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+  "local_validation_status": "LOCAL_VALIDATED",
+  "runtime_validation_status": "PARTIALLY_VALIDATED",
+  "runtime_acceptance_status": "PARTIALLY_ACCEPTED",
+  "maturity_status": "UNASSESSED",
+  "predecessors": ["ZT-FND-001", "ZT-NET-001", "ZT-VIS-001", "ZT-ID-001"],
+  "purpose": "Validate that the foundation, network, visibility, and identity controls operate together and expose conflicts or missing controls.",
+  "acceptance_state": "PARTIALLY_ACCEPTED",
+  "evidence_continuity": "EC3_ONE_TIME_RUNTIME",
+  "current_maturity": "UNASSESSED",
+  "capability_assessment": [
+    {"id":"ZT-7.1","relationship":"BOUNDED_RUNTIME_OBSERVATION","validation":"PARTIALLY_RUNTIME_VALIDATED","current_maturity":"UNASSESSED"},
+    {"id":"ZT-8.1","relationship":"CHECK_ONLY_GOVERNANCE","validation":"LOCAL_VALIDATED","current_maturity":"UNASSESSED"},
+    {"id":"ZT-8.2","relationship":"READ_ONLY_VALIDATION_AUTOMATION","validation":"PARTIALLY_RUNTIME_VALIDATED","current_maturity":"UNASSESSED"}
+  ],
+  "latest_execution": {
+    "execution_id": "ZTA-20260728T082622Z-594aed64",
+    "workflow_id": "ZT-CV-WF-001",
+    "plan_hash": "72c0aa52f20b12fb67d7b149e7c1ed980c2cfcbcdafea9cfc344cac2f4912624",
+    "result": "PARTIAL",
+    "steps_passed": 8,
+    "steps_warned": 2,
+    "steps_failed": 0,
+    "decision": "PASS_WITH_OPEN_GAPS",
+    "blocking_gate": null,
+    "blocking_finding": null
+  },
+  "evidence_files": [
+    "docs/evidence/zero-trust/zt-cv-001-validation.yaml",
+    "docs/evidence/zero-trust/zt-cv-001-live-summary.sanitized.txt",
+    "docs/evidence/zero-trust/zt-cv-001-p1-cv-001-blocked.sanitized.txt",
+    "docs/evidence/zero-trust/zt-cv-001-p1-cv-001-remediated-validation.yaml",
+    "docs/evidence/zero-trust/zt-cv-001-p1-cv-001-remediated.sanitized.txt",
+    "docs/zero-trust/recovery/P1-CV-001/runtime-results.yaml",
+    "docs/zero-trust/recovery/P1-CV-001/validation-results.yaml"
+  ],
+  "automatic_remediation": false,
+  "authoritative_status_update": false,
+  "maturity_assignment": false,
+  "schedule_installed": false,
+  "scheduled_operation": false,
+  "continuous_operation": false,
+  "phase_1_complete": false,
+  "limitations": [
+    "The final 2026-07-28 bounded execution completed 8 PASS, 2 WARN, and 0 FAIL; all ten package gates were accepted or partially accepted and no current regression was found.",
+    "The two dependency-readiness failures and all earlier blocked attempts receive no acceptance or continuity credit.",
+    "The package is partially accepted at EC3 only; P1-RV-001 may collect its first independent candidate but cannot claim EC4 until three eligible successes are at least 24 hours apart.",
+    "No schedule, automatic remediation, continuous operation, maturity, compliance, certification, or Phase 1 completion is claimed."
+  ]
+}

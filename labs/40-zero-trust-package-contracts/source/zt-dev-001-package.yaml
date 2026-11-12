@@ -1,0 +1,38 @@
+{
+  "package_id": "ZT-DEV-001",
+  "package_name": "Endpoint Inventory, Compliance, Vulnerability, and Patch Validation Foundation",
+  "package_type": "DEVICE_ENDPOINT_VALIDATION",
+  "phase": "PHASE_1",
+  "authority_status": "AUTHORITATIVE",
+  "implementation_status": "IMPLEMENTED",
+  "validation_status": "PARTIALLY_RUNTIME_VALIDATED",
+  "current_maturity": "UNASSESSED",
+  "target_maturity": "INITIAL",
+  "execution_authority": "CODEX_EXECUTED_LIVE_RUNTIME",
+  "execution_record": "docs/evidence/zero-trust/zt-dev-001-validation.yaml",
+  "validator": "tools/endpoint/validate_endpoint_compliance.py",
+  "inventory": "docs/zero-trust/device/device-inventory.yaml",
+  "policy": "docs/zero-trust/device/endpoint-compliance-policy.yaml",
+  "capability_mappings": [
+    {"id": "ZT-2.3.1", "relationship": "DIRECT_BOUNDED_IMPLEMENTATION", "validation": "PARTIALLY_RUNTIME_VALIDATED", "limitation": "Six stable aliases are classified; one mandatory non-production VM has live software and state evidence."},
+    {"id": "ZT-2.1.1", "relationship": "DIRECT_BOUNDED_IMPLEMENTATION", "validation": "PARTIALLY_RUNTIME_VALIDATED", "limitation": "Compliance is evaluated for one VM and existing restricted-validator boundaries only."},
+    {"id": "ZT-2.4.2", "relationship": "DIRECT_BOUNDED_READ_ONLY_ASSESSMENT", "validation": "PARTIALLY_RUNTIME_VALIDATED", "limitation": "Native security-update and reboot-required state are read; patch automation is disabled."},
+    {"id": "ZT-2.2.1", "relationship": "POLICY_DESIGN_ONLY", "validation": "NOT_VALIDATED", "limitation": "No device-state policy enforcement point or real-time authorization exists."},
+    {"id": "ZT-2.3.2", "relationship": "REFERENCE_ONLY", "validation": "NOT_VALIDATED", "limitation": "No UEM or MDM platform is deployed."},
+    {"id": "ZT-2.4.1", "relationship": "REFERENCE_ONLY", "validation": "NOT_VALIDATED", "limitation": "EDR/XDR adoption is deferred and no agent was installed."}
+  ],
+  "asset_summary": {"inventoried": 6, "mandatory_live": 1, "live_assessed": 1, "excluded_operator_boundary": 1},
+  "automatic_remediation": false,
+  "automatic_patching": false,
+  "automatic_reboot": false,
+  "endpoint_agent_installed": false,
+  "edr_decision": "DEFERRED",
+  "secrets_tracked": false,
+  "limitations": [
+    "Live software, patch, and vulnerability-proxy evidence covers one non-production monitoring VM only.",
+    "OpenStack, EVE-NG, and router assets remain limited to their existing restricted-validator summaries.",
+    "A reboot-required marker is open for operator-reviewed maintenance; this package did not reboot the VM.",
+    "No dedicated vulnerability scanner, EDR, XDR, MDM, UEM, real-time device authorization, automatic patching, or isolation is implemented.",
+    "Capability maturity and repository-wide endpoint compliance remain unassessed."
+  ]
+}
