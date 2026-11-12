@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-portal
+  namespace: user-service
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: user-portal
+  ports:
+    - {name: http, protocol: TCP, port: 8080, targetPort: http}
