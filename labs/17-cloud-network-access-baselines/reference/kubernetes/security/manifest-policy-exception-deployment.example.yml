@@ -1,0 +1,16 @@
+# SAMPLE / NON-PRODUCTION — CONTROLLED EXCEPTION PLACEHOLDER
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <exception-deployment-placeholder>
+  namespace: <namespace-placeholder>
+  annotations:
+    exception_id: <exception-id-placeholder>
+    owner: <owner-placeholder>
+    reason: <reason-placeholder>
+    expiry: <expiry-placeholder>
+    approval_id: <approval-id-placeholder>
+    rollback_condition: <rollback-condition-placeholder>
+    evidence_reference: <evidence-path>
+    final_expected_judgment: K8S_POLICY_EXCEPTION_APPROVED
+spec: {template: {spec: {containers: [{name: <container-name-placeholder>, image: <image-placeholder>:v1-placeholder}]}}}
