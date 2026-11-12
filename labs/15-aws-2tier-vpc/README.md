@@ -11,20 +11,20 @@ Can Ansible build a multi-AZ VPC, private web EC2 hosts behind an ALB, restricte
 - `03_create_compute.yml`: EC2, generated SSH key and web services
 - `04_create_alb.yml` through `08_generate_report.yml`: traffic, validation, inventory and report
 - `09_pre_git_check.sh`, `10_generate_examples.yml`: pre-commit safety check and synthetic outputs
-- `99_delete_all.sh`: charge-bearing resources cleanup (explicit opt-in)
+- [Cleanup source reference](reference/99_delete_all.sh.reference.txt): legacy AWS cleanup commands and order
 
 ## Migration changes
 - Source-specific `/home/user1/lab/aws` paths changed to `{{ playbook_dir }}` (Ansible) or script-local `LAB_ROOT`.
 - Bastion SSH ingress now requires `LAB_MANAGEMENT_CIDR`; unset and `0.0.0.0/0` values are rejected.
 - SSH host-key checking uses `accept-new` instead of disabling verification. Confirm fingerprints before use.
-- The cleanup script requires `CONFIRM_LAB_DESTROY=YES` and must be reviewed before execution.
+- The cleanup source selects load balancers and target groups by a name substring and a key pair by name. It also ignores API failures during final checks. It is kept as a text reference. For a lab you deploy, record the account, region and exact resource IDs in your inventory and use those IDs for cleanup and post-checks.
 - Real inventory, private keys, credentials, endpoint IDs and generated reports must remain untracked.
 
 ## Verification plan
 1. Verify syntax and module collection versions using `00_syntax_check.sh`.
 2. Review AWS account, IAM scope, costs (especially NAT Gateway, EC2 and ALB) and `ap-northeast-2` region.
 3. Set `LAB_MANAGEMENT_CIDR` to your own trusted IPv4 CIDR, typically a /32.
-4. Run only in a disposable AWS account; check provision → ALB response → denied public web SSH → report → cleanup.
+4. Run only in a disposable AWS account; check provision → ALB response → denied public web SSH → report → cleanup against the recorded lab inventory.
 5. Store redacted evidence and record limitations before upgrading status to `LOCAL_VALIDATED`.
 
 ## Provenance

@@ -36,6 +36,7 @@
 - These exclusions are **not lost**: the original repositories must remain. A file-path/SHA manifest is NOT a full Git backup.
 
 ## Quality gates
+- [x] Run `python3 tools/check_catalog.py` to validate the numbered lab paths and role README links
 - [x] 51 primary ownership assignments in [manifest.json](../labs/role-groups/manifest.json), unique and covering all lab IDs
 - [x] Seven role READMEs with integration input/output, mandatory failure/denial cases
 - [x] Original numbered labs kept as canonical source files
