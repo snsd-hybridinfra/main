@@ -179,8 +179,8 @@ runcmd:
   - [systemctl, restart, ssh]
   - [ufw, default, deny, incoming]
   - [ufw, default, allow, outgoing]
-  - [ufw, allow, from, 192.168.8.0/24, to, any, port, '22', proto, tcp]
-  - [ufw, allow, from, 192.168.1.0/24, to, any, port, '22', proto, tcp]
+  - [ufw, allow, from, 192.0.2.99/24, to, any, port, '22', proto, tcp]
+  - [ufw, allow, from, 192.0.2.99/24, to, any, port, '22', proto, tcp]
   - [ufw, --force, enable]
   - [touch, /var/lib/snsd-ansible-control-ready]
 final_message: SNSD Ansible control node initialization complete

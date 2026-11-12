@@ -212,8 +212,8 @@ write_files:
       {
         "proxies": {
           "default": {
-            "httpProxy": "http://172.17.0.1:3128",
-            "httpsProxy": "http://172.17.0.1:3128",
+            "httpProxy": "http://192.0.2.99:3128",
+            "httpsProxy": "http://192.0.2.99:3128",
             "noProxy": "localhost,127.0.0.1"
           }
         }
