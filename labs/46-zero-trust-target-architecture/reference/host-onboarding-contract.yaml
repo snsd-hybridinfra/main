@@ -1,0 +1,43 @@
+{
+  "contract_id": "ZT-HOST-ONBOARDING-001",
+  "applies_after_provider_stage": true,
+  "allowed_states": [
+    "READY",
+    "READY_WITH_WARNINGS",
+    "NOT_READY",
+    "BLOCKED",
+    "REVIEW_REQUIRED"
+  ],
+  "deployment_gate": {
+    "READY": "ALLOW",
+    "READY_WITH_WARNINGS": "REVIEW_REQUIRED",
+    "NOT_READY": "DENY",
+    "BLOCKED": "DENY",
+    "REVIEW_REQUIRED": "DENY_UNTIL_APPROVED"
+  },
+  "required_checks": [
+    "supported_os",
+    "supported_architecture",
+    "management_reachability",
+    "approved_ssh_access",
+    "approved_privilege_escalation",
+    "no_unrestricted_sudo",
+    "time_synchronization",
+    "dns_resolution",
+    "storage_capacity",
+    "filesystem_capacity",
+    "required_interfaces",
+    "required_internal_network",
+    "no_unapproved_public_exposure",
+    "compatible_package_manager",
+    "python_availability_where_required",
+    "rollback_path",
+    "runtime_directory_availability",
+    "evidence_directory_availability"
+  ],
+  "target_types": [
+    "openstack-vm",
+    "existing-vm",
+    "physical-server"
+  ]
+}
