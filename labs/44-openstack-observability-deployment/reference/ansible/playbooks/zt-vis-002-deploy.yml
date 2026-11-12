@@ -1,0 +1,9 @@
+---
+- name: Configure approved ZT-VIS-002 private visibility target
+  hosts: zt_vis_002
+  become: true
+  gather_facts: true
+  serial: 1
+  any_errors_fatal: true
+  roles:
+    - role: ../roles/zt_vis_002

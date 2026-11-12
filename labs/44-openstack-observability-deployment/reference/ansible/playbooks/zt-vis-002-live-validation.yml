@@ -1,0 +1,218 @@
+---
+- name: Execute the separately authorized ZT-VIS-002 live validation campaign
+  hosts: zt_vis_002
+  become: true
+  gather_facts: true
+  serial: 1
+  any_errors_fatal: true
+  vars:
+    zt_vis_002_live_validation_authorized: false
+    zt_vis_002_persistence_restart_authorized: false
+    zt_vis_002_rollback_validation_authorized: false
+    zt_vis_002_recovery_authorized: false
+    zt_vis_002_live_validation_id: ""
+    zt_vis_002_live_validator_source: ""
+    zt_vis_002_mtls_validator_source: ""
+    zt_vis_002_live_inventory_source: ""
+    zt_vis_002_live_validator_path: /usr/local/sbin/snsd-zt-vis-002-live-validator
+    zt_vis_002_rollback_started: false
+  tasks:
+    - name: Require the four explicit live-validation authorizations
+      ansible.builtin.assert:
+        that:
+          - zt_vis_002_live_validation_authorized | bool
+          - zt_vis_002_persistence_restart_authorized | bool
+          - zt_vis_002_rollback_validation_authorized | bool
+          - zt_vis_002_recovery_authorized | bool
+          - zt_vis_002_live_validation_id is match('^P2VIS-[0-9]{8}T[0-9]{6}Z$')
+          - zt_vis_002_live_validator_source | length > 0
+          - zt_vis_002_mtls_validator_source | length > 0
+          - zt_vis_002_live_inventory_source | length > 0
+        fail_msg: Separate live, restart, rollback, and recovery authorization is required
+
+    - name: Install the temporary fixed live validator
+      ansible.builtin.copy:
+        src: "{{ zt_vis_002_live_validator_source }}"
+        dest: "{{ zt_vis_002_live_validator_path }}"
+        owner: root
+        group: root
+        mode: '0700'
+
+    - name: Execute the bounded live-validation campaign
+      block:
+        - name: Validate the pre-campaign runtime baseline
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", baseline, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_baseline
+
+        - name: Ingest one package-owned sanitized synthetic record
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", positive, "{{ zt_vis_002_live_validation_id }}"]
+          environment:
+            ZT_VIS_002_LIVE_VALIDATION_AUTHORIZED: 'YES'
+          changed_when: true
+          register: zt_vis_002_positive
+
+        - name: Validate direct-service bypass denial
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", bypass, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_bypass
+
+        - name: Validate proxy and Grafana authentication denials
+          ansible.builtin.command:
+            argv:
+              - /usr/bin/python3
+              - "{{ zt_vis_002_mtls_validator_source }}"
+              - --inventory
+              - "{{ zt_vis_002_live_inventory_source }}"
+              - --ca
+              - "{{ zt_vis_002_proxy_client_ca_source }}"
+              - --client-certificate
+              - "{{ zt_vis_002_proxy_client_certificate_source }}"
+              - --client-key
+              - "{{ zt_vis_002_proxy_client_key_source }}"
+              - --server-name
+              - "{{ zt_vis_002_proxy_server_name }}"
+          delegate_to: localhost
+          become: false
+          changed_when: false
+          no_log: true
+          register: zt_vis_002_negative
+
+        - name: Validate the synthetic record evidence boundary
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", evidence, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_evidence_integrity
+
+        - name: Restart the private monitoring VM for persistence validation
+          ansible.builtin.reboot:
+            reboot_timeout: 300
+            connect_timeout: 10
+            post_reboot_delay: 5
+
+        - name: Validate configuration, data, ingestion, and service persistence
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", persistence, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_persistence
+
+        - name: Require unchanged non-secret configuration after restart
+          ansible.builtin.assert:
+            that:
+              - >-
+                (zt_vis_002_baseline.stdout_lines | select('match', '^configuration_sha256=') | list)
+                == (zt_vis_002_persistence.stdout_lines | select('match', '^configuration_sha256=') | list)
+            fail_msg: ZT-VIS-002 non-secret configuration changed across restart
+
+        - name: Record that bounded rollback has started
+          ansible.builtin.set_fact:
+            zt_vis_002_rollback_started: true
+
+        - name: Stop only the package-owned Compose project for rollback validation
+          ansible.builtin.command:
+            argv:
+              - /usr/bin/podman
+              - compose
+              - --project-name
+              - snsd-zt-vis-002
+              - --file
+              - /opt/snsd-zt-vis-002/compose.yaml
+              - down
+          changed_when: true
+
+        - name: Validate rollback removal and preservation boundaries
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", rollback, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_rollback
+
+        - name: Require unchanged preserved configuration after rollback
+          ansible.builtin.assert:
+            that:
+              - >-
+                (zt_vis_002_baseline.stdout_lines | select('match', '^configuration_sha256=') | list)
+                == (zt_vis_002_rollback.stdout_lines | select('match', '^configuration_sha256=') | list)
+            fail_msg: ZT-VIS-002 preserved configuration changed during rollback
+
+        - name: Recover the reviewed stack from the preserved configuration and data
+          ansible.builtin.include_role:
+            name: ../roles/zt_vis_002
+
+        - name: Record successful bounded recovery
+          ansible.builtin.set_fact:
+            zt_vis_002_rollback_started: false
+
+        - name: Validate recovered services and the pre-rollback synthetic record
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", recovery, "{{ zt_vis_002_live_validation_id }}"]
+          changed_when: false
+          register: zt_vis_002_recovery
+
+        - name: Revalidate authenticated proxy access after recovery
+          ansible.builtin.command:
+            argv:
+              - /usr/bin/python3
+              - "{{ zt_vis_002_mtls_validator_source }}"
+              - --inventory
+              - "{{ zt_vis_002_live_inventory_source }}"
+              - --ca
+              - "{{ zt_vis_002_proxy_client_ca_source }}"
+              - --client-certificate
+              - "{{ zt_vis_002_proxy_client_certificate_source }}"
+              - --client-key
+              - "{{ zt_vis_002_proxy_client_key_source }}"
+              - --server-name
+              - "{{ zt_vis_002_proxy_server_name }}"
+          delegate_to: localhost
+          become: false
+          changed_when: false
+          no_log: true
+          register: zt_vis_002_recovered_proxy
+
+        - name: Require unchanged non-secret configuration after recovery
+          ansible.builtin.assert:
+            that:
+              - >-
+                (zt_vis_002_baseline.stdout_lines | select('match', '^configuration_sha256=') | list)
+                == (zt_vis_002_recovery.stdout_lines | select('match', '^configuration_sha256=') | list)
+            fail_msg: ZT-VIS-002 non-secret configuration changed during recovery
+
+        - name: Require every acceptance-class marker
+          ansible.builtin.assert:
+            that:
+              - "'baseline=PASS' in zt_vis_002_baseline.stdout"
+              - "'positive=PASS' in zt_vis_002_positive.stdout"
+              - "'bypass=PASS' in zt_vis_002_bypass.stdout"
+              - "'evidence_integrity=PASS' in zt_vis_002_evidence_integrity.stdout"
+              - zt_vis_002_negative.rc == 0
+              - "'persistence=PASS' in zt_vis_002_persistence.stdout"
+              - "'rollback=PASS' in zt_vis_002_rollback.stdout"
+              - "'recovery=PASS' in zt_vis_002_recovery.stdout"
+              - zt_vis_002_recovered_proxy.rc == 0
+            fail_msg: One or more ZT-VIS-002 live acceptance markers are missing
+      rescue:
+        - name: Best-effort recovery when failure occurred after bounded rollback
+          ansible.builtin.include_role:
+            name: ../roles/zt_vis_002
+          when: zt_vis_002_rollback_started | bool
+          ignore_errors: true
+
+        - name: Stop on a failed live-validation campaign
+          ansible.builtin.fail:
+            msg: ZT-VIS-002 live validation failed; raw details remain external and untracked
+      always:
+        - name: Remove the synthetic validation input
+          ansible.builtin.command:
+            argv: ["{{ zt_vis_002_live_validator_path }}", cleanup, "{{ zt_vis_002_live_validation_id }}"]
+          environment:
+            ZT_VIS_002_LIVE_VALIDATION_AUTHORIZED: 'YES'
+          changed_when: true
+          failed_when: false
+
+        - name: Remove the temporary target validator
+          ansible.builtin.file:
+            path: "{{ zt_vis_002_live_validator_path }}"
+            state: absent
