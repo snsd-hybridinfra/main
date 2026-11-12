@@ -4,7 +4,7 @@
 **Destination:** `snsd-hybridinfra/main` (review branch `chore/portfolio-structure-2026-11`)  
 **State:** `EXTRACTED / AWAITING_REVALIDATION / SOURCES_RETAINED`
 
-The old projects are sources of reusable **labs**, not automatically completed integration projects. Nineteen source-derived labs are registered: 15 through 33, including seventeen derived from the former multicloud repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
+The old projects are sources of reusable **labs**, not automatically completed integration projects. Twenty-six source-derived labs are registered: 15 through 40, including twenty-four derived from the former multicloud repository. These are extraction units, not verified runnable projects. The original repositories have **not** been deleted or archived. This register does not constitute a full backup.
 
 | Source repository | Source commit SHA | Destination | Source files selected | Not imported |
 |---|---|---|---:|---|
@@ -50,5 +50,19 @@ Build and validate independent labs first. Only after multiple labs have stable 
 ### Source inventory is not a complete backup
 
 - [Source file manifest](migration/snsd-multicloud-ops-source-file-manifest.tsv): 1,252 original source `main` branch paths, Git blob SHAs and byte sizes. **No file bytes, history, other branches, issues or PRs are preserved by this manifest itself.**
-- Source packages, Terraform modules, and all 63 original IDP Kubernetes manifests have been selectively extracted. Large amounts of portal UI, migrations, Zero Trust history/evidence, ADRs, runbooks and tooling **remain in the original**.
+- Source packages, Terraform modules, and all 63 original IDP Kubernetes manifests have been selectively extracted. The complete database, generic runbooks and source test trees now have extracted reference copies, but **large amounts of imported-team portal code, Zero Trust recovery/evidence history, target architecture, ADRs, and tool-specific assets remain in the original**.
 - **No original repository deletion/archival** occurred. A full independent Git mirror and GitHub metadata export must be verified before considering deletion.
+
+## Continued extraction: Labs 34–40 (2026-11-12)
+
+| Lab | Source scope | Copied source files | Limitation |
+|---|---|---:|---|
+| [34 PostgreSQL Schema & Migrations](../labs/34-postgres-schema-migrations/README.md) | DB 스키마·Alembic·권한 검증 | 26 | reference only / not revalidated |
+| [35 Portal UI Contracts](../labs/35-portal-ui-contracts/README.md) | 관리자·사용자 UI 기본 셸, 외부 팀 UI 제외 | 10 | reference only / not revalidated |
+| [36 Day-2 Operations Runbooks](../labs/36-day2-operations-runbooks/README.md) | 운영·배포·장애·복구 절차 | 40 | reference only / not revalidated |
+| [37 Validation Fixtures](../labs/37-validation-fixtures/README.md) | 테스트·합성 데이터·거부 케이스 | 36 | reference only / not revalidated |
+| [38 Identity & Device Assurance](../labs/38-identity-device-assurance/README.md) | 주체·역할·기기 신뢰 정책 | 12 | reference only / not revalidated |
+| [39 k3s Ansible Bootstrap](../labs/39-k3s-ansible-bootstrap/README.md) | 단일 노드 k3s Ansible 구성 | 8 | reference only / not revalidated |
+| [40 Zero Trust Package Contracts](../labs/40-zero-trust-package-contracts/README.md) | 보안 패키지·검증·롤백 계약 | 38 | reference only / not revalidated |
+
+The original `snsd-multicloud-ops` source had **1,252 tracked file entries** on the pinned `main` commit. This register tracks selected file transfers, not a byte-for-byte migration of the full repository or its history. For remaining unique source trees, see [remaining-source-areas.md](migration/remaining-source-areas.md).

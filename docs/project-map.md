@@ -16,7 +16,7 @@ Stable inputs, outputs, interfaces and reusable modules
 Composed projects (only when ready)
 ```
 
-기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~33번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
+기존 01~14번은 독립 로컬 검증 자료를 가진 실습이며, 15~40번은 원본을 선별 이관·재구성한 **미재검증** 랩입니다. 과거 프로젝트를 옮겨왔다고 새 랩이 통합 완료되는 것은 아닙니다.
 
 ## 활용 가능한 랩군
 
@@ -32,7 +32,7 @@ Composed projects (only when ready)
 | [19 Metric Anomaly Scoring](../labs/19-metric-anomaly-scoring/README.md) | 합성 메트릭 처리·임계값 점수 | 이상징후 기록·인적 검토, 재검증 대기 |
 | [20 PostgreSQL Restic Verification](../labs/20-postgres-restic-verification/README.md) | PostgreSQL dump·Restic·무결성 검증 | DR 사전검증 설계, 재검증 대기 |
 
-## 추가 이관 랩 21–33
+## 추가 이관 랩 21–40
 
 | 랩군 | 관심사 |
 |---|---|
@@ -41,6 +41,10 @@ Composed projects (only when ready)
 | 26, 33 | 서비스 관측, EVE-NG 검증 |
 | 27–29 | 신청, 승인·권한, Terraform 프로비저닝 원본 |
 | 30–32 | AI Agent/NAS 계약, GitOps, 보안 기준선 |
+
+| 34–35 | PostgreSQL 스키마·마이그레이션, 사용자·관리자 포털 UI 셸 |
+| 36–37 | Day-2 운영 Runbook과 원본 검증 테스트 |
+| 38–40 | Identity/Device, k3s Ansible, Zero Trust 패키지 계약 |
 
 **모두 이관·재검증 대기**입니다. 특히 API·공급망·클러스터 소스는 단독 실행 가능한 완성 랩이라는 의미가 아닙니다.
 

@@ -23,9 +23,9 @@
 
 | 구분 | 수량 | 의미 |
 |---|---:|---|
-| 등록 랩 | 33 | 기존 로컬 검증 기록 14개 + 이관·재구성 랩 19개 |
+| 등록 랩 | 40 | 기존 로컬 검증 기록 14개 + 선별 이관·재구성 랩 26개 |
 | 기존 로컬 검증 | 14 | 코드·컨테이너·합성 모델 및 임시 로컬 클러스터에서 증적 확보 |
-| 이관·재검증 대기 | 19 | 소스 추출과 정적 조정 중심; 독립 실행·통합 검증 전 |
+| 이관·재검증 대기 | 26 | 소스 추출·정적 보존 단계, 독립 실행·통합 검증 전 |
 | 실제 운영 검증 | 0 | 운영·고객 환경 성과를 주장하지 않음 |
 
 ## 실습 카탈로그
@@ -92,6 +92,20 @@
 
 [원본 파일 1,252개 목록·SHA](docs/migration/snsd-multicloud-ops-source-file-manifest.tsv)는 **백업이 아닌 인덱스**입니다. 원본에서 미이관 자료가 남아 있으므로 삭제하지 않았습니다.
 
+### Additional extracted labs (34–40)
+
+| 랩 | 재사용 범위 | 소스 파일 | 상태 |
+|---|---|---:|---|
+| [34 PostgreSQL Schema & Migrations](labs/34-postgres-schema-migrations/README.md) | DB 스키마·Alembic·권한 검증 | 26 | `NOT_REVALIDATED` |
+| [35 Portal UI Contracts](labs/35-portal-ui-contracts/README.md) | 관리자·사용자 UI 기본 셸, 외부 팀 UI 제외 | 10 | `NOT_REVALIDATED` |
+| [36 Day-2 Operations Runbooks](labs/36-day2-operations-runbooks/README.md) | 운영·배포·장애·복구 절차 | 40 | `NOT_REVALIDATED` |
+| [37 Validation Fixtures](labs/37-validation-fixtures/README.md) | 테스트·합성 데이터·거부 케이스 | 36 | `NOT_REVALIDATED` |
+| [38 Identity & Device Assurance](labs/38-identity-device-assurance/README.md) | 주체·역할·기기 신뢰 정책 | 12 | `NOT_REVALIDATED` |
+| [39 k3s Ansible Bootstrap](labs/39-k3s-ansible-bootstrap/README.md) | 단일 노드 k3s Ansible 구성 | 8 | `NOT_REVALIDATED` |
+| [40 Zero Trust Package Contracts](labs/40-zero-trust-package-contracts/README.md) | 보안 패키지·검증·롤백 계약 | 38 | `NOT_REVALIDATED` |
+
+**참고:** 원본 저장소의 파일 경로 목록은 완전한 소스 백업이 아니며, 일부 영역은 보안·출처·중복 우려로 미이관 상태입니다. [남은 원본 영역](docs/migration/remaining-source-areas.md)을 확인하세요.
+
 ## 문서 구조
 
 | 문서 | 역할 |
@@ -110,7 +124,7 @@
 main/
 ├─ docs/           근거·로드맵·출처·실습 이관 대장
 ├─ labs/01-14/     기존에 로컬 검증된 독립 실습
-└─ labs/15-33/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
+└─ labs/15-40/     3개 프로젝트 저장소에서 선별 이관한 미재검증 랩
 ```
 
 이 저장소는 단일 **실습 저장소**입니다. 기존 프로젝트 저장소의 유용한 코드와 설계 자료는 소규모 독립 랩으로 옮기고, 앞으로 검증된 랩들을 조합해 새 프로젝트를 설계합니다. 연결된 프로젝트들의 종전 구현·검증 상태를 이관된 랩에 그대로 부여하지 않습니다.
