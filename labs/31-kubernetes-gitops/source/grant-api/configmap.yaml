@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grant-api-config
+  namespace: control-service
+data:
+  AUTH_MODE: oidc
+  AUTO_CREATE_SCHEMA: "false"
+  OIDC_ISSUER: https://id.gg-snsdinfra.cloud/realms/iaas
+  OIDC_AUDIENCE: grant-api
+  OIDC_JWKS_URL: https://keycloak.control.internal/realms/iaas/protocol/openid-connect/certs
+  REQUEST_API_URL: http://request-api.user-service.svc.cluster.local:8000
+  APPROVAL_API_URL: http://approval-api.control-service.svc.cluster.local:8001
+  CALLBACK_TIMEOUT_SECONDS: "3"
+  REQUIRED_DB_REVISION: 0003_provisioning_jobs
+  SERVICE_TOKEN_URL: https://keycloak.control.internal/realms/iaas/protocol/openid-connect/token
+  SERVICE_CLIENT_ID: grant-api-callback
+  SERVICE_CLIENT_SECRET_FILE: /etc/service-oauth/client-secret
+  SERVICE_SCOPE: service:callback
+  GRANT_SIGNING_ALGORITHM: RS256
+  GRANT_SIGNING_PRIVATE_KEY_FILE: /etc/grant-signing/private.pem
+  GRANT_SIGNING_PUBLIC_KEY_FILE: /etc/grant-signing/public.pem
+  GRANT_ISSUER: https://grant.control.internal
+  GRANT_AUDIENCE: protected-resource
+  SSL_CERT_FILE: /etc/service-ca/ca.crt

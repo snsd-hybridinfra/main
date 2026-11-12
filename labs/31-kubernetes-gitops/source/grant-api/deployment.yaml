@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grant-api
+  namespace: control-service
+  labels:
+    app.kubernetes.io/name: grant-api
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxUnavailable: 0, maxSurge: 1}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grant-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grant-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8002"
+        prometheus.io/path: /metrics
+    spec:
+      serviceAccountName: grant-api
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: grant-api
+      containers:
+        - name: grant-api
+          image: registry.example.com/iaas/grant-api@sha256:0000000000000000000000000000000000000000000000000000000000000000
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef: {name: grant-api-config}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: {name: grant-api-runtime, key: database-url}
+          ports:
+            - {name: http, containerPort: 8002, protocol: TCP}
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+          resources:
+            requests: {cpu: 150m, memory: 192Mi}
+            limits: {cpu: 750m, memory: 512Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: ["ALL"]}
+          volumeMounts:
+            - {name: runtime, mountPath: /tmp}
+            - {name: service-ca, mountPath: /etc/service-ca, readOnly: true}
+            - {name: signing-keys, mountPath: /etc/grant-signing, readOnly: true}
+            - {name: service-oauth, mountPath: /etc/service-oauth, readOnly: true}
+      volumes:
+        - name: runtime
+          emptyDir: {sizeLimit: 64Mi}
+        - name: service-ca
+          secret:
+            secretName: service-trust-bundle
+            defaultMode: 0440
+        - name: signing-keys
+          secret:
+            secretName: grant-signing-keys
+            defaultMode: 0440
+        - name: service-oauth
+          secret:
+            secretName: grant-api-oauth
+            defaultMode: 0440
