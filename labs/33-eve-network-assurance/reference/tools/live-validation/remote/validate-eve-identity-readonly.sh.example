@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly PATH='/usr/sbin:/usr/bin:/sbin:/bin'
+export PATH
+umask 077
+
+readonly OPERATION="${1:-}"
+readonly PACKAGE_VERSION='1.0.0'
+readonly VALIDATOR_ACCOUNT='codex-validator'
+readonly DISPATCHER='/usr/local/sbin/codex-eve-dispatcher'
+readonly HELPER='/usr/local/sbin/validate-eve-identity-readonly'
+readonly SUDOERS='/etc/sudoers.d/codex-eve-validator'
+readonly SSH_DROPIN='/etc/ssh/sshd_config.d/90-snsd-zero-trust-validator.conf'
+readonly AUTHORIZED_KEYS='/home/codex-validator/.ssh/authorized_keys'
+
+if [[ "$#" -ne 1 ]]; then
+    printf '%s\n' 'DENY_UNSUPPORTED_ARGUMENTS'
+    exit 64
+fi
+
+metadata_is() {
+    local path="$1"
+    local expected="$2"
+    [[ -f "$path" && ! -L "$path" && "$(/usr/bin/stat -c '%u,%g,%a' "$path")" == "$expected" ]]
+}
+
+case "$OPERATION" in
+    identity-summary)
+        password_state="$(/usr/bin/passwd -S "$VALIDATOR_ACCOUNT" | /usr/bin/awk '{print $2}')"
+        if [[ "$password_state" != 'L' && "$password_state" != 'LK' && "$password_state" != 'NP' ]]; then
+            printf '%s\n' 'identity_status=NON_COMPLIANT'
+            exit 2
+        fi
+        if /usr/bin/id -nG "$VALIDATOR_ACCOUNT" | /usr/bin/tr ' ' '\n' | /usr/bin/grep -Eq '^(sudo|wheel|docker|libvirt|libvirt-qemu|lxd)$'; then
+            printf '%s\n' 'identity_status=NON_COMPLIANT'
+            exit 3
+        fi
+        printf '%s\n' \
+            'identity_class=DEDICATED_VALIDATOR' \
+            'password_state=LOCKED' \
+            'broad_admin_groups=ABSENT' \
+            'interactive_shell=DENIED_BY_ENFORCEMENT' \
+            'home_write=DENIED'
+        ;;
+    policy-status)
+        /usr/sbin/visudo -cf "$SUDOERS" >/dev/null
+        /usr/sbin/visudo -c >/dev/null
+        /usr/bin/grep -qF 'ForceCommand /usr/local/sbin/codex-eve-dispatcher' "$SSH_DROPIN"
+        /usr/bin/grep -qF 'restrict,command="/usr/local/sbin/codex-eve-dispatcher"' "$AUTHORIZED_KEYS"
+        printf '%s\n' \
+            'forced_command=ENFORCED' \
+            'sudo_scope=EXACT_ALLOWLIST' \
+            'ssh_restrictions=ENFORCED' \
+            'third_party_sudoers=PROTECTED'
+        ;;
+    service-health)
+        if /usr/bin/systemctl is-active --quiet ssh; then
+            ssh_unit='ssh'
+        elif /usr/bin/systemctl is-active --quiet sshd; then
+            ssh_unit='sshd'
+        else
+            printf '%s\n' 'service_health=FAILED'
+            exit 4
+        fi
+        [[ -d /opt/unetlab ]]
+        printf '%s\n' 'ssh_service=HEALTHY' 'eve_ng_platform=HEALTHY' "ssh_unit_class=${ssh_unit^^}"
+        ;;
+    configuration-metadata)
+        validator_gid="$(/usr/bin/id -g "$VALIDATOR_ACCOUNT")"
+        metadata_is "$DISPATCHER" '0,0,755'
+        metadata_is "$HELPER" '0,0,755'
+        metadata_is "$SUDOERS" '0,0,440'
+        metadata_is "$SSH_DROPIN" '0,0,600'
+        metadata_is "$AUTHORIZED_KEYS" "0,${validator_gid},640"
+        [[ "$(/usr/bin/stat -c '%u,%g,%a' /home/codex-validator)" == "0,${validator_gid},750" ]]
+        [[ "$(/usr/bin/stat -c '%u,%g,%a' /home/codex-validator/.ssh)" == "0,${validator_gid},750" ]]
+        printf '%s\n' 'configuration_metadata=COMPLIANT' 'validator_writable_policy=ABSENT' 'symlinked_policy=ABSENT'
+        ;;
+    validator-version)
+        printf 'validator_package_version=%s\n' "$PACKAGE_VERSION"
+        ;;
+    *)
+        printf '%s\n' 'DENY_UNKNOWN_OPERATION'
+        exit 70
+        ;;
+esac
+
