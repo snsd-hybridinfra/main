@@ -1,0 +1,23 @@
+# SAMPLE / NON-PRODUCTION — not a trained model binary
+profile_id: <threshold-profile-placeholder>
+profile_type: static_threshold_profile
+dataset_source_scenario: synthetic-lab-case
+detection_scenario: synthetic-lab-case
+report_scenario: synthetic-lab-case
+final_evidence_report_scenario: synthetic-lab-case
+supported_feature_groups: [target_availability, probe_success, http_health, api_latency, load_balancer_health, workload_readiness, restart_count, cpu_utilization, memory_utilization, disk_utilization, database_availability, replication_lag, recovery_health]
+scoring_method: [z_score_placeholder, static_threshold_placeholder, rolling_baseline_placeholder]
+threshold_rules:
+  - probe_success below expected value
+  - HTTP status code not healthy
+  - replication lag above threshold
+  - CPU utilization above threshold
+  - memory utilization above threshold
+  - disk utilization above threshold
+  - Kubernetes restart count above threshold
+  - Prometheus target up equals 0
+  - service latency above threshold
+  - backup/restore reference health degraded
+anomaly_decision_values: [NORMAL, WARNING, ANOMALY_DETECTED, REVIEW_REQUIRED, EVIDENCE_INCOMPLETE]
+review_required_conditions: [warning, anomaly, incomplete_evidence]
+evidence_reference: <evidence-path>

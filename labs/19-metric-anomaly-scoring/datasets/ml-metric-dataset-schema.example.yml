@@ -1,0 +1,37 @@
+# SAMPLE / NON-PRODUCTION
+schema_name: ml_metric_dataset
+required_fields:
+  - dataset_id
+  - collected_at
+  - collection_window_start
+  - collection_window_end
+  - metric_timestamp
+  - metric_source
+  - metric_name
+  - metric_value
+  - metric_unit
+  - scrape_job
+  - instance_placeholder
+  - service_placeholder
+  - environment_placeholder
+  - feature_group
+  - feature_name
+  - normalized_value
+  - anomaly_label_placeholder
+  - collection_method
+  - evidence_reference
+constraints:
+  metric_timestamp: required
+  metric_name: required
+  metric_value: numeric
+  normalized_value: numeric_or_documented_placeholder
+  anomaly_label_placeholder: [normal, suspected_anomaly, unknown]
+  collection_method: [synthetic_sample, sanitized_lab_export, manual_placeholder]
+prohibited_content:
+  - raw_logs
+  - packet_payload
+  - usernames
+  - real_hostnames
+  - real_ips
+  - secrets
+  - credentials
