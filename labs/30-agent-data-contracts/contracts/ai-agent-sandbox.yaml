@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "blueprint_id": "AI_AGENT_SANDBOX",
+  "project_alias": "PROJECT_MINI_ONA",
+  "status": {
+    "design": "LOCAL_VALIDATED",
+    "implementation": "PARTIALLY_IMPLEMENTED_LOCAL",
+    "control_plane_slice": "LOCAL_SIMULATION_VALIDATED",
+    "runtime": "NOT_VALIDATED"
+  },
+  "authorities": {
+    "decision": "docs/adr/0020-persistent-ai-agent-sandbox.md",
+    "catalog": "docs/platform/composite-service-catalog.yaml",
+    "validator": "tools/validate_ai_agent_sandbox.py"
+  },
+  "local_implementation": {
+    "service": "applications/internal-iaas-portal/services/request-api/request_api/agent_jobs.py",
+    "api_mode": "SERVICE_ONLY_LOCAL_SIMULATION",
+    "database_migration": "applications/internal-iaas-portal/database/migrations/request-db/versions/0003_agent_job_simulation.py",
+    "additional_migrations": [
+      "applications/internal-iaas-portal/database/migrations/request-db/versions/0004_agent_integration_outbox.py",
+      "applications/internal-iaas-portal/database/migrations/request-db/versions/0005_agent_budget_telemetry.py"
+    ],
+    "sandbox_bundle": ["KUBERNETES_JOB", "NETWORK_POLICY", "RESOURCE_QUOTA"],
+    "queue_transport_contract": "REDIS_STREAMS_XADD_XREADGROUP",
+    "local_queue_adapter": "DATABASE_OUTBOX",
+    "credential_lease_mode": "NON_SECRET_LOCAL_INVALID_REFERENCE",
+    "credential_lease_ttl_seconds": 900,
+    "egress_decision_mode": "EXACT_CLASS_PROTOCOL_PORT_VIA_AUTHENTICATED_BROKER",
+    "runtime_adapter": "applications/internal-iaas-portal/services/request-api/request_api/agent_runtime.py",
+    "runtime_readiness": "docs/platform/ai-agent-runtime-readiness.yaml",
+    "bundle_deployable": false,
+    "external_side_effects": false
+  },
+  "execution_model": {
+    "durable_authority": "CONTROL_PLANE_JOB_STATE",
+    "compute_unit": "DISPOSABLE_SANDBOX_POD",
+    "persistence_model": "CHECKPOINT_AND_RECREATE",
+    "pod_is_durable_authority": false,
+    "live_runtime_authorized": false,
+    "lifecycle": [
+      "RECEIVED", "QUEUED", "STARTING", "RUNNING", "AWAITING_APPROVAL",
+      "CHECKPOINTED", "RESUMING", "COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT", "BUDGET_EXHAUSTED"
+    ],
+    "approval_wait_behavior": "CHECKPOINT_DELETE_POD_RESUME_NEW_POD"
+  },
+  "sandbox": {
+    "runtime_class_requirement": "KATA_OR_GVISOR_REQUIRED",
+    "plain_runc_accepted": false,
+    "run_as_non_root": true,
+    "read_only_root_filesystem": true,
+    "drop_all_capabilities": true,
+    "seccomp_profile": "RuntimeDefault_OR_STRONGER",
+    "privileged": false,
+    "host_path": false,
+    "host_network": false,
+    "host_pid": false,
+    "host_ipc": false,
+    "automount_service_account_token": false,
+    "task_namespace_isolation": true,
+    "resource_quota_required": true,
+    "limits_required": ["CPU", "MEMORY", "PID", "EPHEMERAL_STORAGE"]
+  },
+  "credentials": {
+    "git_identity": "SHORT_LIVED_GITHUB_APP_TOKEN",
+    "model_identity": "SHORT_LIVED_MODEL_BROKER_TOKEN",
+    "task_scoped": true,
+    "expiration_behavior": "FAIL_CLOSED_AND_REQUIRE_NEW_LEASE",
+    "developer_ssh_keys_allowed": false,
+    "browser_sessions_allowed": false,
+    "raw_provider_api_keys_allowed": false
+  },
+  "queue": {
+    "target_transport": "REDIS_STREAMS",
+    "delivery_contract": ["XADD", "XREADGROUP", "ACK_AFTER_ACCEPTED_TRANSITION", "IDEMPOTENT_JOB_ID"],
+    "local_adapter": "DATABASE_OUTBOX",
+    "message_payload": ["JOB_ID", "SANDBOX_SPEC_DIGEST", "REPOSITORY_ALIAS", "SOURCE_COMMIT", "TASK_DIGEST", "ENVIRONMENT", "SIZE"],
+    "raw_task_text_allowed": false,
+    "credential_material_allowed": false,
+    "live_redis_connection": false
+  },
+  "egress": {
+    "default_deny": true,
+    "enforcement": ["K8S_NETWORK_POLICY", "AUTHENTICATED_FQDN_AWARE_EGRESS_BROKER", "CONTROLLED_DNS"],
+    "approved_destinations": ["GITHUB_SERVICE", "MODEL_BROKER", "APPROVED_PACKAGE_MIRROR", "PLATFORM_TELEMETRY"],
+    "direct_ip_allowed": false,
+    "alternate_dns_allowed": false,
+    "tunneling_allowed": false,
+    "network_policy_alone_is_sufficient": false
+  },
+  "budgets": {
+    "hard_limits_required": ["WALL_CLOCK", "ITERATIONS", "MODEL_TOKENS", "MONETARY_COST", "EXTERNAL_CALLS", "CONCURRENCY", "EGRESS_BYTES"],
+    "limit_action": "CHECKPOINT_CANCEL_AND_DELETE_POD",
+    "request_rate_only_is_sufficient": false
+  },
+  "local_budget_enforcement": {
+    "mode": "PRE_EXECUTION_ATOMIC_RESERVATION",
+    "ledger": "PERSISTENT_OPTIMISTIC_VERSIONED",
+    "idempotent": true,
+    "overrun_outcome": "BUDGET_EXHAUSTED",
+    "overrun_actions": ["DENY_RESERVATION", "CANCEL_QUEUE_ITEM", "REVOKE_ACTIVE_LEASES", "RELEASE_COMPUTE"],
+    "external_meter_connected": false
+  },
+  "human_in_the_loop": {
+    "preauthorized": ["WORKSPACE_EDIT", "ALLOWLISTED_BUILD", "ALLOWLISTED_TEST"],
+    "approval_required": ["MAIN_BRANCH_MUTATION", "BRANCH_PROTECTION_BYPASS", "PRODUCTION_ACCESS", "DATABASE_SCHEMA_CHANGE", "SECRET_ACCESS", "NEW_EGRESS_DESTINATION", "INFRASTRUCTURE_MUTATION", "DEPENDENCY_SOURCE_CHANGE"],
+    "decision_is_recorded": true,
+    "indefinite_pod_suspension": false
+  },
+  "git_delivery": {
+    "task_branch_required": true,
+    "atomic_checkpoint_commits": true,
+    "draft_pull_request": true,
+    "direct_main_push": false,
+    "pre_push_checks": ["DIFF_POLICY", "SECRET_SCAN", "TEST_RESULT", "PROVENANCE"]
+  },
+  "observability": {
+    "trace_spans": ["request.queue", "pod.schedule", "image.pull", "repo.clone", "agent.iteration", "llm.request", "tool.exec", "test.run", "checkpoint.write", "git.push", "pr.create", "cleanup"],
+    "metrics": ["QUEUE_LATENCY", "COLD_START_P50_P95_P99", "LLM_LATENCY", "TOKEN_COST", "TEST_PASS_RATE", "POLICY_DENIALS", "TIMEOUTS", "CLEANUP_FAILURES"],
+    "raw_prompts_allowed": false,
+    "source_code_allowed": false,
+    "secrets_allowed": false,
+    "correlation_key": "TRACE_ID",
+    "local_event_store": "SANITIZED_FIXED_SCHEMA",
+    "otel_exporter_connected": false
+  },
+  "persistence": {
+    "metadata": "CONTROL_PLANE_DATABASE",
+    "checkpoints": "ENCRYPTED_OBJECT_STORAGE",
+    "git_artifacts": "TASK_BRANCH_AND_DRAFT_PR",
+    "credentials_persisted": false
+  },
+  "acceptance_checks": [
+    "POSITIVE_TASK", "NEGATIVE_EGRESS", "EGRESS_BYPASS", "CHECKPOINT_RESUME",
+    "ROLLBACK_CLEANUP", "RUNAWAY_BUDGET_TERMINATION", "APPROVAL_CHECKPOINT",
+    "TOKEN_EXPIRY", "SANDBOX_ISOLATION"
+  ],
+  "prohibited_scope": [
+    "PRODUCTION_REPOSITORY_AUTONOMOUS_WRITE", "PRODUCTION_DATA", "DIRECT_MAIN_PUSH",
+    "UNBOUNDED_AGENT_LOOP", "USER_PERSONAL_CREDENTIALS", "PLAIN_CONTAINER_AS_SECURITY_BOUNDARY",
+    "RAW_PROMPT_OR_SOURCE_TELEMETRY", "LIVE_DEPLOYMENT_BY_THIS_CONTRACT"
+  ]
+}

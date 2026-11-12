@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "status": "IMPLEMENTED_LOCAL",
+  "runtime_validation_status": "NOT_VALIDATED",
+  "decision": "docs/adr/0024-bounded-llm-monitoring-assistant.md",
+  "identity": {
+    "portal_roles": ["LLM_USER", "MSP_OPERATOR", "MSP_ADMIN"],
+    "required_scopes": ["llm:invoke", "monitoring:assist"],
+    "human_identity_source": "ORGANIZATION_OIDC",
+    "provider_identity": "SERVER_SIDE_OPENAI_PLATFORM_SERVICE_PRINCIPAL",
+    "personal_chatgpt_session_allowed": false,
+    "user_supplied_api_key_allowed": false
+  },
+  "input_contract": {
+    "accepted": ["SIGNAL_ID", "OBSERVED_AT", "METRIC_SOURCE", "METRIC_NAME", "CURRENT_VALUE", "BASELINE_VALUE", "ANOMALY_SCORE", "DETERMINISTIC_STATE"],
+    "prohibited": ["RAW_LOG", "FREE_FORM_PROMPT", "FILE_CONTENT", "SOURCE_CODE", "SECRET", "IP_ADDRESS", "HOSTNAME", "USER_ID", "TENANT_ID", "FINANCIAL_RECORD"]
+  },
+  "authority": {
+    "output": "ADVISORY_ONLY",
+    "may_change_detection_state": false,
+    "may_approve": false,
+    "may_block": false,
+    "may_remediate": false,
+    "human_review_required": true
+  },
+  "provider": {
+    "default": "DISABLED",
+    "development": "LOCAL_DETERMINISTIC_ASSISTANT",
+    "external_adapter": "OPENAI_RESPONSES_API",
+    "request_storage": false,
+    "credential_source": "EXTERNAL_ABSOLUTE_TOKEN_FILE_OR_FUTURE_WORKLOAD_IDENTITY",
+    "external_connection_status": "NOT_CONNECTED"
+  },
+  "implementation": [
+    "applications/internal-iaas-portal/services/request-api/request_api/monitoring_assistant.py",
+    "applications/internal-iaas-portal/services/request-api/request_api/portal.py",
+    "applications/internal-iaas-portal/services/user-portal/eclipse/js/idp-llm.js"
+  ]
+}

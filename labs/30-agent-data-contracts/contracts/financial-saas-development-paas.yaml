@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "blueprint_id": "API_DEVELOPMENT_STACK",
+  "display_name": "Financial SaaS Development PaaS",
+  "status": {
+    "design": "LOCAL_VALIDATED",
+    "manifest_resolver": "PARTIALLY_IMPLEMENTED_LOCAL",
+    "runtime": "NOT_VALIDATED"
+  },
+  "authority": {
+    "decision": "docs/adr/0021-financial-saas-development-paas.md",
+    "catalog": "docs/platform/composite-service-catalog.yaml",
+    "architecture": "docs/platform/architecture-baseline.yaml",
+    "resolver": "applications/internal-iaas-portal/services/request-api/request_api/saas_paas.py",
+    "tests": "applications/internal-iaas-portal/tests/api/test_financial_saas_paas.py"
+  },
+  "product_model": {
+    "type": "APPROVED_COMPOSITE_BLUEPRINT",
+    "user_selectable_components": false,
+    "user_supplied_provider_identifiers": false,
+    "user_supplied_hcl": false,
+    "allowed_user_inputs": ["blueprint_id", "environment", "size", "duration_hours", "purpose"],
+    "resolved_manifest_immutable": true,
+    "deployment_transaction": "ALL_OR_NOTHING"
+  },
+  "business_domain_profiles": [
+    "SECURITIES_ORDER_API_SIMULATION",
+    "SECURITIES_POST_TRADE_SIMULATION"
+  ],
+  "internal_components": [
+    "K3S_RUNTIME",
+    "APPLICATION_RUNTIME",
+    "POSTGRESQL",
+    "CACHE",
+    "MESSAGE_QUEUE",
+    "OBJECT_STORAGE",
+    "NAS_FILE_EXCHANGE",
+    "LOAD_BALANCER",
+    "NETWORK_POLICY",
+    "OPERATIONS_PROFILE"
+  ],
+  "environments": ["DEV", "TEST", "STG"],
+  "sizes": {
+    "SMALL": {
+      "tenant_cpu_limit": "2",
+      "tenant_memory_limit": "4Gi",
+      "application_replica_limit": 2,
+      "availability_claim": "SINGLE_NODE_LAB"
+    },
+    "STANDARD": {
+      "tenant_cpu_limit": "4",
+      "tenant_memory_limit": "8Gi",
+      "application_replica_limit": 4,
+      "availability_claim": "SINGLE_NODE_LAB"
+    }
+  },
+  "network_profile": {
+    "id": "PRIVATE_SAAS_INGRESS",
+    "default_deny": true,
+    "public_ingress": false,
+    "east_west_policy_required": true,
+    "database_direct_user_access": false,
+    "outbound_via_approved_services_only": true
+  },
+  "security": {
+    "oidc_required": true,
+    "namespace_rbac_required": true,
+    "pod_security_profile": "RESTRICTED",
+    "service_account_token_default": "DISABLED",
+    "secrets_mode": "EXTERNAL_REFERENCE_ONLY",
+    "image_mode": "APPROVED_REGISTRY_DIGEST_PINNED",
+    "audit_correlation": "TRACE_ID_AND_REQUEST_ID",
+    "financial_data": "SYNTHETIC_OR_NON_PRODUCTION_ONLY"
+  },
+  "delivery": {
+    "cluster_bootstrap": "SEPARATE_AUTHORITY",
+    "platform_addons": "GITOPS_MANAGED",
+    "tenant_application": "APPROVED_PIPELINE",
+    "lifecycle": ["REQUEST", "APPROVE", "PROVISION", "RUNNING", "EXPIRE", "DESTROY"],
+    "rollback": "REVERSE_DEPENDENCY_ORDER",
+    "ttl_cleanup_required": true
+  },
+  "tenant_bundle": {
+    "status": "INERT_LOCAL_IMPLEMENTED",
+    "service_endpoint": "/internal/v1/financial-saas/tenant-bundle",
+    "namespace_derivation": "SOURCE_MANIFEST_DIGEST",
+    "pod_security": "RESTRICTED_V1_36",
+    "quota_by_size": true,
+    "service_account_token_default": "DISABLED",
+    "network_policies": ["DEFAULT_DENY", "CLUSTER_DNS", "PRIVATE_INGRESS", "APPROVED_DATA_SERVICES"],
+    "runtime_authorized": false,
+    "deployable": false
+  },
+  "operations": {
+    "metrics": true,
+    "logs": true,
+    "traces": true,
+    "alerts": true,
+    "cost_attribution": true,
+    "backup_restore": "REQUIRED_BUT_NOT_DR"
+  },
+  "mini_ona_relationship": {
+    "role": "INTERNAL_AUTOMATION_SERVICE",
+    "paas_runtime_dependency": false,
+    "kata_required_for_saas_workloads": false,
+    "kata_required_for_untrusted_agent_execution": true
+  },
+  "runtime_gates": [
+    "K3S_TENANT_BASELINE",
+    "APPROVED_INTERNAL_REGISTRY",
+    "OIDC_AND_RBAC",
+    "EXTERNAL_SECRET_MANAGER",
+    "POSTGRESQL_ADAPTER",
+    "REDIS_ADAPTER",
+    "MESSAGE_QUEUE_ADAPTER",
+    "OBJECT_STORAGE_ADAPTER",
+    "NAS_FILE_EXCHANGE_ADAPTER",
+    "PRIVATE_INGRESS_ADAPTER",
+    "OTEL_PIPELINE"
+  ],
+  "prohibited_scope": [
+    "PRODUCTION_FINANCIAL_DATA",
+    "REAL_SECURITIES_ORDERS",
+    "REAL_EXCHANGE_OR_BROKER_CONNECTIVITY",
+    "REAL_CUSTOMER_OR_ACCOUNT_DATA",
+    "DIRECT_COMPONENT_SELECTION",
+    "DIRECT_MAIN_PUSH",
+    "PUBLIC_INTERNET_EXPOSURE",
+    "ACTIVE_PUBLIC_CLOUD_CLAIM",
+    "MULTI_SITE_DR_CLAIM",
+    "PRODUCTION_READINESS_CLAIM"
+  ]
+}
