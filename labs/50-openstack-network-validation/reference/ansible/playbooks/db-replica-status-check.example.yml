@@ -1,0 +1,9 @@
+---
+# NON-PRODUCTION EXAMPLE. Documentation-only debug placeholder; do not execute against a database.
+- name: Document DB replica status evidence inputs
+  hosts: db_replica_placeholder
+  gather_facts: false
+  tasks:
+    - name: Explain the sanitized evidence contract
+      ansible.builtin.debug:
+        msg: "Collect replica thread and lag evidence through a separately authorized procedure; no SQL or service action is implemented."

@@ -1,0 +1,13 @@
+---
+# NON-PRODUCTION EXAMPLE ONLY
+# This placeholder does not connect to MariaDB, execute SQL, or collect credentials.
+- name: Document MariaDB replication status collection boundary
+  hosts: db_replica_placeholder
+  gather_facts: false
+  tasks:
+    - name: Explain approved manual evidence collection
+      ansible.builtin.debug:
+        msg: >-
+          Collect SHOW REPLICA STATUS or SHOW SLAVE STATUS manually in an
+          approved lab, sanitize all environment values, and validate the
+          resulting sample locally. No database command is executed here.

@@ -1,0 +1,9 @@
+---
+# NON-PRODUCTION EXAMPLE. Debug-only evidence contract; creates no backup.
+- name: Document backup creation evidence inputs
+  hosts: backup_target_placeholder
+  gather_facts: false
+  tasks:
+    - name: Explain the sanitized evidence contract
+      ansible.builtin.debug:
+        msg: "Validate placeholder manifest, checksum, metadata, retention, encryption, and access-control evidence only."

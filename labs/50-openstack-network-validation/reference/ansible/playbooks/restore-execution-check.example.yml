@@ -1,0 +1,9 @@
+---
+# NON-PRODUCTION EXAMPLE. Debug-only evidence contract; performs no restore.
+- name: Document restore execution evidence inputs
+  hosts: restore_target_placeholder
+  gather_facts: false
+  tasks:
+    - name: Explain the sanitized restore evidence contract
+      ansible.builtin.debug:
+        msg: "Validate manifest reference, checksum, disposable target, metadata, consistency, rollback, and retired-numbered-case linkage only."
