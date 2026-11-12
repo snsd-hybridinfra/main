@@ -1,0 +1,33 @@
+{
+  "manifest_id": "P1-RUN-BASE",
+  "manifest_version": "2.0.0",
+  "title": "Minimum Phase 1 Package-Oriented Runbook Baseline",
+  "phase": "PHASE_1",
+  "authoritative_root": "docs/runbooks/phase-1/",
+  "index": "docs/runbooks/RUNBOOK_INDEX.md",
+  "template": "docs/runbooks/RUNBOOK_TEMPLATE.md",
+  "validation_status": "VALIDATED_LOCAL",
+  "last_reviewed": "2026-08-20",
+  "runtime_execution_performed": true,
+  "package_status_promoted": true,
+  "phase_state": {
+    "implementation_status": "PARTIAL",
+    "validation_status": "PARTIALLY_VALIDATED",
+    "completion_status": "NOT_COMPLETE",
+    "boundary": "ZT-RV-001"
+  },
+  "runbooks": [
+    {"runbook_id":"RB-P1-001","path":"docs/runbooks/phase-1/01-phase-1-entry-and-preflight.md","related_packages":["ZT-FND-001"],"procedure_status":"IMPLEMENTED","validation_status":"VALIDATED_LOCAL","live_execution_permitted":false},
+    {"runbook_id":"RB-P1-002","path":"docs/runbooks/phase-1/02-repository-safe-validation.md","related_packages":["ZT-FND-001"],"procedure_status":"IMPLEMENTED","validation_status":"VALIDATED_LOCAL","live_execution_permitted":false},
+    {"runbook_id":"RB-P1-003","path":"docs/runbooks/phase-1/03-evidence-handling-and-sanitization.md","related_packages":["ZT-FND-001","ZT-NET-001","ZT-VIS-001","ZT-ID-001"],"procedure_status":"PARTIALLY_IMPLEMENTED","validation_status":"VALIDATED_LOCAL","live_execution_permitted":false},
+    {"runbook_id":"RB-P1-004","path":"docs/runbooks/phase-1/04-network-validation-and-gap-management.md","related_packages":["ZT-NET-001"],"procedure_status":"IMPLEMENTED","validation_status":"RUNTIME_VALIDATED","live_execution_permitted":true},
+    {"runbook_id":"RB-P1-005","path":"docs/runbooks/phase-1/05-visibility-validation-and-gap-management.md","related_packages":["ZT-VIS-001"],"procedure_status":"IMPLEMENTED","validation_status":"RUNTIME_VALIDATED","live_execution_permitted":true},
+    {"runbook_id":"RB-P1-006","path":"docs/runbooks/phase-1/06-identity-validation-readiness.md","related_packages":["ZT-ID-001"],"procedure_status":"IMPLEMENTED","validation_status":"RUNTIME_VALIDATED","live_execution_permitted":true},
+    {"runbook_id":"RB-P1-007","path":"docs/runbooks/phase-1/07-repeatable-and-scheduled-validation.md","related_packages":["ZT-CV-001","ZT-RV-001","ZT-SCH-001"],"procedure_status":"PARTIALLY_IMPLEMENTED","validation_status":"PARTIALLY_RUNTIME_VALIDATED","live_execution_permitted":false}
+  ],
+  "package_flow_authority": "docs/zero-trust/package-flow.yaml",
+  "unresolved_gaps": [
+    {"gap_id":"CROSS_CAPABILITY_BOUNDED_GAPS","owner":"ZT-CV-001","status":"PARTIALLY_ACCEPTED"},
+    {"gap_id":"SCHEDULED_VALIDATION_DEFERRED_FINAL","owner":"ZT-SCH-001","status":"DEFERRED_FINAL"}
+  ]
+}
