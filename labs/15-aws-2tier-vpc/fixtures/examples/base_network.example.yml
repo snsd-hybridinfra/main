@@ -1,0 +1,23 @@
+base_network:
+  region: "ap-northeast-2"
+  vpc_id: "vpc-xxxxxxxxxxxxxxxxx"
+
+  public_subnets:
+    public_subnet_1: "subnet-xxxxxxxxxxxxxxxxx"
+    public_subnet_2: "subnet-xxxxxxxxxxxxxxxxx"
+
+  private_subnets:
+    private_subnet_1: "subnet-xxxxxxxxxxxxxxxxx"
+    private_subnet_2: "subnet-xxxxxxxxxxxxxxxxx"
+
+  internet_gateway_id: "igw-xxxxxxxxxxxxxxxxx"
+  nat_gateway_id: "nat-xxxxxxxxxxxxxxxxx"
+
+  route_tables:
+    public_route_table_id: "rtb-xxxxxxxxxxxxxxxxx"
+    private_route_table_id: "rtb-xxxxxxxxxxxxxxxxx"
+
+common_tags:
+  Project: "ansible-vpc-lab"
+  Owner: "jjh"
+  ManagedBy: "ansible"

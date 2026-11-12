@@ -1,0 +1,4 @@
+security_groups:
+  alb_sg_id: "sg-xxxxxxxxxxxxxxxxx"
+  bastion_sg_id: "sg-xxxxxxxxxxxxxxxxx"
+  web_sg_id: "sg-xxxxxxxxxxxxxxxxx"

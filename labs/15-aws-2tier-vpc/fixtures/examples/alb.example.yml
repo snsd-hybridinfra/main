@@ -1,0 +1,11 @@
+alb:
+  name: "ansible-jjh-alb"
+  dns_name: "ansible-jjh-alb-xxxxxxxx.ap-northeast-2.elb.amazonaws.com"
+
+  target_group:
+    name: "ansible-jjh-tg"
+    arn: "arn:aws:elasticloadbalancing:ap-northeast-2:ACCOUNT_ID:targetgroup/ansible-jjh-tg/xxxxxxxx"
+
+  targets:
+    web_1_instance_id: "i-xxxxxxxxxxxxxxxxx"
+    web_2_instance_id: "i-xxxxxxxxxxxxxxxxx"
