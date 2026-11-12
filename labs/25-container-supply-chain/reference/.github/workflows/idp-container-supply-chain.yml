@@ -1,0 +1,105 @@
+name: IDP container supply chain
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/idp-container-supply-chain.yml"
+      - "applications/internal-iaas-portal/**"
+      - "docs/platform/container-supply-chain.yaml"
+      - "docs/adr/0023-container-image-supply-chain-and-k3s-delivery.md"
+      - "tools/validate_container_supply_chain.py"
+      - "tests/test_container_supply_chain.py"
+  workflow_dispatch:
+    inputs:
+      release_id:
+        description: Immutable release identifier
+        required: true
+        type: string
+      approved_registry:
+        description: Protected private registry authority
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: idp-container-supply-chain-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Validate container supply-chain authority
+        run: |
+          python3 tools/validate_container_supply_chain.py --strict
+          python3 tools/validate_container_runtime_readiness.py --strict
+      - name: Run supply-chain policy tests
+        run: python3 -m unittest tests.test_container_supply_chain -v
+
+  publish-and-promote:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: policy
+    runs-on: [self-hosted, linux, x64, idp-supply-chain]
+    environment: idp-container-publish
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+      id-token: write
+    env:
+      IDP_APPROVED_REGISTRY: ${{ inputs.approved_registry }}
+      IDP_BASE_PYTHON_IMAGE: ${{ vars.IDP_BASE_PYTHON_IMAGE }}
+      IDP_BASE_NGINX_IMAGE: ${{ vars.IDP_BASE_NGINX_IMAGE }}
+      IDP_BASE_CRS_IMAGE: ${{ vars.IDP_BASE_CRS_IMAGE }}
+      IDP_BASE_TERRAFORM_IMAGE: ${{ vars.IDP_BASE_TERRAFORM_IMAGE }}
+      IDP_TOOL_DOCKER_SHA256: ${{ vars.IDP_TOOL_DOCKER_SHA256 }}
+      IDP_DOCKER_BUILDX_PATH: /usr/local/lib/docker/cli-plugins/docker-buildx
+      IDP_TOOL_DOCKER_BUILDX_SHA256: ${{ vars.IDP_TOOL_DOCKER_BUILDX_SHA256 }}
+      IDP_TOOL_TRIVY_SHA256: ${{ vars.IDP_TOOL_TRIVY_SHA256 }}
+      IDP_TOOL_SYFT_SHA256: ${{ vars.IDP_TOOL_SYFT_SHA256 }}
+      IDP_TOOL_COSIGN_SHA256: ${{ vars.IDP_TOOL_COSIGN_SHA256 }}
+      IDP_TOOL_GIT_SHA256: ${{ vars.IDP_TOOL_GIT_SHA256 }}
+      IDP_TOOL_GH_SHA256: ${{ vars.IDP_TOOL_GH_SHA256 }}
+      IDP_COSIGN_CERTIFICATE_IDENTITY: ${{ vars.COSIGN_CERTIFICATE_IDENTITY }}
+      IDP_COSIGN_CERTIFICATE_OIDC_ISSUER: ${{ vars.COSIGN_OIDC_ISSUER }}
+    steps:
+      - name: Checkout exact main commit with short-lived promotion credential
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: true
+      - name: Validate protected runner authority
+        run: python3 tools/validate_container_supply_chain.py --strict
+      - name: Authenticate to GHCR with the job-scoped token
+        env:
+          GHCR_TOKEN: ${{ github.token }}
+        run: printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Build scan publish sign verify and resolve
+        run: >-
+          python3 applications/internal-iaas-portal/supply-chain/container_pipeline.py
+          build-release
+          --release-id "${{ inputs.release_id }}"
+          --registry "${{ inputs.approved_registry }}"
+      - name: Render reviewed GitOps promotion
+        run: >-
+          python3 applications/internal-iaas-portal/supply-chain/container_pipeline.py
+          promote
+          --release ".runtime/container-supply-chain/${{ inputs.release_id }}/release-attestation.json"
+          --registry "${{ inputs.approved_registry }}"
+      - name: Create immutable promotion pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "idp-supply-chain[bot]"
+          git config user.email "idp-supply-chain[bot]@users.noreply.github.com"
+          git switch -c "codex/release-${{ inputs.release_id }}"
+          git add -- applications/internal-iaas-portal/kubernetes/releases
+          git commit -m "Promote IDP container release ${{ inputs.release_id }}"
+          git push --set-upstream origin "codex/release-${{ inputs.release_id }}"
+          gh pr create --draft --base main --head "codex/release-${{ inputs.release_id }}" --title "Promote IDP container release ${{ inputs.release_id }}" --body "Digest-only GitOps promotion generated from reviewed source ${{ github.sha }}. Merge approval authorizes Argo CD reconciliation; CI has no kubeconfig and performs no direct cluster mutation."
