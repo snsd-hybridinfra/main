@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>인프라 운영 실험 카탈로그</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <a class="wordmark" href="/README.md">Infrastructure Lab</a>
+      <nav aria-label="자료">
+        <a href="/docs/briefings/README.md">브리핑</a>
+        <a href="/docs/briefings/research-intake.md#컨소시엄">컨소시엄</a>
+        <a href="/docs/briefings/research-intake.md#세미나">세미나</a>
+        <a href="/docs/experiment-backlog.md">실험 후보</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="intro">
+      <h1>인프라 운영 실험</h1>
+      <p>관심 있는 운영 영역을 고르고 구성, 실행 절차, 검증 기록을 확인하세요.</p>
+    </section>
+    <form class="filters" role="search">
+      <label>실험 검색<input id="query" type="search" placeholder="예: BGP, Restic, UI" autocomplete="off"></label>
+      <label>운영 랩<select id="lab"><option value="">전체 랩</option></select></label>
+      <label>검증 상태<select id="status">
+        <option value="">전체 상태</option>
+        <option value="LOCAL_VALIDATED">로컬 검증</option>
+        <option value="PREVIOUS_LOCAL_EVIDENCE">기존 로컬 검증 기록</option>
+        <option value="SOURCE_EXTRACTED_NOT_REVALIDATED">이관 자료 · 재검증 전</option>
+      </select></label>
+    </form>
+    <p class="result" id="result" role="status">실험 목록을 불러오는 중입니다.</p>
+    <section id="catalog" class="grid" aria-label="운영 랩 목록"></section>
+  </main>
+  <template id="group-template">
+    <article class="group">
+      <header><h2><a></a></h2><span></span></header>
+      <ul></ul>
+    </article>
+  </template>
+  <template id="experiment-template">
+    <li><a></a><small></small></li>
+  </template>
+</body>
+</html>

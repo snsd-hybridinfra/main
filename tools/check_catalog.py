@@ -38,7 +38,7 @@ def check_catalog(root):
             link = (path.relative_to(folder) / "README.md").as_posix()
             if not (folder / link).is_file() or f"]({link})" not in index:
                 raise ValueError(f"Missing experiment README or link: {path}")
-            if experiment["status"] not in {"PREVIOUS_LOCAL_EVIDENCE", "SOURCE_EXTRACTED_NOT_REVALIDATED"}:
+            if experiment["status"] not in {"LOCAL_VALIDATED", "PREVIOUS_LOCAL_EVIDENCE", "SOURCE_EXTRACTED_NOT_REVALIDATED"}:
                 raise ValueError(f"Unknown evidence status: {path}")
             listed.add(path)
             experiments.add(path)

@@ -1,0 +1,35 @@
+:root {
+  font-family: "Inter", "Noto Sans KR", system-ui, sans-serif;
+  background: #f4f7f6;
+  color: #172a25;
+  line-height: 1.55;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-underline-offset: .2em; }
+a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #16725b; outline-offset: 3px; }
+.wrap { width: min(100% - 2rem, 72rem); margin-inline: auto; }
+.top { background: #102e27; color: #f2fffa; }
+.top-inner { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem 2rem; padding-block: .75rem; }
+.wordmark { font-weight: 750; text-decoration: none; }
+nav { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .9rem; }
+nav a { color: #e5f1ed; }
+main { padding-block: clamp(2rem, 6vw, 4rem); }
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -.045em; line-height: 1.15; }
+.intro p { color: #455b53; margin: .9rem 0 1.8rem; }
+.filters { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .9rem; font-weight: 650; }
+input, select { min-width: 0; width: 100%; min-height: 2.8rem; padding: .5rem .7rem; border: 1px solid #9eb4aa; border-radius: .45rem; background: white; color: inherit; font: inherit; font-weight: 400; }
+.result { margin-block: 1.5rem .75rem; color: #455b53; font-size: .9rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; align-items: start; }
+.group { min-width: 0; background: #fff; border: 1px solid #cedbd5; border-radius: .7rem; overflow: hidden; }
+.group header { display: flex; justify-content: space-between; gap: 1rem; align-items: center; background: #e7f2ed; padding: .85rem 1rem; }
+.group h2 { margin: 0; font-size: 1.1rem; }
+.group header span { white-space: nowrap; color: #365449; font-size: .85rem; }
+ul { list-style: none; margin: 0; padding: 0 1rem; }
+li { padding: .7rem 0; display: grid; gap: .15rem; overflow-wrap: anywhere; }
+li + li { border-top: 1px solid #e0e9e5; }
+li a { font-weight: 600; }
+li small { color: #53645e; }
+li small[data-status="LOCAL_VALIDATED"] { color: #155c45; }
+@media (max-width: 42rem) { .filters { grid-template-columns: 1fr; } }

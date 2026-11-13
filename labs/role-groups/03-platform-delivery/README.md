@@ -18,6 +18,7 @@ python3 tools/run_role.py 03-platform-delivery
 
 | 실험 | 검증 기록 |
 |---|---|
+| [운영 실험 카탈로그 UI](experiments/portfolio-catalog/README.md) | 로컬 로직·링크 검증 |
 | [Self-Service Infrastructure Request API](experiments/self-service-request-api/README.md) | 이관 자료 · 개별 재검증 전 |
 | [Kubernetes Manifest, Policy & GitOps Source](experiments/kubernetes-gitops/README.md) | 이관 자료 · 개별 재검증 전 |
 | [Container Build Supply Chain & Restricted Runner](experiments/container-supply-chain/README.md) | 이관 자료 · 개별 재검증 전 |

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "lab_count": 7,
-  "experiment_count": 51,
+  "experiment_count": 52,
   "labs": [
     {
       "id": "01-network-fabric",
@@ -9,35 +9,43 @@
       "experiments": [
         {
           "path": "labs/role-groups/01-network-fabric/experiments/bgp-ecmp",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "BGP ECMP Spine-Leaf Lab"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/evpn-vxlan",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "BGP EVPN / VXLAN L2VNI Lab"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/ai-dc-network",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "AI DC Network: 공유 병목과 지연"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/load-balancer-ha",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "Edge Load Balancer HA: 관리면·사용자망·OT망 분리와 백엔드 장애 복구"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/network-digital-twin",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "Network Digital Twin: 애플리케이션 경로·AIDC Control Plane 의도 검증"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/ai-multiregion-data-path",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "AI Multi-Region Data Path: Hub 원본과 Spoke 캐시"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/eve-network-assurance",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "EVE-NG Routing Model & Read-Only Assurance"
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/dandelion-service-topology",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "OpenStack Service Topology & HA Boundaries"
         }
       ]
     },
@@ -47,39 +55,48 @@
       "experiments": [
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/terraform-security-validation",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "Terraform Security Validation: 공개 SSH 탐지와 수정 재검증"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/aws-2tier-vpc",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "AWS 2-Tier VPC with Ansible"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/openstack-ansible-operations",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "OpenStack Provisioning and Ansible Day-2 Operations"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/cloud-network-access-baselines",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Cloud Network and Access Guardrails"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/cost-cleanup-guardrails",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Cloud Cost & Resource Cleanup Guardrails"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/multicloud-network-iac",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "AWS & Azure Network IaC Baselines"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/k3s-ansible-bootstrap",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "k3s Single-Node Bootstrap via Ansible"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/openstack-network-validation",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "OpenStack Network IaC & Host Validation"
         },
         {
           "path": "labs/role-groups/02-cloud-foundation/experiments/disposable-lab-host-provisioning",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Disposable Lab VM and Storage Provisioning"
         }
       ]
     },
@@ -88,40 +105,54 @@
       "title": "Platform Engineering & Application Delivery",
       "experiments": [
         {
+          "path": "labs/role-groups/03-platform-delivery/experiments/portfolio-catalog",
+          "status": "LOCAL_VALIDATED",
+          "title": "운영 실험 카탈로그 UI"
+        },
+        {
           "path": "labs/role-groups/03-platform-delivery/experiments/container-supply-chain",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Container Build Supply Chain & Restricted Runner"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/self-service-request-api",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Self-Service Infrastructure Request API"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/approval-grant-lifecycle",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Approval, Access Grant and Expiration"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/terraform-runner-blueprints",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "OpenStack Terraform Blueprints & Job Runner"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/agent-data-contracts",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Agent Sandbox & Data Exchange Contracts"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/kubernetes-gitops",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Kubernetes Manifest, Policy & GitOps Source"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/postgres-schema-migrations",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "PostgreSQL Schema, RBAC and Alembic Migrations"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/portal-ui-contracts",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Self-Service / Admin Portal UI Contracts"
         },
         {
           "path": "labs/role-groups/03-platform-delivery/experiments/edge-security-service-contracts",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Edge WAF, AuthN/AuthZ and Service API Contracts"
         }
       ]
     },
@@ -131,39 +162,48 @@
       "experiments": [
         {
           "path": "labs/role-groups/04-security-trust/experiments/iam-sts",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "IAM / STS: 탈취된 역할의 행동 범위 줄이기"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/aaa-radius",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "AAA / RADIUS: 승인·거부 정책 확인"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/ai-agent-security",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "AI Agent Security: 서명된 실행 범위와 도구 호출 경계"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/vulnerability-prioritization",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "Infrastructure Vulnerability Prioritization"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/kubernetes-rbac",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "Kubernetes ServiceAccount 최소 권한 Lab"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/security-baselines",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Zero Trust Security Control Baselines"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/identity-device-assurance",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Identity & Device Assurance Controls"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/zero-trust-package-contracts",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Zero Trust Package Contracts & Rollback Criteria"
         },
         {
           "path": "labs/role-groups/04-security-trust/experiments/zero-trust-target-architecture",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Zero Trust Target Architecture and Acceptance Maps"
         }
       ]
     },
@@ -173,23 +213,28 @@
       "experiments": [
         {
           "path": "labs/role-groups/05-observability-sre/experiments/sanitized-observability",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Bounded Observability (Grafana / Loki / Alloy)"
         },
         {
           "path": "labs/role-groups/05-observability-sre/experiments/metric-anomaly-scoring",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Deterministic Metric Anomaly Scoring and Reporting"
         },
         {
           "path": "labs/role-groups/05-observability-sre/experiments/service-observability",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Service Observability, Probes & Traffic Health"
         },
         {
           "path": "labs/role-groups/05-observability-sre/experiments/dandelion-health-triage",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Multi-Service Health Triage and Escalation"
         },
         {
           "path": "labs/role-groups/05-observability-sre/experiments/openstack-observability-deployment",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "OpenStack Monitoring VM + mTLS Deployment Reference"
         }
       ]
     },
@@ -199,31 +244,38 @@
       "experiments": [
         {
           "path": "labs/role-groups/06-change-automation/experiments/restconf-python",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "RESTCONF / Python: API와 CLI 상태 대조"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/automation-approval",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Change Automation Approval & Policy Gates"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/continuous-verification",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Continuous Verification & Evidence Freshness"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/day2-operations-runbooks",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Day-2 Operations & Failure Recovery Runbooks"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/validation-fixtures",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Validation Harness and Synthetic Test Fixtures"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/remote-readonly-validation",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Bounded Remote Read-Only Validation & Evidence Pipeline"
         },
         {
           "path": "labs/role-groups/06-change-automation/experiments/repository-quality-gates",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Repository Quality Gates & Change Documentation"
         }
       ]
     },
@@ -233,19 +285,23 @@
       "experiments": [
         {
           "path": "labs/role-groups/07-recovery-dr/experiments/backup-recovery",
-          "status": "PREVIOUS_LOCAL_EVIDENCE"
+          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "title": "백업·복구: 합성 서비스의 RTO/RPO 측정"
         },
         {
           "path": "labs/role-groups/07-recovery-dr/experiments/postgres-restic-verification",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "PostgreSQL Backup + Restic Evidence Verification"
         },
         {
           "path": "labs/role-groups/07-recovery-dr/experiments/dandelion-restic-recovery",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Dandelion Restic Backup and Recovery Scenarios"
         },
         {
           "path": "labs/role-groups/07-recovery-dr/experiments/restic-restore-maintenance",
-          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED"
+          "status": "SOURCE_EXTRACTED_NOT_REVALIDATED",
+          "title": "Restic Restore, Maintenance & Scheduled Backups"
         }
       ]
     }

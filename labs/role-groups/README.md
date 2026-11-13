@@ -14,6 +14,7 @@ python3 tools/run_role.py all
 
 ## 검증 범위
 
+- **로컬 검증**은 해당 실험 README에 명시한 로컬 실행 환경에서 확인한 결과입니다.
 - **기존 로컬 검증 기록**은 개별 실험의 과거 실행 환경과 입력에 해당합니다.
 - **이관 자료 · 개별 재검증 전**은 선별한 코드나 설계입니다. 공통 실행에서 사용한 일부 입력은 공통 실행 기록의 범위로 확인할 수 있습니다.
 - **랩 간 실험**으로 가상 IDC 패브릭에 [경로 검증](01-network-fabric/idc/architecture.md), [관측](05-observability-sre/idc/README.md), [변경·원복](06-change-automation/idc/README.md), [장애 재현](07-recovery-dr/idc/validation.md)을 연결했습니다.
