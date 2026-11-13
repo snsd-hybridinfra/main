@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "source": "live-exporter-and-frr-loki",
+  "from": "2026-11-13T09:36:09.252+00:00",
+  "to": "2026-11-13T09:36:41.030+00:00",
+  "correlation_window_s": 10,
+  "recent_change_window_s": 300,
+  "incidents": [
+    {
+      "incident_id": "inc-63895cbc77285831bbe7",
+      "link_id": "U1",
+      "started_at": "2026-11-13T09:36:14.441+00:00",
+      "recovered_at": "2026-11-13T09:36:29.331+00:00",
+      "status": "recovered",
+      "nodes": [
+        "leaf1",
+        "spine1"
+      ],
+      "endpoints": [
+        {
+          "node": "spine1",
+          "interface": "eth1"
+        },
+        {
+          "node": "leaf1",
+          "interface": "eth1"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "evt-b745eeec6f7c5b7b7b36",
+          "timestamp": "2026-11-13T09:36:14.441+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "203.0.113.0",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-f82cec44021a2b40da3e",
+          "timestamp": "2026-11-13T09:36:14.441+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "loki",
+          "peer": "203.0.113.0",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-153ba69ea679e80c9fe8",
+          "timestamp": "2026-11-13T09:36:14.442+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "203.0.113.1",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-bfb8adc1e1f6b638d9be",
+          "timestamp": "2026-11-13T09:36:14.442+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "loki",
+          "peer": "203.0.113.1",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-427ec678b41b82e51f3f",
+          "timestamp": "2026-11-13T09:36:15.161+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "exporter",
+          "peer": "203.0.113.0",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-8c1e153616929ccc9bfa",
+          "timestamp": "2026-11-13T09:36:15.161+00:00",
+          "kind": "interface_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "exporter",
+          "interface": "eth1"
+        },
+        {
+          "event_id": "evt-bc77a959bfbc81997ece",
+          "timestamp": "2026-11-13T09:36:15.161+00:00",
+          "kind": "interface_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "exporter",
+          "interface": "eth1"
+        },
+        {
+          "event_id": "evt-e359d56da070c36de3e5",
+          "timestamp": "2026-11-13T09:36:15.161+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "exporter",
+          "peer": "203.0.113.1",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-0d117876db73a7a0f991",
+          "timestamp": "2026-11-13T09:36:19.437+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "192.0.2.11",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-fb483d9531505dd75e96",
+          "timestamp": "2026-11-13T09:36:19.437+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "loki",
+          "peer": "192.0.2.11",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-1bec07dc30f0c55e8590",
+          "timestamp": "2026-11-13T09:36:19.457+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "192.0.2.1",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-e4db6e3ea89b110db4ac",
+          "timestamp": "2026-11-13T09:36:19.457+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "loki",
+          "peer": "192.0.2.1",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-9a44f1ab037f2c554193",
+          "timestamp": "2026-11-13T09:36:21.110+00:00",
+          "kind": "bgp_down",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "exporter",
+          "peer": "192.0.2.1",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-fc38d0ebf5051d6e0b27",
+          "timestamp": "2026-11-13T09:36:21.110+00:00",
+          "kind": "bgp_down",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "exporter",
+          "peer": "192.0.2.11",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-c998bf41e89531aa2ac3",
+          "timestamp": "2026-11-13T09:36:27.081+00:00",
+          "kind": "bgp_up",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "203.0.113.1",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-37c84c31efa36caf146e",
+          "timestamp": "2026-11-13T09:36:27.084+00:00",
+          "kind": "bgp_up",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "203.0.113.0",
+          "family": "ipv4"
+        },
+        {
+          "event_id": "evt-2efd45bb9d73434bc43d",
+          "timestamp": "2026-11-13T09:36:28.411+00:00",
+          "kind": "bgp_up",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "192.0.2.11",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-884982f1edaf70ffc12c",
+          "timestamp": "2026-11-13T09:36:28.416+00:00",
+          "kind": "bgp_up",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "frr_file",
+          "peer": "192.0.2.1",
+          "family": "evpn"
+        },
+        {
+          "event_id": "evt-db5f35f5bab3b4b57a36",
+          "timestamp": "2026-11-13T09:36:29.331+00:00",
+          "kind": "interface_up",
+          "node": "leaf1",
+          "link_id": "U1",
+          "source": "exporter",
+          "interface": "eth1"
+        },
+        {
+          "event_id": "evt-e41099ffc6dcae71b2da",
+          "timestamp": "2026-11-13T09:36:29.331+00:00",
+          "kind": "interface_up",
+          "node": "spine1",
+          "link_id": "U1",
+          "source": "exporter",
+          "interface": "eth1"
+        }
+      ],
+      "cause": {
+        "kind": "link_failure_suspected",
+        "confidence": "suspected",
+        "basis": [
+          "evt-153ba69ea679e80c9fe8",
+          "evt-427ec678b41b82e51f3f",
+          "evt-8c1e153616929ccc9bfa",
+          "evt-b745eeec6f7c5b7b7b36",
+          "evt-bc77a959bfbc81997ece",
+          "evt-bfb8adc1e1f6b638d9be",
+          "evt-e359d56da070c36de3e5",
+          "evt-f82cec44021a2b40da3e"
+        ]
+      },
+      "recent_changes": [
+        {
+          "timestamp": "2026-11-13T09:34:09.992+00:00",
+          "event": "restore_applied",
+          "run": "description",
+          "node": "leaf1",
+          "candidate": "description",
+          "interface": "eth1",
+          "seconds_before": 124.449,
+          "relation": "temporal_and_scope_only"
+        },
+        {
+          "timestamp": "2026-11-13T09:35:22.646+00:00",
+          "event": "restore_applied",
+          "run": "harmless",
+          "node": "leaf1",
+          "candidate": "harmless",
+          "interface": null,
+          "seconds_before": 51.795,
+          "relation": "temporal_and_scope_only"
+        }
+      ]
+    }
+  ]
+}

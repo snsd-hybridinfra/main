@@ -1,0 +1,554 @@
+{
+  "runtime": {
+    "kernel": "6.12.116+deb13-amd64",
+    "frr": "10.3",
+    "ansible_core": "2.19.11",
+    "namespace_cleanup": true
+  },
+  "baseline": {
+    "timestamp": "2026-11-13T09:32:25.236+00:00",
+    "pass": true,
+    "failures": [],
+    "neighbors": {
+      "spine1/ipv4": {
+        "203.0.113.1": "Established",
+        "203.0.113.3": "Established"
+      },
+      "spine1/evpn": {
+        "192.0.2.11": "Established",
+        "192.0.2.12": "Established"
+      },
+      "spine2/ipv4": {
+        "203.0.113.5": "Established",
+        "203.0.113.7": "Established"
+      },
+      "spine2/evpn": {
+        "192.0.2.11": "Established",
+        "192.0.2.12": "Established"
+      },
+      "leaf1/ipv4": {
+        "203.0.113.0": "Established",
+        "203.0.113.4": "Established"
+      },
+      "leaf1/evpn": {
+        "192.0.2.1": "Established",
+        "192.0.2.2": "Established"
+      },
+      "leaf2/ipv4": {
+        "203.0.113.2": "Established",
+        "203.0.113.6": "Established"
+      },
+      "leaf2/evpn": {
+        "192.0.2.1": "Established",
+        "192.0.2.2": "Established"
+      }
+    },
+    "leaves": {
+      "leaf1": {
+        "next_hops": [
+          "203.0.113.0",
+          "203.0.113.4"
+        ],
+        "imet": true,
+        "remote_mac": true,
+        "l3vni": {
+          "vni": 50000,
+          "type": "L3",
+          "tenantVrf": "TENANT",
+          "state": "Up",
+          "l2Vnis": [
+            1010,
+            1020
+          ]
+        },
+        "tenant_routes": [
+          {
+            "dst": "198.51.100.128/26",
+            "nhid": 32,
+            "gateway": "192.0.2.12",
+            "dev": "br4090",
+            "protocol": "bgp",
+            "metric": 20,
+            "flags": [
+              "onlink"
+            ]
+          }
+        ],
+        "underlay_isolated": true
+      },
+      "leaf2": {
+        "next_hops": [
+          "203.0.113.2",
+          "203.0.113.6"
+        ],
+        "imet": true,
+        "remote_mac": true,
+        "l3vni": {
+          "vni": 50000,
+          "type": "L3",
+          "tenantVrf": "TENANT",
+          "state": "Up",
+          "l2Vnis": [
+            1010,
+            1030
+          ]
+        },
+        "tenant_routes": [
+          {
+            "dst": "198.51.100.64/26",
+            "nhid": 30,
+            "gateway": "192.0.2.11",
+            "dev": "br4090",
+            "protocol": "bgp",
+            "metric": 20,
+            "flags": [
+              "onlink"
+            ]
+          }
+        ],
+        "underlay_isolated": true
+      }
+    },
+    "probes": {
+      "l2_mtu": true,
+      "l3_icmp": true,
+      "l2_http": true,
+      "l3_http": true
+    }
+  },
+  "drills": {
+    "spine-link": {
+      "fault_at": "2026-11-13T09:36:14.415+00:00",
+      "restore_at": "2026-11-13T09:36:27.035+00:00",
+      "measurements": {
+        "fib_convergence_s": 0.198,
+        "fib_restore_s": 0.225,
+        "http_state": "no_outage_observed",
+        "http_first_failure_s": null,
+        "http_outage_s": null,
+        "http_restore_s": null,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 50,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_restore": {
+          "sent": 14,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        }
+      },
+      "during": {
+        "timestamp": "2026-11-13T09:36:26.444+00:00",
+        "fib": [
+          "203.0.113.4"
+        ],
+        "http": true,
+        "ipv4": {
+          "203.0.113.0": "Active",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Active",
+          "192.0.2.2": "Established"
+        },
+        "link": "DOWN",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      },
+      "first_observation_s": 0.026
+    },
+    "bgp-neighbor": {
+      "fault_at": "2026-11-13T09:36:46.261+00:00",
+      "restore_at": "2026-11-13T09:36:58.994+00:00",
+      "measurements": {
+        "fib_convergence_s": 0.464,
+        "fib_restore_s": 2.55,
+        "http_state": "recovered",
+        "http_first_failure_s": 0.672,
+        "http_outage_s": 0.092,
+        "http_restore_s": null,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 51,
+          "lost": 1,
+          "errors": 0,
+          "loss_pct": 1.96
+        },
+        "icmp_restore": {
+          "sent": 22,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        }
+      },
+      "during": {
+        "timestamp": "2026-11-13T09:36:58.373+00:00",
+        "fib": [
+          "203.0.113.4"
+        ],
+        "http": true,
+        "ipv4": {
+          "203.0.113.0": "Idle (Admin)",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Active",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 4
+      },
+      "first_observation_s": 0.092
+    },
+    "routing-policy": {
+      "fault_at": "2026-11-13T09:38:07.887+00:00",
+      "restore_at": "2026-11-13T09:38:21.051+00:00",
+      "measurements": {
+        "fib_convergence_s": 0.403,
+        "fib_restore_s": 0.595,
+        "http_state": "recovered",
+        "http_first_failure_s": 0.463,
+        "http_outage_s": 13.488,
+        "http_restore_s": 0.788,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 52,
+          "lost": 51,
+          "errors": 0,
+          "loss_pct": 98.08
+        },
+        "icmp_restore": {
+          "sent": 8,
+          "lost": 2,
+          "errors": 0,
+          "loss_pct": 25.0
+        }
+      },
+      "during": {
+        "timestamp": "2026-11-13T09:38:20.169+00:00",
+        "fib": [],
+        "http": false,
+        "ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "UP",
+          "eth2": "UP",
+          "eth3": "UP"
+        },
+        "leaf2_processes": 3
+      }
+    },
+    "leaf-device": {
+      "fault_at": "2026-11-13T09:37:20.340+00:00",
+      "restore_at": "2026-11-13T09:37:33.326+00:00",
+      "measurements": {
+        "fib_convergence_s": 1.161,
+        "fib_restore_s": 7.299,
+        "http_state": "recovered",
+        "http_first_failure_s": 0.662,
+        "http_outage_s": 20.938,
+        "http_restore_s": 8.614,
+        "icmp_baseline": {
+          "sent": 3,
+          "lost": 0,
+          "errors": 0,
+          "loss_pct": 0.0
+        },
+        "icmp_fault": {
+          "sent": 52,
+          "lost": 52,
+          "errors": 0,
+          "loss_pct": 100.0
+        },
+        "icmp_restore": {
+          "sent": 44,
+          "lost": 32,
+          "errors": 0,
+          "loss_pct": 72.73
+        }
+      },
+      "during": {
+        "timestamp": "2026-11-13T09:37:32.527+00:00",
+        "fib": [],
+        "http": false,
+        "ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "link": "UP",
+        "leaf2_ports": {
+          "eth1": "DOWN",
+          "eth2": "DOWN",
+          "eth3": "DOWN"
+        },
+        "leaf2_processes": 0
+      },
+      "first_observation_s": 0.017
+    }
+  },
+  "monitoring": {
+    "grafana": "13.1.0",
+    "dashboard_uid": "idc-incidents",
+    "panels": 4,
+    "published_records": 6,
+    "unique_incidents": 5,
+    "failed_change_events": [
+      {
+        "run": "bad-policy",
+        "node": "leaf1",
+        "candidate": "break-vtep",
+        "interface": null,
+        "status": "FAIL",
+        "event": "validation_failed",
+        "failed_checks": 16
+      }
+    ],
+    "spine_link_alerts": [
+      {
+        "timestamp": "2026-11-13T09:36:25.014+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "spine1",
+        "interface": null,
+        "peer": "203.0.113.1",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:25.014+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "leaf1",
+        "interface": null,
+        "peer": "203.0.113.0",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:25.014+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "spine1",
+        "interface": null,
+        "peer": "192.0.2.11",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:25.014+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "leaf1",
+        "interface": null,
+        "peer": "192.0.2.1",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:19.177+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "spine1",
+        "interface": null,
+        "peer": "203.0.113.1",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:19.169+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCBGPPeerDown",
+        "node": "leaf1",
+        "interface": null,
+        "peer": "203.0.113.0",
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:19.155+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCInterfaceDown",
+        "node": "spine1",
+        "interface": "eth1",
+        "peer": null,
+        "path": null
+      },
+      {
+        "timestamp": "2026-11-13T09:36:19.154+00:00",
+        "event": "alert",
+        "status": "firing",
+        "alert": "IDCInterfaceDown",
+        "node": "leaf1",
+        "interface": "eth1",
+        "peer": null,
+        "path": null
+      }
+    ],
+    "bgp_series_up": 16
+  },
+  "incident_summaries": {
+    "spine-link": [
+      {
+        "link_id": "U1",
+        "incident_id": "inc-63895cbc77285831bbe7",
+        "started_at": "2026-11-13T09:36:14.441+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "link_failure_suspected",
+          "confidence": "suspected",
+          "basis": [
+            "evt-153ba69ea679e80c9fe8",
+            "evt-427ec678b41b82e51f3f",
+            "evt-8c1e153616929ccc9bfa",
+            "evt-b745eeec6f7c5b7b7b36",
+            "evt-bc77a959bfbc81997ece",
+            "evt-bfb8adc1e1f6b638d9be",
+            "evt-e359d56da070c36de3e5",
+            "evt-f82cec44021a2b40da3e"
+          ]
+        }
+      }
+    ],
+    "bgp-neighbor": [
+      {
+        "link_id": "U1",
+        "incident_id": "inc-b1647da2a851570f5d79",
+        "started_at": "2026-11-13T09:36:46.353+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "undetermined",
+          "confidence": "uncertain",
+          "basis": [
+            "evt-18aec68bc5e75d9ee45b",
+            "evt-1a0eda22a1993e46ef2f",
+            "evt-2335a3842404787f5a40",
+            "evt-2455a63aa67c4b81977e",
+            "evt-4bcd37a9b74bd2e84c17",
+            "evt-6e1f192c50f5e98c1240",
+            "evt-8c27e87f8804f67e977c",
+            "evt-8c30f43dc6624d343720",
+            "evt-b40b3ed2c4dd5d65c2a5",
+            "evt-be74d20e247416f3ad11",
+            "evt-e526294030af4299702d",
+            "evt-efabc906df88b864a346"
+          ]
+        }
+      }
+    ],
+    "leaf-device": [
+      {
+        "link_id": "U2",
+        "incident_id": "inc-651b1ca8a209bccd65cf",
+        "started_at": "2026-11-13T09:37:20.357+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "link_failure_suspected",
+          "confidence": "suspected",
+          "basis": [
+            "evt-0e7ac5fef6db21980781",
+            "evt-11b43e3048c6727951d5",
+            "evt-20e3dd054445ff043de4",
+            "evt-3328908d791a1f2722c5",
+            "evt-868134d8fcb658e9ea51",
+            "evt-b0d9845b932ff070bd86",
+            "evt-fe5264dd641fbd36f54d"
+          ]
+        }
+      },
+      {
+        "link_id": "U4",
+        "incident_id": "inc-f33c5bcb7ae6aa03ebdc",
+        "started_at": "2026-11-13T09:37:20.373+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "link_failure_suspected",
+          "confidence": "suspected",
+          "basis": [
+            "evt-3881d12acf635970e70c",
+            "evt-414c5aa43aeeb4a49770",
+            "evt-612d53aff8d7be7cb1b0",
+            "evt-806b96323d6fd7fa69d0",
+            "evt-8b4546bc705287d68beb",
+            "evt-b7dcca2c2aa932669ed1",
+            "evt-eafc02d3f39abac37218"
+          ]
+        }
+      },
+      {
+        "link_id": "H2",
+        "incident_id": "inc-7ea22bc667ea3c9bccde",
+        "started_at": "2026-11-13T09:37:21.158+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "undetermined",
+          "confidence": "uncertain",
+          "basis": [
+            "evt-2c622d156718d36191cb"
+          ]
+        }
+      }
+    ],
+    "spine-link-repeat": [
+      {
+        "link_id": "U1",
+        "incident_id": "inc-63895cbc77285831bbe7",
+        "started_at": "2026-11-13T09:36:14.441+00:00",
+        "status": "recovered",
+        "cause": {
+          "kind": "link_failure_suspected",
+          "confidence": "suspected",
+          "basis": [
+            "evt-153ba69ea679e80c9fe8",
+            "evt-427ec678b41b82e51f3f",
+            "evt-8c1e153616929ccc9bfa",
+            "evt-b745eeec6f7c5b7b7b36",
+            "evt-bc77a959bfbc81997ece",
+            "evt-bfb8adc1e1f6b638d9be",
+            "evt-e359d56da070c36de3e5",
+            "evt-f82cec44021a2b40da3e"
+          ]
+        }
+      }
+    ]
+  }
+}
