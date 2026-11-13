@@ -11,8 +11,8 @@ POLICY_SLOT = "ip prefix-list FABRIC-LOOPBACKS seq 5"
 CANDIDATES = {"harmless": "192.0.2.250/32", "break-vtep": REMOTE}
 
 
-def running():
-    result = vty(NODE, "show running-config")
+def running(node=NODE):
+    result = vty(node, "show running-config")
     checked_cli(result)
     return result.stdout
 
@@ -26,8 +26,15 @@ def config(*commands):
     checked_cli(vty(NODE, "configure terminal", *commands, timeout=8))
 
 
-def change_policy(candidate, apply):
+def policy_commands(candidate, apply):
     command = f"{POLICY_SLOT} deny {CANDIDATES[candidate]}"
-    config(command if apply else "no " + command)
-    for peer, _ in peers(NODE, "ipv4"):
-        checked_cli(vty(NODE, f"clear bgp ipv4 unicast {peer} soft in"))
+    # Removing by sequence also removes the rule from the mgmtd datastore.
+    return [
+        ["configure terminal", command if apply else f"no {POLICY_SLOT}"],
+        *[[f"clear bgp ipv4 unicast {peer} soft in"] for peer, _ in peers(NODE, "ipv4")],
+    ]
+
+
+def change_policy(candidate, apply):
+    for commands in policy_commands(candidate, apply):
+        checked_cli(vty(NODE, *commands, timeout=8))

@@ -1,0 +1,127 @@
+{
+  "uid": "idc-incidents",
+  "title": "IDC Incident Correlation",
+  "schemaVersion": 39,
+  "timezone": "utc",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "refresh": "10s",
+  "tags": [ "idc", "incident" ],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Published incidents",
+      "type": "stat",
+      "datasource": {
+        "type": "loki",
+        "uid": "idc-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "description": "Unique case IDs published in the selected interval.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "idc-loki"
+          },
+          "expr": "count(sum by (incident_id) (count_over_time({job=\"idc-syslog\",app=\"incident\"} | json | __error__=\"\" [$__range]))) or vector(0)",
+          "queryType": "instant"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [ "lastNotNull" ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Interface / BGP alerts",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "idc-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "description": "Firing raw alerts by type.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "idc-prometheus"
+          },
+          "expr": "count by (alertname) (ALERTS{alertname=~\"IDCInterfaceDown|IDCBGPPeerDown\",alertstate=\"firing\"})",
+          "legendFormat": "{{alertname}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Incident summaries",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "idc-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 24,
+        "h": 9
+      },
+      "description": "Case updates may repeat the same ID.",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "idc-loki"
+          },
+          "expr": "{job=\"idc-syslog\",app=\"incident\"} | json | line_format \"{{.incident_id}} | {{.link_id}} | {{.status}} | {{.cause}} | changes={{.changes}}\"",
+          "queryType": "range"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Failed change checks",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "idc-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 24,
+        "h": 8
+      },
+      "description": "",
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "idc-loki"
+          },
+          "expr": "{job=\"idc-syslog\",app=\"change-validation\"} | json | line_format \"{{.node}} | {{.run}} | {{.candidate}} | {{.status}} | checks={{.failed_checks}}\"",
+          "queryType": "range"
+        }
+      ]
+    }
+  ]
+}

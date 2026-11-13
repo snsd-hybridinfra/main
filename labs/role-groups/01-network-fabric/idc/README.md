@@ -1,6 +1,15 @@
 # IDC Network Fabric
 
-[토폴로지와 주소표](architecture.md) · [단계별 학습·검증 체크리스트](roadmap.md) · [측정 결과](../../07-recovery-dr/idc/validation.md)
+Spine–Leaf 랩에서 장애 알람을 한 사건으로 묶고, 설정 변경 후 서비스 상태를 검증합니다.
+
+[토폴로지와 주소표](architecture.md) · [실행 순서](roadmap.md) · [실측 결과](docs/results.md)
+
+| 작업 | 가이드 |
+|---|---|
+| 구성 이해 | [아키텍처](docs/architecture.md) |
+| 알람과 변경 이력 연계 | [장애 상관분석](docs/incident-analysis.md) |
+| Ansible 적용 후 검사와 수동 원복 | [변경 검증](docs/change-validation.md) |
+| 장애 시나리오 실행 | [테스트 절차](docs/test-scenarios.md) · [기술자료](docs/technical-references.md) |
 
 ## FRRouting 환경
 

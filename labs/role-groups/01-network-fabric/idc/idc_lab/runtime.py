@@ -11,6 +11,7 @@ import signal
 import subprocess
 import sys
 import time
+from uuid import uuid4
 
 from .model import DATA, HOSTS, L3_BRIDGE, L3_VNI, LAB, LEAVES, LINKS, NODES, ROUTERS, STATE, VLANS, VRF
 from .model import address, interfaces, leaf_vlans, local_prefix
@@ -220,7 +221,7 @@ def up():
                  str(LAB / "idc_lab/service.py"), str(DATA["service_port"])],
                 stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True,
             )
-        (STATE / "ready").touch()
+        (STATE / "ready").write_text(uuid4().hex + "\n", encoding="utf-8")
     except BaseException:
         down()
         raise

@@ -1,0 +1,21 @@
+---
+- name: Apply the selected lab change to Leaf1
+  hosts: idc_routers
+  gather_facts: false
+  become: true
+  any_errors_fatal: true
+  tasks:
+    - name: Verify the lab VTY target
+      ansible.builtin.assert:
+        that:
+          - idc_change_target == 'leaf1'
+          - idc_change_vty == ['vtysh', '--vty_socket', '/run/frr/idc-leaf1', '--config_dir', '/run/idc-resilience/leaf1']
+      run_once: true
+
+    - name: Apply the selected candidate through the lab socket
+      ansible.builtin.command:
+        argv: "{{ idc_change_vty + item }}"
+      loop: "{{ idc_change_groups }}"
+      when: inventory_hostname == idc_change_target
+      register: applied
+      failed_when: applied.rc != 0 or '% ' in (applied.stdout ~ applied.stderr)

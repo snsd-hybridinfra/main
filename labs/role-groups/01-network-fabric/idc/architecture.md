@@ -55,4 +55,4 @@ Host2의 `/healthz`를 VLAN 10 L2와 VLAN 20→30 L3 경로에서 확인한다. 
 
 DATA CENTER KOREA 2026의 공식 전시 개요와 프로그램에서 확인한 DCIM·관제·운영 자동화 주제를 적용했다. 링크·정책·복구 시나리오와 측정값은 이 가상 실습에서 얻는다. [공식 전시 개요](https://datacenterkorea.kr/exhibtion/introduce/) · [공식 프로그램](https://datacenterkorea.kr/conference-overview/)
 
-개인 포트폴리오의 메인 저장소는 [snsd-hybridinfra/main](https://github.com/snsd-hybridinfra/main)이다. [snsd-multicloud-ops](https://github.com/snsd-hybridinfra/snsd-multicloud-ops)의 Ansible·관제·네트워크 참고 자료는 해당 역할의 학습 자산으로 연결한다. 패브릭 주소는 RFC 5737 문서용 대역이고 외부 회선은 합성 원장에만 등록한다.
+패브릭 주소는 RFC 5737 문서용 대역이고 외부 회선은 합성 원장에만 등록한다. [운영 랩 아키텍처](docs/architecture.md)
