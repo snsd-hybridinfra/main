@@ -1,0 +1,31 @@
+name: IDC IP duplicate offline lab
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'labs/role-groups/05-observability-sre/idc/ip-duplicate/**'
+      - '.github/workflows/ip-duplicate-lab.yml'
+  push:
+    paths:
+      - 'labs/role-groups/05-observability-sre/idc/ip-duplicate/**'
+      - '.github/workflows/ip-duplicate-lab.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Unit tests (synthetic data only)
+        run: python3 -m unittest discover -s labs/role-groups/05-observability-sre/idc/ip-duplicate -p 'test_*.py' -v
+      - name: Simulate alerts without network traffic
+        run: |
+          python3 labs/role-groups/05-observability-sre/idc/ip-duplicate/detect.py \
+            --input labs/role-groups/05-observability-sre/idc/ip-duplicate/fixtures/synthetic.json \
+            --output "$RUNNER_TEMP/alerts.json" \
+            --syslog-output "$RUNNER_TEMP/alerts.syslog"
+          python3 -c 'import json,os; p=os.environ["RUNNER_TEMP"]+"/alerts.json"; a=json.load(open(p))["alerts"]; assert len(a)==2; print("synthetic alerts:",len(a))'
