@@ -1,4 +1,4 @@
-"""Check one-to-one ownership of the portfolio's numbered labs."""
+"""Check that every experiment belongs to one operating lab."""
 import argparse
 import json
 from pathlib import Path
@@ -10,42 +10,46 @@ GROUP_ROOT = "labs/role-groups"
 
 def check_catalog(root):
     manifest = json.loads((root / GROUP_ROOT / "manifest.json").read_text())
-    canonical = {}
-    for path in sorted((root / "labs").iterdir()):
-        match = re.fullmatch(r"(\d{2})-[a-z0-9-]+", path.name)
-        if not match or not path.is_dir():
-            continue
-        lab_id = int(match[1])
-        if lab_id in canonical:
-            raise ValueError(f"Duplicate lab ID on disk: {lab_id}")
-        if not (path / "README.md").is_file():
-            raise ValueError(f"Missing README: {path.name}")
-        canonical[lab_id] = path.relative_to(root).as_posix()
+    if manifest["schema_version"] != "2.0":
+        raise ValueError("Unsupported catalog schema")
+    group_root = root / GROUP_ROOT
+    portfolio = (root / "README.md").read_text()
+    directories = {p.name for p in group_root.iterdir() if p.is_dir() and re.fullmatch(r"\d{2}-[a-z0-9-]+", p.name)}
+    if any(p.is_dir() and re.match(r"\d{2}-", p.name) for p in (root / "labs").iterdir()):
+        raise ValueError("Legacy experiment directories must be inside their operating lab")
 
-    owners = {}
     groups = set()
-    for group in manifest["groups"]:
-        name = group["id"]
-        if not re.fullmatch(r"\d{2}-[a-z0-9-]+", name) or name in groups:
-            raise ValueError(f"Invalid or duplicate role group: {name}")
+    experiments = set()
+    for lab in manifest["labs"]:
+        name = lab["id"]
+        if name in groups or name not in directories:
+            raise ValueError(f"Duplicate or missing lab: {name}")
         groups.add(name)
-        index = (root / GROUP_ROOT / name / "README.md").read_text()
-        if group["primary_ids"] != [lab["id"] for lab in group["labs"]]:
-            raise ValueError(f"{name}: primary IDs and lab entries differ")
-        for lab in group["labs"]:
-            lab_id, path = lab["id"], lab["path"]
-            if lab_id in owners or canonical.get(lab_id) != path:
-                raise ValueError(f"{name}: duplicate or invalid lab {lab_id} ({path})")
-            link = "../../" + Path(path).name + "/README.md"
-            if f"]({link})" not in index:
-                raise ValueError(f"{name}: missing canonical link for lab {lab_id}")
-            owners[lab_id] = name
+        if f"]({GROUP_ROOT}/{name}/README.md)" not in portfolio:
+            raise ValueError(f"Missing portfolio link: {name}")
+        folder = group_root / name
+        index = (folder / "README.md").read_text()
+        on_disk = {p for p in (folder / "experiments").iterdir() if p.is_dir()}
+        listed = set()
+        for experiment in lab["experiments"]:
+            path = root / experiment["path"]
+            if path not in on_disk or path in experiments:
+                raise ValueError(f"Invalid or duplicate experiment: {path}")
+            link = (path.relative_to(folder) / "README.md").as_posix()
+            if not (folder / link).is_file() or f"]({link})" not in index:
+                raise ValueError(f"Missing experiment README or link: {path}")
+            if experiment["status"] not in {"LOCAL_VALIDATED", "PREVIOUS_LOCAL_EVIDENCE", "SOURCE_EXTRACTED_NOT_REVALIDATED"}:
+                raise ValueError(f"Unknown evidence status: {path}")
+            listed.add(path)
+            experiments.add(path)
+        if listed != on_disk:
+            raise ValueError(f"Unlisted experiments in {name}")
 
-    if owners.keys() != canonical.keys() or manifest["lab_count"] != len(canonical):
-        raise ValueError("Canonical labs and role ownership are inconsistent")
-    if manifest["group_count"] != len(groups):
-        raise ValueError("Group count differs from the manifest")
-    return {"labs": len(canonical), "groups": len(groups), "unique_assignments": len(owners)}
+    if groups != directories or len(groups) != manifest["lab_count"]:
+        raise ValueError("Lab directories and catalog differ")
+    if len(experiments) != manifest["experiment_count"]:
+        raise ValueError("Experiment count differs from the catalog")
+    return {"labs": len(groups), "experiments": len(experiments)}
 
 
 def main():

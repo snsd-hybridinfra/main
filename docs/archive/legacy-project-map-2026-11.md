@@ -64,9 +64,9 @@
 
 | 원본 | 이관된 랩 | 이관 범위 | 아직 보존되지 않은 범위 |
 |---|---|---|---|
-| `snsd-hybridinfra/test` (private) | [15 AWS 2-Tier VPC](../labs/15-aws-2tier-vpc/README.md) | 중복을 제거한 Ansible 코드 14개 | 기존 Git 이력, 중복 폴더 및 생성 예시 일부 |
-| `snsd-hybridinfra/dandelion-cloud-automation` | [16 OpenStack Ansible Operations](../labs/16-openstack-ansible-operations/README.md) | 핵심 Ansible 파일 6개 | 팀 문서, 이미지, 자동 복구 스크립트, 기여 기록 다수 |
-| `snsd-hybridinfra/snsd-multicloud-ops` | [17 Cloud Network & Access Guardrails](../labs/17-cloud-network-access-baselines/README.md) | Terraform·RBAC·기준선 14개 | IDP, 에이전트, 거버넌스, 검증 프레임워크 등 대다수 |
+| `snsd-hybridinfra/test` (private) | [15 AWS 2-Tier VPC](../../labs/role-groups/02-cloud-foundation/experiments/aws-2tier-vpc/README.md) | 중복을 제거한 Ansible 코드 14개 | 기존 Git 이력, 중복 폴더 및 생성 예시 일부 |
+| `snsd-hybridinfra/dandelion-cloud-automation` | [16 OpenStack Ansible Operations](../../labs/role-groups/02-cloud-foundation/experiments/openstack-ansible-operations/README.md) | 핵심 Ansible 파일 6개 | 팀 문서, 이미지, 자동 복구 스크립트, 기여 기록 다수 |
+| `snsd-hybridinfra/snsd-multicloud-ops` | [17 Cloud Network & Access Guardrails](../../labs/role-groups/02-cloud-foundation/experiments/cloud-network-access-baselines/README.md) | Terraform·RBAC·기준선 14개 | IDP, 에이전트, 거버넌스, 검증 프레임워크 등 대다수 |
 
 미이관 범위를 무의미하거나 삭제 가능하다고 판단한 것은 아닙니다. 원본 삭제 전 **전체 Git 미러 백업, 기여자·이슈·PR 및 릴리스 기록 보존, 필요한 고유 자료 재검토**가 필요합니다. 자세한 목록과 기준은 [이관 대장](migration-register.md)을 따릅니다.
 

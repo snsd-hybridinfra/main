@@ -12,7 +12,7 @@
 
 **개인 학습 질문:** Fabric 내부와 경계의 역할을 나누고, VRF·VNI·경로 교환·게이트웨이·격리 정책이 맞물리는 위치를 설명한다.
 
-**연결 랩:** [01 BGP/ECMP](../../labs/01-bgp-ecmp/README.md)·[02 EVPN/VXLAN](../../labs/02-evpn-vxlan/README.md)·[10 Digital Twin](../../labs/10-network-digital-twin/README.md).
+**연결 랩:** [01 BGP/ECMP](../../labs/role-groups/01-network-fabric/experiments/bgp-ecmp/README.md)·[02 EVPN/VXLAN](../../labs/role-groups/01-network-fabric/experiments/evpn-vxlan/README.md)·[10 Digital Twin](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md).
 
 **확장 계획:** 합성 두 Fabric의 경계와 허용 경로를 설계한다. 같은 테넌트 통신, 다른 테넌트 거부, 경계 장애 후 대체 경로를 시험 항목으로 둔다. FRR 기반 모델을 만들더라도 ACI 제품 구현을 검증했다는 의미로 사용하지 않는다.
 
@@ -25,7 +25,7 @@
 
 **개인 학습 질문:** 설정 파일이 문법상 맞는 것과 실제 통신·격리가 의도대로 유지되는 것을 따로 확인한다.
 
-**연결 랩:** [03 RESTCONF/Python](../../labs/03-restconf-python/README.md)·[10 Digital Twin](../../labs/10-network-digital-twin/README.md)·[14 Terraform Security Validation](../../labs/14-terraform-security-validation/README.md).
+**연결 랩:** [03 RESTCONF/Python](../../labs/role-groups/06-change-automation/experiments/restconf-python/README.md)·[10 Digital Twin](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md)·[14 Terraform Security Validation](../../labs/role-groups/02-cloud-foundation/experiments/terraform-security-validation/README.md).
 
 **확장 계획:** 합성 장비의 변경 전후 스냅샷과 기대값을 비교해 정상·오류·수집 실패를 나눈다. 처음에는 읽기 전용 검사를 만든다. 자동 배포·CI 차단·원복은 실행 증적이 생긴 뒤 별도 단계로 올린다.
 

@@ -8,11 +8,11 @@
 
 | 순서 | 할 일 | 연결 랩 | 완료 기준 |
 |---|---|---|---|
-| 1 | Fabric 패킷 경로를 Underlay·Overlay로 나눠 설명 | [01](../../labs/01-bgp-ecmp/README.md)·[02](../../labs/02-evpn-vxlan/README.md) | 정상·격리·단일 장애·복구를 같은 양식으로 설명하고 출력으로 확인 |
-| 2 | 변경 전후 상태 비교를 읽기 전용으로 구성 | [03](../../labs/03-restconf-python/README.md)·[10](../../labs/10-network-digital-twin/README.md) | 정상·예상 밖 차이·수집 실패를 구분하고 실패 시 성공 판정을 멈춤 |
-| 3 | 취약점 영향 조건과 관리 접근 경로를 분리 | [09](../../labs/09-load-balancer-ha/README.md)·[11](../../labs/11-vulnerability-prioritization/README.md) | 영향 있음·없음·확인 불가를 구분하고, 악용 근거와 접근 경로를 별도 기록 |
-| 4 | 클라우드 역할·실제 권한·복구 확인을 연결 | [04](../../labs/04-iam-sts/README.md)·[05](../../labs/05-backup-recovery/README.md)·[13](../../labs/13-kubernetes-rbac/README.md)·[14](../../labs/14-terraform-security-validation/README.md) | 합성 판정과 실제 런타임 결과를 구분하며 허용·거부·복구 시험 확보 |
-| 5 | AI Fabric·시설 의존성을 학습 질문으로 축소 | [08](../../labs/08-ai-dc-network/README.md)·[12](../../labs/12-ai-multiregion-data-path/README.md)·[10](../../labs/10-network-digital-twin/README.md) | 측정 가능한 병목·경로·의존성 하나를 정하고 장비 없이 확인할 수 없는 범위를 표시 |
+| 1 | Fabric 패킷 경로를 Underlay·Overlay로 나눠 설명 | [01](../../labs/role-groups/01-network-fabric/experiments/bgp-ecmp/README.md)·[02](../../labs/role-groups/01-network-fabric/experiments/evpn-vxlan/README.md) | 정상·격리·단일 장애·복구를 같은 양식으로 설명하고 출력으로 확인 |
+| 2 | 변경 전후 상태 비교를 읽기 전용으로 구성 | [03](../../labs/role-groups/06-change-automation/experiments/restconf-python/README.md)·[10](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md) | 정상·예상 밖 차이·수집 실패를 구분하고 실패 시 성공 판정을 멈춤 |
+| 3 | 취약점 영향 조건과 관리 접근 경로를 분리 | [09](../../labs/role-groups/01-network-fabric/experiments/load-balancer-ha/README.md)·[11](../../labs/role-groups/04-security-trust/experiments/vulnerability-prioritization/README.md) | 영향 있음·없음·확인 불가를 구분하고, 악용 근거와 접근 경로를 별도 기록 |
+| 4 | 클라우드 역할·실제 권한·복구 확인을 연결 | [04](../../labs/role-groups/04-security-trust/experiments/iam-sts/README.md)·[05](../../labs/role-groups/07-recovery-dr/experiments/backup-recovery/README.md)·[13](../../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/README.md)·[14](../../labs/role-groups/02-cloud-foundation/experiments/terraform-security-validation/README.md) | 합성 판정과 실제 런타임 결과를 구분하며 허용·거부·복구 시험 확보 |
+| 5 | AI Fabric·시설 의존성을 학습 질문으로 축소 | [08](../../labs/role-groups/01-network-fabric/experiments/ai-dc-network/README.md)·[12](../../labs/role-groups/01-network-fabric/experiments/ai-multiregion-data-path/README.md)·[10](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md) | 측정 가능한 병목·경로·의존성 하나를 정하고 장비 없이 확인할 수 없는 범위를 표시 |
 
 ## 먼저 만들 작은 결과물
 

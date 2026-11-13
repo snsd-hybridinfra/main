@@ -10,22 +10,31 @@
 python3 tools/run_role.py 03-platform-delivery
 ```
 
-Lab 27의 요청 해석기와 Lab 29의 카탈로그를 연결합니다. 개발 VM 요청은 로컬 모듈로 해석되고, 개발 API 요청은 필수 어댑터 및 의존성이 준비될 때까지 차단됩니다. 두 요청의 digest와 배포 권한 상태를 `blueprints.json`에서 확인합니다.
+요청 해석기와 Terraform 실행 카탈로그를 연결합니다. 개발 VM 요청은 로컬 모듈로 해석되고, 개발 API 요청은 필수 어댑터 및 의존성이 준비될 때까지 차단됩니다. 두 요청의 digest와 배포 권한 상태를 `blueprints.json`에서 확인합니다.
 
 실습 범위는 카탈로그와 배포 조건 검증입니다.
 
-## 번호 랩
+## 실험
 
-| ID | 실습과 자료 | 번호 랩의 기록 |
-|---|---|---|
-| 25 | [25-container-supply-chain](../../25-container-supply-chain/README.md) | 이관 참고 |
-| 27 | [27-self-service-request-api](../../27-self-service-request-api/README.md) | 이관 참고 |
-| 28 | [28-approval-grant-lifecycle](../../28-approval-grant-lifecycle/README.md) | 이관 참고 |
-| 29 | [29-terraform-runner-blueprints](../../29-terraform-runner-blueprints/README.md) | 이관 참고 |
-| 30 | [30-agent-data-contracts](../../30-agent-data-contracts/README.md) | 이관 참고 |
-| 31 | [31-kubernetes-gitops](../../31-kubernetes-gitops/README.md) | 이관 참고 |
-| 34 | [34-postgres-schema-migrations](../../34-postgres-schema-migrations/README.md) | 이관 참고 |
-| 35 | [35-portal-ui-contracts](../../35-portal-ui-contracts/README.md) | 이관 참고 |
-| 49 | [49-edge-security-service-contracts](../../49-edge-security-service-contracts/README.md) | 이관 참고 |
+| 실험 | 검증 기록 |
+|---|---|
+| [운영 실험 카탈로그 UI](experiments/portfolio-catalog/README.md) | 로컬 로직·링크 검증 |
+| [Self-Service Infrastructure Request API](experiments/self-service-request-api/README.md) | 이관 자료 · 개별 재검증 전 |
+| [Kubernetes Manifest, Policy & GitOps Source](experiments/kubernetes-gitops/README.md) | 이관 자료 · 개별 재검증 전 |
+| [Container Build Supply Chain & Restricted Runner](experiments/container-supply-chain/README.md) | 이관 자료 · 개별 재검증 전 |
 
-[역할 랩 인덱스](../README.md) · [대표 사례 검증 결과](../evidence/2026-11-12.json)
+<details>
+<summary>다른 실험 보기</summary>
+
+| 실험 | 검증 기록 |
+|---|---|
+| [Approval, Access Grant and Expiration](experiments/approval-grant-lifecycle/README.md) | 이관 자료 · 개별 재검증 전 |
+| [OpenStack Terraform Blueprints & Job Runner](experiments/terraform-runner-blueprints/README.md) | 이관 자료 · 개별 재검증 전 |
+| [Agent Sandbox & Data Exchange Contracts](experiments/agent-data-contracts/README.md) | 이관 자료 · 개별 재검증 전 |
+| [PostgreSQL Schema, RBAC and Alembic Migrations](experiments/postgres-schema-migrations/README.md) | 이관 자료 · 개별 재검증 전 |
+| [Self-Service / Admin Portal UI Contracts](experiments/portal-ui-contracts/README.md) | 이관 자료 · 개별 재검증 전 |
+| [Edge WAF, AuthN/AuthZ and Service API Contracts](experiments/edge-security-service-contracts/README.md) | 이관 자료 · 개별 재검증 전 |
+
+</details>
+
+[전체 랩](../README.md) · [공통 실행 기록](../evidence/2026-11-12.json)
