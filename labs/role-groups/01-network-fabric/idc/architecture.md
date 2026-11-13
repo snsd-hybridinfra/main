@@ -1,6 +1,6 @@
 # IDC Network Operations & Resilience Lab
 
-금융권 IDC의 네트워크 운영 판단을 연습한다. [BGP/ECMP](../../../01-bgp-ecmp/README.md), [EVPN/VXLAN](../../../02-evpn-vxlan/README.md), [Digital Twin](../../../10-network-digital-twin/README.md)의 가상 패브릭을 이어서 정상 경로, 링크·제어면 장애, 서비스 영향과 원복을 검증한다.
+금융권 IDC의 네트워크 운영 판단을 연습한다. [BGP/ECMP](../experiments/bgp-ecmp/README.md), [EVPN/VXLAN](../experiments/evpn-vxlan/README.md), [Digital Twin](../experiments/network-digital-twin/README.md)의 가상 패브릭을 이어서 정상 경로, 링크·제어면 장애, 서비스 영향과 원복을 검증한다.
 
 ## 패브릭
 

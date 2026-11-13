@@ -19,7 +19,7 @@
 2. 같은 세그먼트의 통신 허용과 다른 세그먼트의 거부를 모두 확인했는가?
 3. 링크·Spine·경계 노드가 사라졌을 때 경로와 서비스가 각각 어떻게 바뀌는가?
 
-**기존 랩:** [01 BGP/ECMP](../../labs/01-bgp-ecmp/README.md), [02 EVPN/VXLAN](../../labs/02-evpn-vxlan/README.md), [10 Network Digital Twin](../../labs/10-network-digital-twin/README.md).
+**기존 랩:** [01 BGP/ECMP](../../labs/role-groups/01-network-fabric/experiments/bgp-ecmp/README.md), [02 EVPN/VXLAN](../../labs/role-groups/01-network-fabric/experiments/evpn-vxlan/README.md), [10 Network Digital Twin](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md).
 
 기존 로컬 Fabric 결과를 상용 ACI·EOS·실제 DCI 검증으로 확대하지 않는다. 다음 단계는 두 Fabric 경계의 VRF·VNI·경로 정책을 설계하고 정상·거부·장애 기대값을 먼저 쓰는 것이다.
 
@@ -29,10 +29,10 @@
 
 | 학습 질문 | 연결 랩 | 기존 결과를 읽을 때의 경계 |
 |---|---|---|
-| 누가 어떤 역할을 맡아 어떤 요청을 할 수 있는가? | [04 IAM/STS](../../labs/04-iam-sts/README.md) | 합성 정책 평가와 실제 STS 발급·만료는 별도 |
-| 백업이 존재하는 것과 복구되는 것은 어떻게 다른가? | [05 Backup & Recovery](../../labs/05-backup-recovery/README.md) | 같은 장비의 로컬 사이트 모델과 실제 재해복구는 별도 |
-| 원본·Cache·네트워크 중 어디에서 병목·손상이 발생하는가? | [12 AI Multi-Region Data Path](../../labs/12-ai-multiregion-data-path/README.md) | 로컬 파일 모델과 실제 Region·WAN·제품 성능은 별도 |
-| 라우트 광고와 테넌트 격리는 어떤 조건에서 허용되는가? | [01](../../labs/01-bgp-ecmp/README.md)·[02](../../labs/02-evpn-vxlan/README.md) 확장 계획 | OpenStack/OVN·FRR 연동은 이번에 실행하지 않음 |
+| 누가 어떤 역할을 맡아 어떤 요청을 할 수 있는가? | [04 IAM/STS](../../labs/role-groups/04-security-trust/experiments/iam-sts/README.md) | 합성 정책 평가와 실제 STS 발급·만료는 별도 |
+| 백업이 존재하는 것과 복구되는 것은 어떻게 다른가? | [05 Backup & Recovery](../../labs/role-groups/07-recovery-dr/experiments/backup-recovery/README.md) | 같은 장비의 로컬 사이트 모델과 실제 재해복구는 별도 |
+| 원본·Cache·네트워크 중 어디에서 병목·손상이 발생하는가? | [12 AI Multi-Region Data Path](../../labs/role-groups/01-network-fabric/experiments/ai-multiregion-data-path/README.md) | 로컬 파일 모델과 실제 Region·WAN·제품 성능은 별도 |
+| 라우트 광고와 테넌트 격리는 어떤 조건에서 허용되는가? | [01](../../labs/role-groups/01-network-fabric/experiments/bgp-ecmp/README.md)·[02](../../labs/role-groups/01-network-fabric/experiments/evpn-vxlan/README.md) 확장 계획 | OpenStack/OVN·FRR 연동은 이번에 실행하지 않음 |
 
 ## 3. 보안: 관리·제어 Plane과 비인간 계정
 
@@ -40,7 +40,7 @@
 
 운영 질문은 **제품·버전 → 기능·설정 → 접근 경로 → 실제 악용 근거 → 조치 책임 → 조치 후 서비스 확인** 순서로 정리한다. 점수 하나나 제품 이름만으로 조치 대상을 확정하지 않는다.
 
-**기존 랩:** [06 AAA/RADIUS](../../labs/06-aaa-radius/README.md), [07 AI Agent Security](../../labs/07-ai-agent-security/README.md), [09 Edge Load Balancer HA](../../labs/09-load-balancer-ha/README.md), [11 Vulnerability Prioritization](../../labs/11-vulnerability-prioritization/README.md), [13 Kubernetes RBAC](../../labs/13-kubernetes-rbac/README.md).
+**기존 랩:** [06 AAA/RADIUS](../../labs/role-groups/04-security-trust/experiments/aaa-radius/README.md), [07 AI Agent Security](../../labs/role-groups/04-security-trust/experiments/ai-agent-security/README.md), [09 Edge Load Balancer HA](../../labs/role-groups/01-network-fabric/experiments/load-balancer-ha/README.md), [11 Vulnerability Prioritization](../../labs/role-groups/04-security-trust/experiments/vulnerability-prioritization/README.md), [13 Kubernetes RBAC](../../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/README.md).
 
 인증 성공, 권한 허용, 망 접근 허용은 각각 다른 판정이다. Agent ID나 ServiceAccount가 있다는 사실만으로 최소 권한과 감사가 완성되지는 않는다. 이 구분을 기존 랩의 허용·거부 증적으로 설명한다.
 
@@ -50,9 +50,9 @@
 
 | 단계 | 남길 결과 | 기존 랩 |
 |---|---|---|
-| 현재 상태 수집 | CLI/API 값, 수집 시각, 수집 실패 | [03 RESTCONF/Python](../../labs/03-restconf-python/README.md) |
-| 기대 상태 정의 | 경로·격리·관리 접근의 허용·거부 표 | [10 Digital Twin](../../labs/10-network-digital-twin/README.md) |
-| 변경 전 검사 | 구문 오류와 정책 위반을 구분한 판정 | [14 Terraform Security Validation](../../labs/14-terraform-security-validation/README.md) |
+| 현재 상태 수집 | CLI/API 값, 수집 시각, 수집 실패 | [03 RESTCONF/Python](../../labs/role-groups/06-change-automation/experiments/restconf-python/README.md) |
+| 기대 상태 정의 | 경로·격리·관리 접근의 허용·거부 표 | [10 Digital Twin](../../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md) |
+| 변경 전 검사 | 구문 오류와 정책 위반을 구분한 판정 | [14 Terraform Security Validation](../../labs/role-groups/02-cloud-foundation/experiments/terraform-security-validation/README.md) |
 | 변경 후 비교 | 의도한 차이, 예상 밖 차이, 확인 불가 | 기존 랩 확장 계획 |
 | 원복·복구 확인 | 이전 상태 재확인과 서비스 시험 | 기존 장애·복구 랩 확장 계획 |
 
@@ -62,7 +62,7 @@ Logs·Metrics·Traces와 AIOps는 관측을 해석하는 학습 주제로 둔다
 
 기존 브리핑에는 GPU·메모리·고속 Ethernet·RoCE/RDMA·광 연결·전력·냉각·통합 운영 주제가 축적돼 있다. 학습에서는 Scale-up/Scale-out, 혼잡, 데이터 공급, 전력·냉각 장애의 서비스 영향을 나눠 본다.
 
-**기존 랩:** [08 AI DC Network](../../labs/08-ai-dc-network/README.md), [12 AI Multi-Region Data Path](../../labs/12-ai-multiregion-data-path/README.md), [05 Backup & Recovery](../../labs/05-backup-recovery/README.md).
+**기존 랩:** [08 AI DC Network](../../labs/role-groups/01-network-fabric/experiments/ai-dc-network/README.md), [12 AI Multi-Region Data Path](../../labs/role-groups/01-network-fabric/experiments/ai-multiregion-data-path/README.md), [05 Backup & Recovery](../../labs/role-groups/07-recovery-dr/experiments/backup-recovery/README.md).
 
 가상 TCP 병목 실습은 처리량·지연을 관측하는 출발점이다. RoCEv2·RDMA·PFC·ECN·상용 GPU Fabric 성능을 검증한 결과는 아니다. 투자금·센터 용량·제품 홍보 수치는 직접 측정한 성능과 분리한다. 데이터센터코리아는 기준일 현재 행사 전이므로 발표 성과 대신 사후에 확인할 질문만 남겼다.
 

@@ -12,7 +12,6 @@ import sys
 
 from check_catalog import GROUP_ROOT, ROOT, check_catalog
 
-LABS = ROOT / "labs"
 ROLES = ROOT / GROUP_ROOT
 IDC = Path(__file__).with_name("idc.py")
 
@@ -40,7 +39,7 @@ def python(script, *args, exit_code=0):
 
 
 def fabric(out):
-    lab = LABS / "10-network-digital-twin"
+    lab = ROOT / "labs/role-groups/01-network-fabric/experiments/network-digital-twin"
     python(lab / "validate.py", "--model", lab / "model.json", "--evidence", out / "digital-twin.json")
     rendered = python(IDC, "render", "--check")
     python(IDC, "inventory", "--out", out / "netbox-plan.json")
@@ -67,8 +66,8 @@ def check_address_plan(plan):
 
 
 def cloud(out):
-    shared = LABS / "24-multicloud-network-iac/terraform/envs"
-    openstack = LABS / "50-openstack-network-validation/reference/terraform/envs/openstack-network-validation"
+    shared = ROOT / "labs/role-groups/02-cloud-foundation/experiments/multicloud-network-iac/terraform/envs"
+    openstack = ROOT / "labs/role-groups/02-cloud-foundation/experiments/openstack-network-validation/reference/terraform/envs/openstack-network-validation"
     plan = {
         "aws": cidrs(shared / "aws-network-validation/terraform.tfvars.example",
                      ("vpc_cidr", "public_subnet_cidr", "private_subnet_cidr")),
@@ -90,8 +89,8 @@ def cloud(out):
 
 
 def platform(out):
-    lab = LABS / "27-self-service-request-api"
-    runner = LABS / "29-terraform-runner-blueprints/source/terraform"
+    lab = ROOT / "labs/role-groups/03-platform-delivery/experiments/self-service-request-api"
+    runner = ROOT / "labs/role-groups/03-platform-delivery/experiments/terraform-runner-blueprints/source/terraform"
     resolver = runpy.run_path(str(lab / "source/request_api/blueprints.py"))
     resolve = resolver["resolve_blueprint"]
     resolve.__globals__.update(
@@ -116,13 +115,13 @@ def platform(out):
 
 
 def security(out):
-    lab = LABS / "04-iam-sts"
+    lab = ROOT / "labs/role-groups/04-security-trust/experiments/iam-sts"
     python(lab / "evaluate_policy.py", "--directory", lab, "--evidence", out / "iam.json")
     return {"case": "IAM/STS trust, scoped allow and explicit deny fixtures"}
 
 
 def observability(out):
-    lab = LABS / "19-metric-anomaly-scoring"
+    lab = ROOT / "labs/role-groups/05-observability-sre/experiments/metric-anomaly-scoring"
     dataset = lab / "datasets/ml-metric-dataset-synthetic.sample.csv"
     invalid = lab / "datasets/ml-metric-dataset-invalid.sample.csv"
     profile = lab / "models/ml-anomaly-threshold-profile.example.yml"
@@ -140,7 +139,7 @@ def observability(out):
 
 
 def automation(out):
-    lab = LABS / "03-restconf-python"
+    lab = ROOT / "labs/role-groups/06-change-automation/experiments/restconf-python"
     reader = runpy.run_path(str(lab / "compare.py"))
     api = reader["api_rows"](read_json(lab / "fixtures/interfaces.json"))
     cli = reader["cli_rows"]((lab / "fixtures/show_interfaces.txt").read_text())
@@ -148,7 +147,7 @@ def automation(out):
     require(comparison["compared"] == 3 and comparison["mismatches"] == 0
             and not comparison["api_only"] and not comparison["cli_only"], "Interface fixtures diverge")
     write_json(out / "interfaces.json", comparison)
-    evaluator = LABS / "21-automation-approval/src/evaluate_action_policy.py"
+    evaluator = ROOT / "labs/role-groups/06-change-automation/experiments/automation-approval/src/evaluate_action_policy.py"
     allowed = python(evaluator)
     rejected = python(evaluator, "--parameters", '{"path":"../../private"}', exit_code=1)
     require("decision=ALLOW_CHECK" in allowed and "Unsafe parameter value" in rejected,
@@ -158,7 +157,7 @@ def automation(out):
 
 
 def recovery(out):
-    python(LABS / "05-backup-recovery/run-lab.py", "--evidence", out / "site-restore.json")
+    python(ROOT / "labs/role-groups/07-recovery-dr/experiments/backup-recovery/run-lab.py", "--evidence", out / "site-restore.json")
     return {"case": "Loopback HTTP/SQLite site outage, missing snapshot denial and restore"}
 
 

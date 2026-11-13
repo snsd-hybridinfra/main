@@ -10,12 +10,12 @@ The source has **1,252 tracked files** on its `main` branch. The extracted labs 
 
 | Original subtree | Files | Destination |
 |---|---:|---|
-| `applications/internal-iaas-portal/database/` | 26 | [Lab 34](../../labs/34-postgres-schema-migrations/README.md) |
-| `docs/runbooks/` | 40 | [Lab 36](../../labs/36-day2-operations-runbooks/README.md) |
-| `tests/` | 36 | [Lab 37](../../labs/37-validation-fixtures/README.md) |
-| `docs/zero-trust/identity/` and `device/` | 12 | [Lab 38](../../labs/38-identity-device-assurance/README.md) |
-| `applications/internal-iaas-portal/ansible/` | 8 | [Lab 39](../../labs/39-k3s-ansible-bootstrap/README.md) |
-| `docs/zero-trust/packages/` | 38 | [Lab 40](../../labs/40-zero-trust-package-contracts/README.md) |
+| `applications/internal-iaas-portal/database/` | 26 | [Lab 34](../../labs/role-groups/03-platform-delivery/experiments/postgres-schema-migrations/README.md) |
+| `docs/runbooks/` | 40 | [Lab 36](../../labs/role-groups/06-change-automation/experiments/day2-operations-runbooks/README.md) |
+| `tests/` | 36 | [Lab 37](../../labs/role-groups/06-change-automation/experiments/validation-fixtures/README.md) |
+| `docs/zero-trust/identity/` and `device/` | 12 | [Lab 38](../../labs/role-groups/04-security-trust/experiments/identity-device-assurance/README.md) |
+| `applications/internal-iaas-portal/ansible/` | 8 | [Lab 39](../../labs/role-groups/02-cloud-foundation/experiments/k3s-ansible-bootstrap/README.md) |
+| `docs/zero-trust/packages/` | 38 | [Lab 40](../../labs/role-groups/04-security-trust/experiments/zero-trust-package-contracts/README.md) |
 
 The copied files are still **reference material**, not independently executable or verified lab builds. File names and counts were compared against the source tree; content-wide security review and hash equivalence for every file have **not** been completed.
 
@@ -25,10 +25,10 @@ The copied files are still **reference material**, not independently executable 
 |---|---:|---|
 | `docs/zero-trust/recovery/` | 88 | Large historical recovery and execution analysis; do not misrepresent as current lab evidence |
 | `docs/evidence/zero-trust/` | 52 | Historical evidence and context may include identifiers; requires manual redaction decisions |
-| `docs/zero-trust/target-architecture/` | 26 | All 26 source files extracted into [Lab 46](../../labs/46-zero-trust-target-architecture/README.md), including three large matrices; no runtime acceptance inferred |
+| `docs/zero-trust/target-architecture/` | 26 | All 26 source files extracted into [Lab 46](../../labs/role-groups/04-security-trust/experiments/zero-trust-target-architecture/README.md), including three large matrices; no runtime acceptance inferred |
 | `applications/internal-iaas-portal/services/user-portal/eclipse/` | 31 | Source manifest attributes major content to separate `Project-Team-Eclipse` team repo. Review reuse rights and preserve attribution before replication |
 | `docs/platform/` | 20 | Some contracts imported to Labs 27/30, remainder requires dependency analysis |
-| `tools/live-validation/` | 33 | All 33 source files preserved as [Lab 45](../../labs/45-remote-readonly-validation/README.md) references, including dangerous installation/scheduling paths; not runnable |
+| `tools/live-validation/` | 33 | All 33 source files preserved as [Lab 45](../../labs/role-groups/06-change-automation/experiments/remote-readonly-validation/README.md) references, including dangerous installation/scheduling paths; not runnable |
 | `tools/local-vm/` | 5 | Host provisioning and VM automation can have side effects |
 
 The counts in this table are **original subtree totals**, not remaining-file counts. A partially extracted subtree can contain both migrated and unmigrated files. Full byte-level migration coverage was not calculated.
@@ -51,9 +51,9 @@ The counts in this table are **original subtree totals**, not remaining-file cou
 
 ## Last selective extraction: 49–51
 
-- IDP edge WAF and service API contract tests extracted to [Lab 49](../../labs/49-edge-security-service-contracts/README.md); original third-party Eclipse UI remains source-only pending reuse rights.
-- OpenStack provider/network Terraform examples and bounded host/DB checks extracted to [Lab 50](../../labs/50-openstack-network-validation/README.md).
-- Five host-level VM creation or disk modification scripts extracted as **inert** `.reference.txt` samples in [Lab 51](../../labs/51-disposable-lab-host-provisioning/README.md).
+- IDP edge WAF and service API contract tests extracted to [Lab 49](../../labs/role-groups/03-platform-delivery/experiments/edge-security-service-contracts/README.md); original third-party Eclipse UI remains source-only pending reuse rights.
+- OpenStack provider/network Terraform examples and bounded host/DB checks extracted to [Lab 50](../../labs/role-groups/02-cloud-foundation/experiments/openstack-network-validation/README.md).
+- Five host-level VM creation or disk modification scripts extracted as **inert** `.reference.txt` samples in [Lab 51](../../labs/role-groups/02-cloud-foundation/experiments/disposable-lab-host-provisioning/README.md).
 - Original architecture decision docs are in [legacy ADR archive](../archive/legacy-adr/README.md), not a current lab acceptance record.
 - Historical Zero Trust `recovery/` 88-file and `docs/evidence/zero-trust/` 52-file trees, Dandelion's team logs/screenshots/slides and imported third-party Eclipse portal code are intentionally not bulk-published into a personal lab repository. The original repositories remain the authoritative holdings until independently backed up.
 - Role-level integration is [organized](../../labs/role-groups/README.md) but **not runtime verified**, nor is deletion of any original repository authorized.

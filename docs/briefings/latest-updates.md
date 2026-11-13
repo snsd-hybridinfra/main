@@ -9,7 +9,7 @@
 - **원문 발행일:** 2026-10-28, Cisco Talos 표기.
 - **공식 사실:** Talos는 UAT-11473이 CVE-2026-20127 인증 우회를 악용했다고 보고했다. KeyDrift는 SD-WAN 제어면 내부에서 장기 접근과 키 자료 수집을 수행하는 프레임워크로 분석됐다.
 - **학습 해석:** 제어기 계정·프로세스·키의 신뢰가 깨지면 데이터 트래픽의 암호화 여부만으로 안전을 판단하기 어렵다. 관리 접근, 소프트웨어 상태, 침해 조사와 키·자격증명 대응 범위를 함께 검토하는 질문으로 연결한다.
-- **연결:** [09 관리망 분리](../../labs/09-load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/11-vulnerability-prioritization/README.md).
+- **연결:** [09 관리망 분리](../../labs/role-groups/01-network-fabric/experiments/load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/role-groups/04-security-trust/experiments/vulnerability-prioritization/README.md).
 - **다음 검증:** 합성 자산 표에 제어기 역할·접근 경로·악용 근거·조사 상태를 구분해 기록한다. 이 사건의 악성코드나 공격을 실행하지 않았다.
 
 출처 [S01](source-register.md): [Cisco Talos 분석](https://blog.talosintelligence.com/uat-11473-keydrift/).
@@ -20,7 +20,7 @@
 - **공식 공지:** CVE-2026-109618·CVE-2026-109619, 2026-10-21 게시·10-29 갱신 표기.
 - **공식 사실:** Palo Alto Networks는 PHP 관련 취약점의 제품별 영향을 안내하고, 인터넷에 노출된 관리 인터페이스를 대상으로 한 실제 악용을 명시했다. 관리 인터페이스 접근을 Jump Box로 제한하는 완화 방안도 제시한다.
 - **학습 해석:** 영향받는 소프트웨어인지와 외부에서 해당 인터페이스에 접근 가능한지는 별도 항목이다. 접근 제한을 패치 완료나 침해 부재의 증거로 취급하지 않는다.
-- **연결:** [09 관리망 분리](../../labs/09-load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/11-vulnerability-prioritization/README.md).
+- **연결:** [09 관리망 분리](../../labs/role-groups/01-network-fabric/experiments/load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/role-groups/04-security-trust/experiments/vulnerability-prioritization/README.md).
 - **다음 검증:** 같은 취약 소프트웨어를 가진 합성 자산이라도 접근 경로·중요도에 따라 조치 순서가 어떻게 바뀌는지 비교한다. 실제 버전·수정 릴리스·제품 적용 여부는 작업 시 공식 공지로 다시 확인해야 한다.
 
 출처 [S02](source-register.md): [Palo Alto Networks 공지](https://security.paloaltonetworks.com/CVE-2026-109618).
@@ -31,7 +31,7 @@
 - **원문 발행일:** 2026-10-28 19:15 GMT, Cisco 표기. 한국시간으로는 10-29다.
 - **공식 사실:** CVE-2026-76418은 ASA/FTD의 SSL 원격접속 VPN에서 비인증 원격 요청으로 재시작·서비스 거부가 발생할 수 있는 문제다. 영향 판정에는 취약 릴리스, 접근 가능한 SSL VPN 로그인 서비스, Tunnel Group의 Secondary Authentication 구성이 포함된다. 제조사는 수정 소프트웨어를 안내한다.
 - **학습 해석:** 제품명이나 CVSS만 수집하면 기능·설정 조건을 놓친다. Secondary Authentication 설정 조건을 모든 MFA 방식의 취약성으로 일반화하지 않는다.
-- **연결:** [06 AAA/RADIUS](../../labs/06-aaa-radius/README.md), [09 가용성](../../labs/09-load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/11-vulnerability-prioritization/README.md).
+- **연결:** [06 AAA/RADIUS](../../labs/role-groups/04-security-trust/experiments/aaa-radius/README.md), [09 가용성](../../labs/role-groups/01-network-fabric/experiments/load-balancer-ha/README.md), [11 취약점 우선순위](../../labs/role-groups/04-security-trust/experiments/vulnerability-prioritization/README.md).
 - **다음 검증:** 합성 자산에서 `제품·릴리스 / VPN 사용 / 접근 가능 / 해당 인증 설정 / 영향 확인 여부`를 분리한다. 기존 Nginx·RADIUS 랩은 실제 ASA/FTD 취약점 검증이 아니다. 이번 확인으로 실제 악용이나 KEV 등재까지 확인했다고 기록하지 않는다.
 
 출처 [S03](source-register.md): [Cisco 권고](https://www.cisco.com/c/en/us/support/docs/csa/cisco-sa-asaftd-tunnel-dos-s6mgkb75.html).
