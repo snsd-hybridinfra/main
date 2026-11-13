@@ -1,0 +1,709 @@
+{
+  "description": {
+    "validation": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:34:05.539+00:00",
+      "run": "description",
+      "candidate": "description",
+      "phase": "postcheck",
+      "status": "PASS",
+      "failures": [],
+      "state_changes": [],
+      "changed_devices": [
+        "leaf1"
+      ]
+    },
+    "recovery": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:34:12.097+00:00",
+      "run": "description",
+      "candidate": "description",
+      "phase": "recovery-20261113T093410843377Z",
+      "status": "PASS",
+      "failures": [],
+      "state_changes": [],
+      "changed_devices": []
+    },
+    "before": {
+      "timestamp": "2026-11-13T09:33:17.077+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "after": {
+      "timestamp": "2026-11-13T09:34:04.967+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "51256bf88056045925d5ef6ae9cbf0b4dbadb38da39c5b38ce7fee63dcf15423",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "restored": {
+      "timestamp": "2026-11-13T09:34:11.560+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "configuration_diff": "--- before/leaf1.conf\n+++ after/leaf1.conf\n@@ -27,6 +27,10 @@\n vrf TENANT\n  vni 50000\n exit-vrf\n+!\n+interface eth1\n+ description IDC-LAB-U1\n+exit\n !\n router bgp 65101\n  bgp router-id 192.0.2.11\n"
+  },
+  "harmless": {
+    "validation": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:35:18.764+00:00",
+      "run": "harmless",
+      "candidate": "harmless",
+      "phase": "postcheck",
+      "status": "PASS",
+      "failures": [],
+      "state_changes": [],
+      "changed_devices": [
+        "leaf1"
+      ]
+    },
+    "recovery": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:35:24.768+00:00",
+      "run": "harmless",
+      "candidate": "harmless",
+      "phase": "recovery-20261113T093523490507Z",
+      "status": "PASS",
+      "failures": [],
+      "state_changes": [],
+      "changed_devices": []
+    },
+    "before": {
+      "timestamp": "2026-11-13T09:34:16.787+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "after": {
+      "timestamp": "2026-11-13T09:35:18.213+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "c1c76ca41b2dc5a8b174e5e7bbec2f4b63e4b90506e288c7298bfb0b517d7807",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "restored": {
+      "timestamp": "2026-11-13T09:35:24.286+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "configuration_diff": "--- before/leaf1.conf\n+++ after/leaf1.conf\n@@ -10,6 +10,7 @@\n no ipv6 forwarding\n service integrated-vtysh-config\n !\n+ip prefix-list FABRIC-LOOPBACKS seq 5 deny 192.0.2.250/32\n ip prefix-list FABRIC-LOOPBACKS seq 10 permit 192.0.2.1/32\n ip prefix-list FABRIC-LOOPBACKS seq 20 permit 192.0.2.2/32\n ip prefix-list FABRIC-LOOPBACKS seq 30 permit 192.0.2.11/32\n"
+  },
+  "bad-policy": {
+    "validation": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:39:32.994+00:00",
+      "run": "bad-policy",
+      "candidate": "break-vtep",
+      "phase": "postcheck",
+      "status": "FAIL",
+      "failures": [
+        "l2_mtu",
+        "l3_icmp",
+        "l2_http",
+        "l3_http",
+        "leaf1: ECMP next hops",
+        "leaf1: imet",
+        "leaf1: remote_mac",
+        "leaf1: tenant_routes",
+        "probes/l2_mtu: differs from the baseline",
+        "probes/l3_icmp: differs from the baseline",
+        "probes/l2_http: differs from the baseline",
+        "probes/l3_http: differs from the baseline",
+        "leaves/leaf1/next_hops: differs from the baseline",
+        "leaves/leaf1/imet: differs from the baseline",
+        "leaves/leaf1/remote_mac: differs from the baseline",
+        "leaves/leaf1/tenant_routes: differs from the baseline"
+      ],
+      "state_changes": [
+        {
+          "check": "probes/l2_mtu",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "probes/l3_icmp",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "probes/l2_http",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "probes/l3_http",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "leaves/leaf1/next_hops",
+          "before": [
+            "203.0.113.0",
+            "203.0.113.4"
+          ],
+          "after": []
+        },
+        {
+          "check": "leaves/leaf1/imet",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "leaves/leaf1/remote_mac",
+          "before": true,
+          "after": false
+        },
+        {
+          "check": "leaves/leaf1/tenant_routes",
+          "before": [
+            [
+              "198.51.100.128/26",
+              "192.0.2.12",
+              "br4090",
+              "bgp"
+            ]
+          ],
+          "after": []
+        }
+      ],
+      "changed_devices": [
+        "leaf1"
+      ]
+    },
+    "recovery": {
+      "schema_version": 1,
+      "timestamp": "2026-11-13T09:39:43.599+00:00",
+      "run": "bad-policy",
+      "candidate": "break-vtep",
+      "phase": "recovery-20261113T093942182624Z",
+      "status": "PASS",
+      "failures": [],
+      "state_changes": [],
+      "changed_devices": []
+    },
+    "before": {
+      "timestamp": "2026-11-13T09:38:27.183+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "after": {
+      "timestamp": "2026-11-13T09:39:32.273+00:00",
+      "pass": false,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "3aea7a53d9916e098af93732eecff1df54922e056845762dffb2951f86977881",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": false,
+        "l3_icmp": false,
+        "l2_http": false,
+        "l3_http": false
+      }
+    },
+    "restored": {
+      "timestamp": "2026-11-13T09:39:43.051+00:00",
+      "pass": true,
+      "config_sha256": {
+        "spine1": "d6ed12ec5dcbec45e58c7520fd876317ed60c32394b44d79dc930115deedebbe",
+        "spine2": "cb2987832159d22b2887f23b03ddab7821383a12f9be759b2f2f87a047f52da5",
+        "leaf1": "cbae99d5e2aa1979873d48d6207a36a59ed15860bb3c8ddb4f87028e3e1956b3",
+        "leaf2": "b5b5b9522b31965dec6f5c63c0af4b3aa01dbfbeb803758803e2b62c4be14948"
+      },
+      "interfaces": {
+        "spine1/eth1": "UP",
+        "spine1/eth2": "UP",
+        "spine2/eth1": "UP",
+        "spine2/eth2": "UP",
+        "leaf1/eth1": "UP",
+        "leaf1/eth2": "UP",
+        "leaf1/eth3": "UP",
+        "leaf2/eth1": "UP",
+        "leaf2/eth2": "UP",
+        "leaf2/eth3": "UP"
+      },
+      "neighbors": {
+        "spine1/ipv4": {
+          "203.0.113.1": "Established",
+          "203.0.113.3": "Established"
+        },
+        "spine1/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "spine2/ipv4": {
+          "203.0.113.5": "Established",
+          "203.0.113.7": "Established"
+        },
+        "spine2/evpn": {
+          "192.0.2.11": "Established",
+          "192.0.2.12": "Established"
+        },
+        "leaf1/ipv4": {
+          "203.0.113.0": "Established",
+          "203.0.113.4": "Established"
+        },
+        "leaf1/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        },
+        "leaf2/ipv4": {
+          "203.0.113.2": "Established",
+          "203.0.113.6": "Established"
+        },
+        "leaf2/evpn": {
+          "192.0.2.1": "Established",
+          "192.0.2.2": "Established"
+        }
+      },
+      "probes": {
+        "l2_mtu": true,
+        "l3_icmp": true,
+        "l2_http": true,
+        "l3_http": true
+      }
+    },
+    "configuration_diff": "--- before/leaf1.conf\n+++ after/leaf1.conf\n@@ -10,6 +10,7 @@\n no ipv6 forwarding\n service integrated-vtysh-config\n !\n+ip prefix-list FABRIC-LOOPBACKS seq 5 deny 192.0.2.12/32\n ip prefix-list FABRIC-LOOPBACKS seq 10 permit 192.0.2.1/32\n ip prefix-list FABRIC-LOOPBACKS seq 20 permit 192.0.2.2/32\n ip prefix-list FABRIC-LOOPBACKS seq 30 permit 192.0.2.11/32\n"
+  }
+}

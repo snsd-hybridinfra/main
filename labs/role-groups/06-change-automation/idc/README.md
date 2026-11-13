@@ -1,6 +1,6 @@
 # IDC Network Change Automation
 
-가상 FRR의 설정을 Ansible로 백업하고, Leaf1의 수신 정책 후보를 Python으로 검증합니다. 실패 판정에는 VTEP 커널 FIB와 HTTP 프로브를 사용합니다. 원복 후 기준선과 설정을 다시 대조합니다. [작업 기록 양식](change-template.md)
+Ansible로 직접 적용하고 실패 시 작업자가 원복하는 절차는 [네트워크 변경 검증](../../01-network-fabric/idc/docs/change-validation.md)에서 확인합니다. 아래의 기존 실습은 설정 백업과 장애 주입 후 자동 원복을 다룹니다. [작업 기록 양식](change-template.md)
 
 ## 백업과 설정 비교
 

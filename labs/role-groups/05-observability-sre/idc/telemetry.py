@@ -5,13 +5,13 @@ from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
-import re
 from threading import Event, Lock, Thread
 
-from idc_lab.events import emit
+from idc_lab.events import FRR_LINE, emit
 from idc_lab.model import LEAVES, OUT, ROUTERS, STATE, interfaces
 from idc_lab.runtime import ERRORS, describe, require_ready
 from idc_lab.verify import http, next_hops, peer_states, ports, utc
+from observations import Observations
 
 METRICS = {
     "idc_link_oper_up": ("gauge", "Physical lab interface operational state."),
@@ -22,12 +22,16 @@ METRICS = {
     "idc_service_probe_success": ("gauge", "Synthetic HTTP probe returned expected payload."),
     "idc_query_success": ("gauge", "Collection query completed."),
 }
-TIMESTAMP = re.compile(r"^(\d{4}/\d\d/\d\d \d\d:\d\d:\d\d(?:\.\d+)?) (.+)")
 
 
 def sample(name, value, **labels):
+    return name, (labels, int(value))
+
+
+def prometheus_line(name, row):
+    labels, value = row
     tags = ",".join(f"{key}={json.dumps(str(val))}" for key, val in labels.items())
-    return name, f"{name}{{{tags}}} {int(value)}"
+    return f"{name}{{{tags}}} {value}"
 
 
 def collect(node, query, fn):
@@ -41,7 +45,9 @@ def collect(node, query, fn):
 def interface_metrics(node):
     rows = ports(node)
     for port, *_ in interfaces(node):
-        state = rows.get(port, {})
+        state = rows.get(port)
+        if state is None:
+            raise RuntimeError(f"Missing interface {node}/{port}")
         yield sample("idc_link_oper_up", state.get("operstate") == "UP", node=node, interface=port)
         stats = state.get("stats64") or state.get("stats") or {}
         for direction in ("rx", "tx"):
@@ -67,7 +73,7 @@ def service_metrics(path):
     return collect("host1", f"http-{path}", lambda: [sample("idc_service_probe_success", http(path), path=path)])
 
 
-def metrics_body():
+def metrics_body(observations):
     series = {metric: [] for metric in METRICS}
     with ThreadPoolExecutor(max_workers=6) as pool:
         jobs = [pool.submit(router_metrics, node) for node in ROUTERS]
@@ -75,9 +81,16 @@ def metrics_body():
         for job in jobs:
             for metric, row in job.result():
                 series[metric].append(row)
+    observed = {}
+    for metric, kind, field in (("idc_link_oper_up", "interface", "interface"),
+                                ("idc_bgp_peer_up", "bgp", "peer")):
+        for labels, value in series[metric]:
+            observed[(labels["node"], kind, labels[field])] = bool(value)
+    observations.record(observed)
     lines = []
     for metric, (kind, description) in METRICS.items():
-        lines += [f"# HELP {metric} {description}", f"# TYPE {metric} {kind}", *series[metric]]
+        lines += [f"# HELP {metric} {description}", f"# TYPE {metric} {kind}",
+                  *(prometheus_line(metric, row) for row in series[metric])]
     return ("\n".join(lines) + "\n").encode()
 
 
@@ -96,7 +109,7 @@ def relay(stop):
                             break
                         message = raw.decode(errors="replace").strip()
                         stamp = None
-                        if parsed := TIMESTAMP.match(message):
+                        if parsed := FRR_LINE.match(message):
                             stamp = datetime.fromisoformat(parsed[1].replace("/", "-")).replace(
                                 tzinfo=timezone.utc).isoformat(timespec="milliseconds")
                             message = parsed[2]
@@ -121,7 +134,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/metrics":
-            self.respond(metrics_body(), "text/plain; version=0.0.4; charset=utf-8")
+            with self.server.scrape_lock:
+                payload = metrics_body(self.server.observations)
+            self.respond(payload, "text/plain; version=0.0.4; charset=utf-8")
         else:
             self.send_error(404)
 
@@ -163,6 +178,7 @@ def main():
         args.alerts_file.parent.mkdir(parents=True, exist_ok=True)
         with ThreadingHTTPServer(("127.0.0.1", 19808), Handler) as server:
             server.alert_lock, server.alert_file = Lock(), args.alerts_file
+            server.scrape_lock, server.observations = Lock(), Observations()
             stop = Event()
             watcher = Thread(target=relay, args=(stop,), daemon=True)
             watcher.start()

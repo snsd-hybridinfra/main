@@ -39,6 +39,8 @@ Grafana에서 `admin`과 지정한 비밀번호로 로그인해 **IDC Network Re
 
 ## 이벤트 상관분석
 
+포트·BGP 이벤트를 링크별 사건으로 생성하고 **IDC Incident Correlation** 대시보드에 게시할 수 있습니다. [사건 수집과 판정](../../01-network-fabric/idc/docs/incident-analysis.md)
+
 ```sh
 sudo python3 tools/idc.py drill routing-policy --observe 16
 ```

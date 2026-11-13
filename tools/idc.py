@@ -9,7 +9,9 @@ FABRIC = ROLES / "01-network-fabric/idc"
 MODULES = {"render": "render", "fabric": "runtime", "verify": "verify", "inventory": "inventory"}
 SCRIPTS = {
     "observe": ROLES / "05-observability-sre/idc/telemetry.py",
+    "incident": ROLES / "05-observability-sre/idc/incident.py",
     "change": ROLES / "06-change-automation/idc/change.py",
+    "change-validate": ROLES / "06-change-automation/idc/validation.py",
     "drill": ROLES / "07-recovery-dr/idc/drill.py",
 }
 
@@ -24,7 +26,9 @@ def main():
     if args.stage in MODULES:
         runpy.run_module(f"idc_lab.{MODULES[args.stage]}", run_name="__main__")
     else:
-        runpy.run_path(str(SCRIPTS[args.stage]), run_name="__main__")
+        script = SCRIPTS[args.stage]
+        sys.path.insert(0, str(script.parent))
+        runpy.run_path(str(script), run_name="__main__")
 
 
 if __name__ == "__main__":
