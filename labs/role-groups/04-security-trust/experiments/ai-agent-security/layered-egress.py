@@ -1,17 +1,52 @@
 #!/usr/bin/env python3
 """Synthetic L4/L7/MCP decision model; not packet enforcement."""
 import json
+import re
 from urllib.parse import urlsplit
 
-def decide(identity_valid, url, tool):
+UPSTREAM_HOST = "api.test.invalid"
+DEFAULT_OPERATIONS = frozenset({"read_facts", "read_api_facts"})
+DENIED_OPERATIONS = frozenset({"delete_facts", "delete_api_facts"})
+
+
+def normalize_operation(operation):
+    if not isinstance(operation, str) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*", operation):
+        return None
+    words = re.sub(r"([A-Z])([A-Z][a-z])", r"\1_\2", operation)
+    words = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", words)
+    return words.lower()
+
+
+def destination_decision(url):
+    if not isinstance(url, str) or re.search(r"[\x00-\x20\x7f\\]", url):
+        return "l4_denied"
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return "l4_denied"
+    if (
+        parsed.scheme != "https"
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.hostname != UPSTREAM_HOST
+        or port not in (None, 443)
+        or parsed.netloc.lower() not in (UPSTREAM_HOST, f"{UPSTREAM_HOST}:443")
+    ):
+        return "l4_denied"
+    if parsed.path != "/v1/facts" or "?" in url or "#" in url:
+        return "l7_denied"
+    return "allow"
+
+
+def decide(identity_valid, url, tool, allowed_operations=DEFAULT_OPERATIONS):
     if not identity_valid:
         return "identity_denied"
-    p = urlsplit(url)
-    if p.scheme != "https" or p.username is not None or p.password is not None or (p.hostname, p.port or 443) != ("api.test.invalid", 443):
-        return "l4_denied"
-    if p.path != "/v1/facts" or p.query or p.fragment:
-        return "l7_denied"
-    if tool != "read_facts":
+    destination = destination_decision(url)
+    if destination != "allow":
+        return destination
+    operation = normalize_operation(tool)
+    if operation in DENIED_OPERATIONS or operation not in allowed_operations:
         return "mcp_tool_denied"
     return "allow"
 

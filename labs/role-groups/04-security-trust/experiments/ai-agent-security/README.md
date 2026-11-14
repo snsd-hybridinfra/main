@@ -20,9 +20,9 @@
 
 HMAC Key는 재현을 위한 로컬 테스트 값이며 운영 비밀이나 ServiceNow 구현이 아니다. 운영에서는 비대칭 서명, Key Rotation, IdP, 중앙 폐기 목록과 감사 저장소가 필요하다.
 
-실행:
+실행 (이 디렉터리에서):
 
-    python F:\main\labs\07-ai-agent-security\run-lab.py --evidence F:\main\labs\07-ai-agent-security\evidence\2026-10-18.json
+    python3 run-lab.py
 
 ## 직접 확인한 결과
 
@@ -60,3 +60,21 @@ HMAC Key는 재현을 위한 로컬 테스트 값이며 운영 비밀이나 Serv
 ## 프로젝트에 붙이기 전에 남은 것
 
 서브 프로젝트의 AI 운영 보조 기능에 적용한다면 읽기 권한부터 시작하고, 짧은 수명의 서명된 Workload Identity와 중앙 폐기, 도구별 Scope, 쓰기 승인, 불변 감사 로그를 함께 붙인다. 이 결과는 서브 프로젝트 Agent 배포 증거가 아니다.
+
+## 2026-11-14 주간 브리핑 후속 회귀
+
+| AWS 공식 권고 | 제품과 영향 버전 | 최초 수정 버전 | 핵심 내용 |
+|---|---|---|---|
+| [CVE-2026-125271](https://aws.amazon.com/security/security-bulletins/2026-176-aws/) · 2026-11-10 | AWS API MCP Server `>=0.2.13, <1.5.1` | `1.5.1` | 연속 대문자가 들어간 작업명을 잘못 정규화해 거부·사용자 확인 정책과 일치하지 않을 수 있었습니다. |
+| [CVE-2026-100307](https://aws.amazon.com/security/security-bulletins/2026-179-aws/) · 2026-11-11 | mcp-gateway-registry `>=1.0.9, <=1.24.7` | `1.25.0` | 외부 관리 API가 인증 후 쓰기 인가를 검사하지 않아 낮은 권한의 계정이 관리자 권한을 얻을 수 있었습니다. |
+| [CVE-2026-125926](https://aws.amazon.com/security/security-bulletins/2026-180-aws/) · 2026-11-11 | mcp-gateway-registry `>=1.0.3, <=1.34.0` | `1.35.0` | 서버 등록·수정 API가 업스트림 주소를 충분히 검증하지 않아 게이트웨이를 통한 내부망 요청(SSRF)이 가능했습니다. |
+
+등록 API와 도구 호출은 동일한 목적지 검사를 사용합니다. [회귀 스크립트](mcp-regression.py)는 인메모리 모의 API에서 관리자·조회자·익명 요청을 비교하고, 거부된 등록이나 수정이 저장된 상태를 바꾸지 않았는지 확인합니다. 작업명은 정규화 후 허용·거부를 판정하며 거부 목록이 우선합니다. 임시 차단 정책 적용과 기준 정책 복구 후 허용·거부를 다시 확인합니다.
+
+```sh
+python3 run-lab.py
+python3 layered-egress.py
+python3 mcp-regression.py
+```
+
+마지막 명령은 시나리오별 기대값·실제값·실패 사유를 JSON으로 출력하며 일치하면 0, 불일치하면 1로 종료합니다. `401/403/400/201/200`은 모의 API의 응답 코드입니다. 목적지 검사는 예약 도메인의 단일 HTTPS 엔드포인트를 허용하는 합성 모델로 실행합니다. AWS 제품 실행, 실제 취약점 공격, DNS·리다이렉트·실제 업스트림 연결, IdP 연동 및 사용자 확인 정책은 검증 범위 밖입니다. 기존 Passport 테스트만 격리된 루프백 HTTP와 임시 파일을 사용합니다.

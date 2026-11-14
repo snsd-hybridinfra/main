@@ -1,0 +1,32 @@
+name: AI Agent Security regression
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      LAB: labs/role-groups/04-security-trust/experiments/ai-agent-security
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Existing Passport and layered egress
+        run: |
+          python3 "$LAB/run-lab.py"
+          python3 "$LAB/layered-egress.py"
+      - name: MCP policy regression
+        if: ${{ !cancelled() }}
+        run: python3 "$LAB/mcp-regression.py"
+      - name: Repository regression
+        if: ${{ !cancelled() }}
+        run: |
+          python3 tools/check_catalog.py
+          python3 tools/run_role.py all
+          python3 tools/idc.py render --check
