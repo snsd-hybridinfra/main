@@ -16,6 +16,8 @@
 
 10월 4일 브리핑에서 다룬 [Dell CSM 보안 권고 DSA-2026-448](https://www.dell.com/support/kbdoc/en-us/000515771/dsa-2026-448-security-update-for-dell-container-storage-modules-multiple-vulnerabilities)(2026-10-01)는 Storage Operator와 Authorization 계층이 Cluster Node·Secret·Storage 관리자 자격증명까지 영향을 줄 수 있음을 보여 준다. 이 권고는 기존 최소 권한 질문과 연결했지만 Dell CSM은 배포하지 않았다.
 
+[AWS 보안 공지 2026-156-AWS, CVE-2026-119115](https://aws.amazon.com/security/security-bulletins/2026-156-aws/)(2026-10-29 09:30 PDT)는 AWS Private CA Connector for Kubernetes 1.10.1 미만에서 Namespace Issuer만 승인된 사용자가 조건에 따라 Cluster Issuer로 인증서를 발급받을 수 있었음을 설명한다. 기존 RBAC 런타임 결과는 그대로 두고, Issuer의 이름뿐 아니라 `kind`와 Namespace가 모두 맞아야 허용하는 작은 정책 판정을 추가했다.
+
 ## 권한 구조
 
 ```text
@@ -37,7 +39,7 @@ Secret / delete / other-team / ClusterRole
 kind 실행 파일이 PATH에 있으면:
 
 ```powershell
-cd F:\main\labs\13-kubernetes-rbac
+cd F:\main\labs\role-groups\04-security-trust\experiments\kubernetes-rbac
 .\run.ps1
 ```
 
@@ -48,6 +50,12 @@ cd F:\main\labs\13-kubernetes-rbac
 ```
 
 스크립트는 Digest로 고정한 kind Node Image로 임시 클러스터를 만들고 Manifest를 적용한 뒤 `kubectl auth can-i --as=system:serviceaccount:rbac-lab:operator-reader`를 실행한다. 검증이 끝나면 클러스터와 임시 kubeconfig를 지운다. 조사 목적으로 남길 때만 `-KeepCluster`를 사용한다.
+
+Issuer 경계의 합성 정책 판정은 Cluster 없이 실행한다.
+
+```powershell
+python .\validate_issuer_boundary.py --input .\issuer-boundary-cases.json --evidence .\evidence\2026-11-14-issuer-boundary.json
+```
 
 ## 직접 돌려본 결과
 
@@ -64,9 +72,15 @@ cd F:\main\labs\13-kubernetes-rbac
 
 6개가 모두 기대와 일치했다. “조회가 된다”만 확인하지 않고, 자동화 계정이 Secret과 삭제 권한을 얻지 않았고 Namespace 밖으로 나가지 못하는 것도 같이 확인했다.
 
+## Issuer 이름·종류·Namespace를 함께 본 결과
+
+[2026-11-14 Issuer 경계 판정 증적](evidence/2026-11-14-issuer-boundary.json)에서는 정확한 `AWSPCAIssuer/team-issuer` 한 건만 허용했다. 같은 이름의 `AWSPCAClusterIssuer`, 승인되지 않은 Cluster Issuer, `kind` 누락, 일반 `Issuer`, 다른 Namespace 요청 5건은 거부됐다.
+
+이 결과는 내가 만든 합성 Approval Policy의 6/6 판정이다. AWS Private CA Connector, cert-manager, 실제 CertificateRequest, 하위 CA 발급, 1.10.1 Upgrade와 인증서 갱신은 실행하지 않았다. 기존 2026-09-30 증적만 kind Runtime에서 실행한 RBAC 검증이다.
+
 ## 남은 점
 
-- 실제 Operator, CRD, Controller Image, Helm Chart와 Dell CSM은 배포하지 않았다.
+- 실제 Operator, CRD, Controller Image, Helm Chart, Dell CSM과 AWS Private CA Connector는 배포하지 않았다.
 - Admission Policy, NetworkPolicy, Audit Log, ServiceAccount Token 회전은 확인하지 않았다.
 - `kubectl --as`를 사용할 수 있는 로컬 관리자 자격으로 권한을 질의했다. 운영 클러스터 사용자의 권한 모델을 검증한 결과는 아니다.
 - 이 결과는 임시 kind 클러스터의 로컬 런타임 검증이다. `snsd-multicloud-ops`의 k3s PaaS에 적용되었다는 뜻은 아니다.

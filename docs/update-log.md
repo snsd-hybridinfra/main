@@ -236,3 +236,10 @@
 - 아키텍처 의사결정 기록 27개는 `docs/archive/legacy-adr/`에 별도 보존했습니다. 과거 증적이나 팀 프로젝트 원본 기록은 새 랩의 성공 증거로 옮기지 않았습니다.
 - 총 **51개 개별 랩(기존 로컬 검증 14, 이관 후 미재검증 37)**을 `labs/role-groups/`의 **7개 운영 역할군**에 1회씩 배정했습니다. 입력/출력·공동 검증·중복 통합 지침을 문서화했으며, **통합 코드를 실행하거나 검증하지 않았습니다**.
 - 세 원본 저장소의 경로/SHA 목록만 인덱스로 보존했으며 전체 Git mirror/복원 검증·메타데이터 백업·원본 삭제는 진행하지 않았습니다.
+
+## 2026-11-14 — Credential·Issuer 경계 검증
+
+- 대화에서 마지막으로 확인 가능한 2026-11-02 브리핑의 AWS 공식 공지 두 건을 원문과 대조했다.
+- 기존 [IAM/STS](../labs/role-groups/04-security-trust/experiments/iam-sts/README.md)에 무효한 합성 Credential의 평문·Hex 로그와 Process Argument 노출 검사를 추가했다. 노출 3건·안전 2건, 총 5/5가 예상과 일치했다.
+- 기존 [Kubernetes RBAC](../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/README.md)에 Issuer `kind`·이름·Namespace를 함께 보는 합성 승인 정책을 추가했다. 정확한 Namespace Issuer 1건만 허용하고 5건을 거부해 6/6이 일치했다.
+- 실제 KPL·AWS 자격증명·Private CA Connector·cert-manager·Certificate 발급은 실행하지 않았다. 기존 실험을 수정했으며 새 실험을 등록하지 않았다.

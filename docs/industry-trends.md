@@ -2,7 +2,7 @@
 
 **2026년 11월 2일 (월) 누적 정리:** [분야별 종합](briefings/cumulative-summary.md) · [최근 후속](briefings/latest-updates.md) · [컨퍼런스 노트](briefings/conference-notes.md) · [출처·확보 범위](briefings/source-register.md). 아래 기존 기록의 실습 상태는 유지하며, 새 공식 자료 확인과 신규 실행 검증을 구분합니다.
 
-기준: 2026년 10월 18일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
+기준: 2026년 11월 2일까지의 「IT·보안 데일리 브리핑」 대화 요약. 이 문서는 당시 브리핑의 **학습 주제 분류**이며, 각 시장 전망이나 기사 수치를 독립적으로 검증한 보고서가 아닙니다. 새 사실을 추가할 때는 원문 출처와 날짜를 확인합니다. 기사별 질문·실습·한계는 [뉴스 → 기술 실습 기록](news-to-labs.md)에 적습니다.
 
 ## 1. AI 인프라 전체 스택
 
@@ -38,7 +38,9 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 
 브리핑에서 반복된 운영 흐름은 네트워크 CLI에서 Python/API/Telemetry로, 서버 모니터링에서 Logs·Metrics·Traces를 연결하는 방향입니다. [Unit 42의 Kubernetes Operator 연구](https://unit42.paloaltonetworks.com/agentic-ai-kubernetes-operator-risks/)(2026-09-29)는 자동화 ServiceAccount의 과도한 RBAC가 침해 범위를 키운다는 문제를 제시했습니다. Kubernetes는 Pod뿐 아니라 Service, Ingress/Gateway, NetworkPolicy, RBAC, Storage와 관측까지 함께 학습합니다.
 
-**실습 연결:** RESTCONF 조회 결과와 CLI 대조, 네트워크 상태 자동 점검, 합성 워크로드 관측. 13번 랩에서는 Namespace Role로 조회만 허용하고 Secret·삭제·다른 Namespace·ClusterRole 접근을 kind 런타임에서 거부했습니다.
+[AWS Private CA Connector for Kubernetes CVE-2026-119115 공지](https://aws.amazon.com/security/security-bulletins/2026-156-aws/)(2026-10-29)는 Issuer 이름만으로 Namespace와 Cluster 범위를 구분하지 말고 `kind`와 이름을 정확히 확인해야 하는 사례를 보여 줍니다.
+
+**실습 연결:** RESTCONF 조회 결과와 CLI 대조, 네트워크 상태 자동 점검, 합성 워크로드 관측. Kubernetes RBAC 실험에서는 Namespace Role로 조회만 허용하고 Secret·삭제·다른 Namespace·ClusterRole 접근을 kind 런타임에서 거부했습니다. 별도 합성 판정에서는 정확한 `AWSPCAIssuer` 한 건만 허용하고 Cluster Kind·Kind 누락·다른 Namespace 요청을 거부했습니다.
 
 ## 7. 서비스 경계의 가용성과 취약점 우선순위
 
@@ -66,7 +68,9 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 
 9월 28일 브리핑의 [Microsoft Storm-3168 분석](https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/)은 탈취된 Service Principal이 짧은 시간에 대량 삭제를 시도했고, 일부 Storage는 Resource Lock과 삭제 보호로 차단됐다고 설명합니다. 사람 계정뿐 아니라 Service Principal·IAM Role·Service Account의 최소 권한과 자격증명 수명주기가 클라우드 복원력의 핵심입니다.
 
-**실습 연결:** AWS 형식의 합성 신뢰·역할·세션 정책으로 허용 2건과 거부 5건을 로컬 판정했습니다. Azure Resource Lock과 실제 클라우드 자격증명은 검증하지 않았습니다.
+[AWS Kinesis Producer Library CVE-2026-119117 공지](https://aws.amazon.com/security/security-bulletins/2026-159-aws/)(2026-10-30)는 최소 권한 정책과 별개로 DEBUG 로그와 Process Argument가 자격증명 노출 경로가 될 수 있음을 보여 줍니다.
+
+**실습 연결:** AWS 형식의 합성 신뢰·역할·세션 정책으로 허용 2건과 거부 5건을 로컬 판정했습니다. 추가로 무효한 합성 문자열의 평문·Hex 노출과 Redaction 결과 5건을 확인했습니다. Azure Resource Lock, 실제 KPL과 클라우드 자격증명은 검증하지 않았습니다.
 
 ## 11. AI Multi-Region Data Path
 

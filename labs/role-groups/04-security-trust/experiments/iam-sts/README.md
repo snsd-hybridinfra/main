@@ -4,6 +4,8 @@
 
 [Google Threat Intelligence Group의 적대적 AI 분석](https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai)(2026-09-08)을 읽으면서 클라우드 자격증명이 탈취됐을 때 피해 범위를 어디까지 줄일 수 있는지가 궁금했다. 이어서 [Microsoft의 Storm-3168 분석](https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/)(2026-09-25)을 확인했다. 공격자는 탈취한 Azure Service Principal로 자원을 대량 삭제하고 다른 자격증명도 수집했다. 일부 Storage 삭제는 Resource Lock과 삭제 보호에 막혔다.
 
+[AWS 보안 공지 2026-159-AWS, CVE-2026-119117](https://aws.amazon.com/security/security-bulletins/2026-159-aws/)(2026-10-30 23:00 PDT)는 Amazon Kinesis Producer Library for Java 1.0.8 미만에서 자격증명이 DEBUG 로그와 Native Child Process 인자에 들어갈 수 있었음을 설명한다. 정책이 최소 권한이어도 로그와 프로세스 목록이 새 노출 경로가 될 수 있다는 문제를 기존 랩에 더했다. 실제 KPL이나 AWS 자격증명은 사용하지 않았다.
+
 기사의 공격을 재현하지는 않았다. 대신 더 작은 질문으로 바꿨다.
 
 > 역할 자격증명이 노출되더라도 신뢰 관계, 역할 권한, 세션 정책, 명시적 거부를 겹쳐 두면 허용된 작업 밖으로 나가지 못하게 할 수 있을까?
@@ -26,11 +28,17 @@
 ## 실행
 
 ```powershell
-cd F:\main\labs\04-iam-sts
+cd F:\main\labs\role-groups\04-security-trust\experiments\iam-sts
 python .\evaluate_policy.py --directory . --evidence .\evidence\2026-09-28.json
 ```
 
 평가기는 각 시나리오의 예상값과 실제 판정을 비교하고 하나라도 다르면 실패 코드로 끝난다. 실행 결과는 날짜별 JSON으로 남긴다.
+
+자격증명 노출 표면 확인은 별도 합성 입력으로 실행한다.
+
+```powershell
+python .\scan_credential_exposure.py --input .\credential-exposure-cases.json --evidence .\evidence\2026-11-14-credential-exposure.json
+```
 
 ## 내가 확인한 결과
 
@@ -47,6 +55,12 @@ python .\evaluate_policy.py --directory . --evidence .\evidence\2026-09-28.json
 
 결과 원본은 [2026-09-28 실행 증적](evidence/2026-09-28.json)에 저장했다. 입력 정책과 시나리오의 SHA-256도 같이 기록해 어떤 파일로 실행했는지 다시 확인할 수 있게 했다.
 
+## 자격증명 노출 표면을 따로 확인한 결과
+
+[2026-11-14 합성 노출 검사 증적](evidence/2026-11-14-credential-exposure.json)에서는 5개 사례가 모두 예상과 같았다. 안전한 INFO 로그와 Redaction된 로그는 통과했고, 테스트 문자열이 평문이나 Hex로 들어간 DEBUG 로그 2건과 Process Argument 1건은 노출로 잡았다.
+
+이 검사는 `LAB_CREDENTIAL_SYNTHETIC_ONLY`라는 무효한 문자열만 찾는다. 실제 KPL 0.x·1.x, AWS Credential Provider, OS Process List, 로그 수집 Pipeline, AWS Key 회전이나 Role Session 폐기를 검증한 결과가 아니다. AWS 공지의 완전한 해결책인 KPL 1.0.8 이상 Upgrade도 수행하지 않았다.
+
 ## 해보고 정리한 점
 
 역할 정책에 읽기 권한이 있어도 세션 정책에 없으면 최종 권한에서 빠졌다. 반대로 세션 정책에 항목을 더 넣는다고 역할 정책보다 권한이 커지지는 않았다. 쓰기와 삭제는 명시적 거부가 우선했다. 이번 실습에서 확인하고 싶었던 것은 이 세 가지 관계였다.
@@ -59,7 +73,7 @@ python .\evaluate_policy.py --directory . --evidence .\evidence\2026-09-28.json
 - Azure Resource Lock과 삭제 보호의 실제 차단
 - 운영 자원에 대한 공격이나 삭제
 
-그래서 현재 상태는 **로컬 정책 판정 7/7 통과**로 기록했다. 클라우드 런타임 검증은 아니다.
+그래서 현재 상태는 **로컬 정책 판정 7/7과 합성 노출 검사 5/5 통과**로 기록했다. 클라우드 런타임 검증은 아니다.
 
 ## 다음에 실제 계정에서 해볼 순서
 

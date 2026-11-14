@@ -7,7 +7,7 @@
 | [네트워크 패브릭](labs/role-groups/01-network-fabric/README.md) | BGP/ECMP 경로 전환, EVPN/VXLAN 세그먼트 격리, AIDC 공유 병목 |
 | [클라우드 인프라](labs/role-groups/02-cloud-foundation/README.md) | AWS·Azure·OpenStack 주소 계획, Terraform 공개 SSH 탐지, k3s 초기 구성 |
 | [플랫폼 배포](labs/role-groups/03-platform-delivery/README.md) | 실험 카탈로그 UI, 셀프서비스 VM 요청, Kubernetes GitOps |
-| [보안·접근 제어](labs/role-groups/04-security-trust/README.md) | IAM/STS 세션 권한, AAA/RADIUS 승인·거부, Kubernetes 최소 권한 |
+| [보안·접근 제어](labs/role-groups/04-security-trust/README.md) | IAM/STS 세션 권한·자격증명 노출, AAA/RADIUS 승인·거부, Kubernetes 최소 권한·Issuer 범위 |
 | [관측·장애 분석](labs/role-groups/05-observability-sre/README.md) | Prometheus·Grafana·Loki 장애 추적, 합성 메트릭 이상 탐지, 서비스 상태 분류 |
 | [변경 자동화](labs/role-groups/06-change-automation/README.md) | RESTCONF와 CLI 상태 비교, 변경 승인 정책, 회귀 검증 |
 | [백업·복구](labs/role-groups/07-recovery-dr/README.md) | 서비스 RTO/RPO 측정, PostgreSQL·Restic 백업 검증, 복원 후 점검 |

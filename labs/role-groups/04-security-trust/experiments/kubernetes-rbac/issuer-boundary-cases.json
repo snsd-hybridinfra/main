@@ -1,0 +1,71 @@
+{
+  "source": {
+    "url": "https://aws.amazon.com/security/security-bulletins/2026-156-aws/",
+    "published_at": "2026-10-29T09:30:00-07:00",
+    "cve": "CVE-2026-119115"
+  },
+  "approval_policy": {
+    "namespace": "rbac-lab",
+    "allowed_issuers": [
+      {
+        "kind": "AWSPCAIssuer",
+        "name": "team-issuer"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "approved-namespaced-issuer",
+      "namespace": "rbac-lab",
+      "issuer_ref": {
+        "kind": "AWSPCAIssuer",
+        "name": "team-issuer"
+      },
+      "expected": "allow"
+    },
+    {
+      "name": "cluster-kind-same-name-denied",
+      "namespace": "rbac-lab",
+      "issuer_ref": {
+        "kind": "AWSPCAClusterIssuer",
+        "name": "team-issuer"
+      },
+      "expected": "deny"
+    },
+    {
+      "name": "unapproved-cluster-issuer-denied",
+      "namespace": "rbac-lab",
+      "issuer_ref": {
+        "kind": "AWSPCAClusterIssuer",
+        "name": "global-ca"
+      },
+      "expected": "deny"
+    },
+    {
+      "name": "missing-kind-denied",
+      "namespace": "rbac-lab",
+      "issuer_ref": {
+        "name": "team-issuer"
+      },
+      "expected": "deny"
+    },
+    {
+      "name": "generic-issuer-kind-denied",
+      "namespace": "rbac-lab",
+      "issuer_ref": {
+        "kind": "Issuer",
+        "name": "team-issuer"
+      },
+      "expected": "deny"
+    },
+    {
+      "name": "other-namespace-denied",
+      "namespace": "other-team",
+      "issuer_ref": {
+        "kind": "AWSPCAIssuer",
+        "name": "team-issuer"
+      },
+      "expected": "deny"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 | 순서 | 실험 흐름 | 비교할 증적 |
 |---|---|---|
 | 1 | [네트워크 패브릭](../labs/role-groups/01-network-fabric/README.md)에서 정상 경로를 확인한 뒤 링크를 끊습니다. | BGP 이웃, FIB, 서비스 통신 |
-| 2 | [클라우드 인프라](../labs/role-groups/02-cloud-foundation/README.md)와 [보안·접근 제어](../labs/role-groups/04-security-trust/README.md)에서 주소 계획과 권한을 검증합니다. | CIDR 충돌, 허용·거부 정책 판정 |
+| 2 | [클라우드 인프라](../labs/role-groups/02-cloud-foundation/README.md)와 [보안·접근 제어](../labs/role-groups/04-security-trust/README.md)에서 주소 계획과 권한을 검증합니다. [IAM/STS](../labs/role-groups/04-security-trust/experiments/iam-sts/README.md)의 합성 Credential 노출 검사와 [Kubernetes RBAC](../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/README.md)의 Issuer 범위 판정을 이어서 봅니다. | CIDR 충돌, 허용·거부 정책, [Credential 5/5](../labs/role-groups/04-security-trust/experiments/iam-sts/evidence/2026-11-14-credential-exposure.json), [Issuer 6/6](../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/evidence/2026-11-14-issuer-boundary.json) |
 | 3 | [플랫폼 배포](../labs/role-groups/03-platform-delivery/README.md)와 [변경 자동화](../labs/role-groups/06-change-automation/README.md)에서 배포 전 조건과 변경 후 상태를 비교합니다. | 배포 조건, 설정 차이, 상태 스냅샷 |
 | 4 | [관측·장애 분석](../labs/role-groups/05-observability-sre/README.md)과 [백업·복구](../labs/role-groups/07-recovery-dr/README.md)에서 장애와 복구를 관측합니다. | 이벤트 시간, 서비스 프로브, 복구 상태 |
 
