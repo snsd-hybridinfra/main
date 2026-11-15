@@ -6,6 +6,8 @@
 
 2026-09-30 브리핑에서 본 [AWS European Sovereign Cloud 독립 운영 시험 발표](https://aws.amazon.com/blogs/security/aws-european-sovereign-cloud-demonstrating-an-independent-operation/)(2026-09-28)도 같은 질문으로 연결됐다. AWS는 2026-10-24에 Global Network Backbone 연결과 제한된 운영 데이터 전송 시스템을 수시간 끊고, 전용 EU 인터넷 경로와 Direct Connect를 이용해 서비스를 유지하는 시험을 예고했다.
 
+[AWS Interconnect - last mile의 Equinix 연계 프리뷰](https://aws.amazon.com/about-aws/whats-new/2026/11/interconnect-last-mile-preview-equinix/)(2026-11-04)는 두 위치·네 링크, BGP·VLAN·ASN 자동 구성과 기본 MACsec을 설명한다. 이 발표를 읽고 “세션과 물리 경로가 살아 있어도 서비스 정책 때문에 실제 통신은 실패할 수 있지 않을까?”를 기존 변경 게이트에 추가했다. AWS 서비스나 Equinix 회선을 사용한 것은 아니다.
+
 2026-10-02 브리핑의 [KT클라우드 AIDC 운영 플랫폼 보도](https://www.bloter.net/news/articleView.html?idxno=674805)와 [네이버클라우드 AI Factory 풀스택 보도](https://www.bloter.net/news/articleView.html?idxno=674818)(모두 2026-10-01)는 GPU 보유량만큼 운영 소프트웨어, Cloud Platform, Network·Storage·Security를 함께 보는 관점이 중요하다고 설명했다. 이 문제도 여러 환경의 상태와 의존성을 한 모델에서 확인하는 기존 질문과 겹쳐 새 랩을 만들지 않았다.
 
 제품 없이도 핵심 개념부터 확인해 보고 싶었다. 그래서 질문을 **“읽기 전용 토폴로지로 정상 경로, 단일 장애, 금지 흐름, 외부 의존성 제거 뒤의 대체 경로와 AIDC 운영 사각지대를 변경 전에 판정할 수 있을까?”**로 넓혔다. 아래 JSON 모델과 시나리오는 원문 구성을 그대로 복제한 것이 아니라 내가 만든 합성 환경이다.
@@ -34,13 +36,14 @@ AIDC operator -- unified-control-plane -- public-cloud-api
 ## 실행
 
 ```powershell
-cd F:\main\labs\10-network-digital-twin
+cd F:\main\labs\role-groups\01-network-fabric\experiments\network-digital-twin
 python .\validate.py --model .\model.json --evidence .\evidence\2026-10-02.json
+python .\test_change_gate.py --evidence .\evidence\2026-11-15-change-gate.json
 ```
 
 ## 직접 계산한 결과
 
-[2026-10-02 실행 증적](evidence/2026-10-02.json):
+[2026-10-02 실행 증적](evidence/2026-10-02.json)의 시나리오는 [2026-11-15 재실행 증적](evidence/2026-11-15-model.json)에서도 모두 통과했다.
 
 | 시나리오 | 의도 | 관측 | 판정 |
 |---|---|---|---|
@@ -55,12 +58,27 @@ python .\validate.py --model .\model.json --evidence .\evidence\2026-10-02.json
 
 증적에는 입력 모델 SHA-256, 비활성 노드, 계산한 경로, 정책 적용 전후 경로 수가 포함된다. 2026-09-26 첫 모델과 [2026-09-30 확장 모델 증적](evidence/2026-09-30.json)도 지우지 않았다.
 
+## 변경 게이트를 다시 돌린 결과
+
+[2026-11-15 변경 게이트 증적](evidence/2026-11-15-change-gate.json)에서는 정상·단일 링크 제거·서비스 정책 차단·세그멘테이션 제거·복구의 5개 사례가 모두 기대와 일치했다.
+
+| 사례 | 내가 기대한 판정 | 관측 |
+|---|---|---|
+| 정상 | 승인 | 합성 BGP 세션 2개, Client→App 유효 경로 2개, Guest→Admin 0개 |
+| Spine1 링크 제거 | 거부 | 세션과 유효 경로가 각각 1개로 줄어 이중화 기준 미달 |
+| 서비스 정책이 App 차단 | 거부 | 세션 2개·토폴로지 경로 2개지만 유효 경로 0개 |
+| 세그멘테이션 제거 | 거부 | Guest→Admin 유효 경로 2개가 생김 |
+| 복구 | 승인 | 정상 상태와 같은 판정으로 돌아옴 |
+
+여기서 BGP 세션 수는 실제 프로토콜 실행 결과가 아니라 사례 입력값이다. 확인한 것은 **제어면처럼 보이는 값 하나만으로 변경을 승인하지 않고 경로·서비스 정책·격리를 함께 보는 로컬 판정 코드**다.
+
 ## 계산하면서 보인 한계
 
 - 실제 장비, IP Fabric 제품, AWS European Sovereign Cloud, Direct Connect, KT클라우드나 네이버클라우드 제품을 사용하지 않았다.
 - AWS가 예고한 2026-10-24 시험 결과를 미리 성공으로 쓴 것이 아니다. 이번 결과는 발표에 나온 의존성 구조를 내가 단순화해 계산한 값이다.
 - JSON 모델은 운영망에서 자동 수집한 상태가 아니므로 입력이 틀리면 결과도 틀릴 수 있다.
 - 라우팅 프로토콜 수렴, BGP 경로 선택, ACL 우선순위, NAT, 포트·프로토콜, 지연·손실은 계산하지 않는다.
+- AWS Interconnect, Direct Connect, Equinix, MACsec, VLAN·ASN과 99.99% SLA를 실행하거나 검증하지 않았다.
 - 따라서 결과는 **합성 모델의 로컬 검증**이며 운영망의 실제 도달성이나 주권 요건 충족 증명이 아니다.
 
 ## 다음에 이어서 할 일

@@ -29,7 +29,7 @@
         },
         {
           "path": "labs/role-groups/01-network-fabric/experiments/network-digital-twin",
-          "status": "PREVIOUS_LOCAL_EVIDENCE",
+          "status": "LOCAL_VALIDATED",
           "title": "Network Digital Twin: 애플리케이션 경로·AIDC Control Plane 의도 검증"
         },
         {

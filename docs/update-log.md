@@ -243,3 +243,11 @@
 - 기존 [IAM/STS](../labs/role-groups/04-security-trust/experiments/iam-sts/README.md)에 무효한 합성 Credential의 평문·Hex 로그와 Process Argument 노출 검사를 추가했다. 노출 3건·안전 2건, 총 5/5가 예상과 일치했다.
 - 기존 [Kubernetes RBAC](../labs/role-groups/04-security-trust/experiments/kubernetes-rbac/README.md)에 Issuer `kind`·이름·Namespace를 함께 보는 합성 승인 정책을 추가했다. 정확한 Namespace Issuer 1건만 허용하고 5건을 거부해 6/6이 일치했다.
 - 실제 KPL·AWS 자격증명·Private CA Connector·cert-manager·Certificate 발급은 실행하지 않았다. 기존 실험을 수정했으며 새 실험을 등록하지 않았다.
+
+## 2026-11-15 — 새 브리핑 대화 연결과 변경 게이트 재검증
+
+- 11월 2일에 멈춘 기존 브리핑 대화 대신 이어서 생성된 같은 제목의 대화에서 11월 5일·7일 브리핑을 확인했다. 자동화의 확인 대상을 새 대화로 수정했다.
+- AWS Interconnect - last mile의 Equinix 프리뷰, KISA의 Synology NAS 랜섬웨어 주의 권고, AWS Security Hub SBOM 인벤토리 발표를 공식 원문과 대조했다.
+- 새 랩을 만들지 않고 [Network Digital Twin](../labs/role-groups/01-network-fabric/experiments/network-digital-twin/README.md)의 기존 변경 게이트를 수정했다. 정상·단일 링크 제거·서비스 정책 차단·세그멘테이션 제거·복구 5개가 모두 기대와 일치했다.
+- 기존 토폴로지 검증도 같은 날 다시 실행했다. 공통 역할군 회귀 검사에서 Windows 경로 구분자가 FRR의 Linux 로그 경로에 들어가는 문제를 발견해 렌더러를 POSIX 경로로 고정했다. NetBox 인벤토리 생성이 Linux 전용 런타임 모듈을 불필요하게 불러오던 의존성도 분리했다.
+- 실제 AWS·Equinix·Synology·Security Hub, BGP·MACsec·NAS·SBOM 런타임은 검증하지 않았다.

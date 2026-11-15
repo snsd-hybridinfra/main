@@ -1,0 +1,83 @@
+{
+  "tested_at": "2026-11-15T08:14:02.571652+00:00",
+  "status": "passed",
+  "source": {
+    "url": "https://aws.amazon.com/about-aws/whats-new/2026/11/interconnect-last-mile-preview-equinix/",
+    "published_at": "2026-11-04"
+  },
+  "scope": "synthetic undirected graph, session count, and pair policy only",
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "accepted": 2,
+    "rejected": 3
+  },
+  "results": {
+    "baseline": {
+      "observed": {
+        "established_bgp_sessions": 2,
+        "client_app_topology_paths": 2,
+        "client_app_effective_paths": 2,
+        "guest_admin_topology_paths": 2,
+        "guest_admin_effective_paths": 0
+      },
+      "expected_accept": true,
+      "actual_accept": true,
+      "passed": true
+    },
+    "spine1_link_removed": {
+      "observed": {
+        "established_bgp_sessions": 1,
+        "client_app_topology_paths": 1,
+        "client_app_effective_paths": 1,
+        "guest_admin_topology_paths": 1,
+        "guest_admin_effective_paths": 0
+      },
+      "expected_accept": false,
+      "actual_accept": false,
+      "passed": true
+    },
+    "service_policy_blocks_app": {
+      "observed": {
+        "established_bgp_sessions": 2,
+        "client_app_topology_paths": 2,
+        "client_app_effective_paths": 0,
+        "guest_admin_topology_paths": 2,
+        "guest_admin_effective_paths": 0
+      },
+      "expected_accept": false,
+      "actual_accept": false,
+      "passed": true
+    },
+    "segmentation_removed": {
+      "observed": {
+        "established_bgp_sessions": 2,
+        "client_app_topology_paths": 2,
+        "client_app_effective_paths": 2,
+        "guest_admin_topology_paths": 2,
+        "guest_admin_effective_paths": 2
+      },
+      "expected_accept": false,
+      "actual_accept": false,
+      "passed": true
+    },
+    "restored": {
+      "observed": {
+        "established_bgp_sessions": 2,
+        "client_app_topology_paths": 2,
+        "client_app_effective_paths": 2,
+        "guest_admin_topology_paths": 2,
+        "guest_admin_effective_paths": 0
+      },
+      "expected_accept": true,
+      "actual_accept": true,
+      "passed": true
+    }
+  },
+  "not_validated": [
+    "AWS Interconnect, Direct Connect, Equinix, or MACsec runtime",
+    "BGP protocol negotiation, route selection, or convergence time",
+    "VLAN, ASN, physical circuit diversity, or service SLA",
+    "ACL order, ports, protocols, latency, loss, or application probes"
+  ]
+}

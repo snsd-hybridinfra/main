@@ -20,6 +20,8 @@
 
 데이터 위치, 규제, 지연, 비용과 운영 통제가 클라우드 설계에 영향을 줍니다. [AWS European Sovereign Cloud 독립 운영 시험 발표](https://aws.amazon.com/blogs/security/aws-european-sovereign-cloud-demonstrating-an-independent-operation/)(2026-09-28)는 Global Backbone과 제한된 운영 데이터 전송 시스템을 분리한 상태에서 전용 EU Internet과 Direct Connect 경로를 유지하는 시험을 예고했습니다. [OpenStack 2026.2 Hibiscus 공식 릴리스](https://www.openstack.org/software/openstack-hibiscus/)(2026-09-30)는 Private Cloud 기반이 계속 갱신되고 있음을 보여 줍니다. 개인 프로젝트의 OpenStack/k3s 경계와 연결하되, 실제 퍼블릭 클라우드 연동과 Hibiscus 배포 전에는 `Hybrid-Ready`로만 표기합니다.
 
+[AWS Interconnect - last mile의 Equinix 연계 프리뷰](https://aws.amazon.com/about-aws/whats-new/2026/11/interconnect-last-mile-preview-equinix/)(2026-11-04)는 두 위치·네 링크, BGP·VLAN·ASN 자동 구성, 기본 MACsec과 99.99% SLA를 서비스 설명으로 제시했습니다. 기존 Network Digital Twin 변경 게이트에는 세션·경로가 남아 있어도 서비스 정책이 통신을 막는 합성 사례를 추가했습니다. 실제 회선 이중화나 SLA를 검증한 결과는 아닙니다.
+
 **학습 연결:** Private IaaS, IAM/STS, Terraform, Kubernetes 네트워킹. 10번 디지털 트윈에는 이 의존성을 단순화한 합성 경로를 넣어 Global Backbone 제거 뒤 EU Internet·Direct Connect 경로를 계산했습니다. AWS가 예고한 2026-10-24 실제 시험 결과는 아직 확인 대상입니다.
 
 ## 4. AI Agent Security와 보안 기본기
@@ -32,7 +34,7 @@ Agent가 API·셸·저장소·클라우드 권한을 사용할 때는 최소 권
 
 ## 5. 복구와 운영
 
-HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터센터 피격 보도](https://www.reuters.com/world/drones-hit-yandex-data-centre-first-major-attack-russian-data-hub-2026-10-08/)(발생·보도 2026-10-08)는 장비 장애를 넘어 물리 사이트와 전력 손상이 서비스에 미치는 영향을 보여 줍니다. 05번 랩은 같은 노트북의 두 임시 디렉터리와 포트로만 사이트 전환을 모델링했고, 실제 장애 도메인·DNS·회선·클라우드 DR은 검증하지 않았습니다.
+HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터센터 피격 보도](https://www.reuters.com/world/drones-hit-yandex-data-centre-first-major-attack-russian-data-hub-2026-10-08/)(발생·보도 2026-10-08)는 장비 장애를 넘어 물리 사이트와 전력 손상이 서비스에 미치는 영향을 보여 줍니다. [KISA의 Synology NAS 랜섬웨어 주의 권고](https://boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=72267)(2026-11-03)는 관리면 노출 제한, 별도 백업과 실제 복구 점검, 감염 의심 시 격리·증거 보존을 함께 봐야 함을 보여 줍니다. 05번 랩은 같은 노트북의 두 임시 디렉터리와 포트로만 사이트 전환을 모델링했고, NAS·랜섬웨어·독립 백업망은 검증하지 않았습니다.
 
 ## 6. Kubernetes·자동화·관측
 
@@ -61,6 +63,8 @@ HA, 백업, 복원, 재구축, RTO/RPO를 분리해 봅니다. [Yandex 데이터
 [AWS 보안 공지 2026-137-AWS](https://aws.amazon.com/security/security-bulletins/2026-137-aws/)(2026-10-15)는 같은 CVE라도 자체 관리 KVM과 AWS 관리형 Compute의 운영 책임이 다름을 보여 줍니다. 11번 랩은 합성 적용 범위 사례 세 개로 Patch/Reboot 대상과 공지상 고객 조치가 없는 대상을 분리했습니다.
 
 [Palo Alto Networks CVE-2026-0322 공지](https://security.paloaltonetworks.com/CVE-2026-0322)(2026-10-14 게시·10-15 갱신)와 [Google/Mandiant의 BeyondTrust CVE-2026-102764 분석](https://cloud.google.com/blog/topics/threat-intelligence/armory-castle-exploits-beyondtrust/)(2026-10-15)은 관리 인터페이스와 원격지원 장비가 침해되면 저장된 자격증명과 내부 접근 경로까지 위험해질 수 있음을 보여 줍니다. 11번 랩에는 두 합성 자산의 우선순위를, 09번 랩에는 기존 관리망 분리 증적을 연결했습니다.
+
+[AWS Security Hub SBOM 인벤토리 발표](https://aws.amazon.com/about-aws/whats-new/2026/11/security-hub-sbom-inventory/)(2026-11-06)는 Amazon Inspector가 생성한 EC2·ECR Image·Lambda의 패키지·버전·자원 수를 계정과 Region 기준으로 조회하는 흐름을 보여 줍니다. SBOM에 패키지가 있다는 사실과 취약점 영향·노출·서비스 중요도는 별도로 판정해야 합니다. 기존 취약점 우선순위 랩과 연결했지만 실제 AWS 계정이나 SBOM은 수집하지 않았습니다.
 
 **실습 연결:** 공격을 재현하지 않고 CISA KEV 3건, Cisco·Microsoft·Huntress·Palo Alto Networks·Google/Mandiant가 확인한 실제 악용 6개 CVE, Microsoft 패치 권고 1건을 합성 자산 맥락과 결합해 우선순위를 계산했습니다. 패치 권고만 확인된 Exchange 합성 자산에는 악용 점수를 주지 않았고, AhsayCBS 합성 백업 관리 서버는 95점 P0로 올라왔습니다. 실제 버전 식별, 패치, 침해 조사와 서비스 검증은 수행하지 않았습니다.
 

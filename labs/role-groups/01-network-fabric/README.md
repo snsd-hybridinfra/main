@@ -28,7 +28,7 @@ Digital Twin의 경로 모델을 검증하고 같은 IDC 토폴로지에서 생�
 | 실험 | 검증 기록 |
 |---|---|
 | [Edge Load Balancer HA: 관리면·사용자망·OT망 분리와 백엔드 장애 복구](experiments/load-balancer-ha/README.md) | 기존 로컬 검증 기록 |
-| [Network Digital Twin: 애플리케이션 경로·AIDC Control Plane 의도 검증](experiments/network-digital-twin/README.md) | 기존 로컬 검증 기록 |
+| [Network Digital Twin: 애플리케이션 경로·AIDC Control Plane 의도 검증](experiments/network-digital-twin/README.md) | 로컬 검증 |
 | [AI Multi-Region Data Path: Hub 원본과 Spoke 캐시](experiments/ai-multiregion-data-path/README.md) | 기존 로컬 검증 기록 |
 | [EVE-NG Routing Model & Read-Only Assurance](experiments/eve-network-assurance/README.md) | 이관 자료 · 개별 재검증 전 |
 | [OpenStack Service Topology & HA Boundaries](experiments/dandelion-service-topology/README.md) | 이관 자료 · 개별 재검증 전 |

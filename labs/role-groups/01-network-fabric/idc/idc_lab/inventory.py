@@ -9,11 +9,21 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .model import DATA, HOSTS, L3_VNI, LEAVES, LINKS, NODES, ROUTERS, SHARED, VLANS, VRF
 from .model import interfaces, leaf_vlans, prefix
-from .verify import write_json
 
 SITE = "idc-lab"
 REMOTE_SITE = "idc-lab-remote"
 WAN = "IDC-LAB-WAN-01"
+
+
+def write_json(path, value):
+    """Write an inventory artifact without importing the Linux runtime module."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    temporary.replace(path)
 
 
 def inventory():

@@ -1,0 +1,347 @@
+{
+  "tested_at": "2026-11-15T08:14:00.103137+00:00",
+  "model": "synthetic-app-network-v3",
+  "model_sha256": "cab7e9f5609f135097ae90450458b8a215d42d5995dbb0f19665409c48e6d8d6",
+  "sources": [
+    {
+      "title": "KT Cloud AIDC operations platform report",
+      "url": "https://www.bloter.net/news/articleView.html?idxno=674805",
+      "published_at": "2026-10-01"
+    },
+    {
+      "title": "NAVER Cloud AI Factory full-stack report",
+      "url": "https://www.bloter.net/news/articleView.html?idxno=674818",
+      "published_at": "2026-10-01"
+    }
+  ],
+  "status": "passed",
+  "scenarios": [
+    {
+      "name": "normal",
+      "disabled_nodes": [],
+      "checks": [
+        {
+          "source": "client",
+          "destination": "app",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 2,
+          "effective_path_count": 2,
+          "paths": [
+            [
+              "client",
+              "leaf1",
+              "spine1",
+              "leaf2",
+              "app"
+            ],
+            [
+              "client",
+              "leaf1",
+              "spine2",
+              "leaf2",
+              "app"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "guest",
+          "destination": "admin",
+          "expected_reachable": false,
+          "reachable": false,
+          "topology_path_count": 2,
+          "effective_path_count": 0,
+          "paths": [
+            [
+              "guest",
+              "leaf1",
+              "spine1",
+              "leaf2",
+              "admin"
+            ],
+            [
+              "guest",
+              "leaf1",
+              "spine2",
+              "leaf2",
+              "admin"
+            ]
+          ],
+          "policy_denied": true,
+          "policy_reason": "guest-to-management segmentation",
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "spine1-down",
+      "disabled_nodes": [
+        "spine1"
+      ],
+      "checks": [
+        {
+          "source": "client",
+          "destination": "app",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "client",
+              "leaf1",
+              "spine2",
+              "leaf2",
+              "app"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "both-spines-down",
+      "disabled_nodes": [
+        "spine1",
+        "spine2"
+      ],
+      "checks": [
+        {
+          "source": "client",
+          "destination": "app",
+          "expected_reachable": false,
+          "reachable": false,
+          "topology_path_count": 0,
+          "effective_path_count": 0,
+          "paths": [],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "sovereign-normal",
+      "disabled_nodes": [],
+      "checks": [
+        {
+          "source": "external-client",
+          "destination": "sovereign-service",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 2,
+          "effective_path_count": 2,
+          "paths": [
+            [
+              "external-client",
+              "eu-internet",
+              "sovereign-edge",
+              "sovereign-service"
+            ],
+            [
+              "external-client",
+              "global-backbone",
+              "sovereign-edge",
+              "sovereign-service"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "private-client",
+          "destination": "sovereign-service",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "private-client",
+              "direct-connect",
+              "sovereign-service"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "sovereign-global-systems-isolated",
+      "disabled_nodes": [
+        "global-backbone",
+        "operational-transfer"
+      ],
+      "checks": [
+        {
+          "source": "external-client",
+          "destination": "sovereign-service",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "external-client",
+              "eu-internet",
+              "sovereign-edge",
+              "sovereign-service"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "private-client",
+          "destination": "sovereign-service",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "private-client",
+              "direct-connect",
+              "sovereign-service"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "aidc-control-plane-normal",
+      "disabled_nodes": [],
+      "checks": [
+        {
+          "source": "aidc-operator",
+          "destination": "public-cloud-api",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "aidc-operator",
+              "unified-control-plane",
+              "public-cloud-api"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "aidc-operator",
+          "destination": "private-cloud-api",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "aidc-operator",
+              "unified-control-plane",
+              "private-cloud-api"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "aidc-operator",
+          "destination": "onprem-api",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "aidc-operator",
+              "unified-control-plane",
+              "onprem-api"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "aidc-private-cloud-api-unavailable",
+      "disabled_nodes": [
+        "private-cloud-api"
+      ],
+      "checks": [
+        {
+          "source": "aidc-operator",
+          "destination": "public-cloud-api",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "aidc-operator",
+              "unified-control-plane",
+              "public-cloud-api"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "aidc-operator",
+          "destination": "private-cloud-api",
+          "expected_reachable": false,
+          "reachable": false,
+          "topology_path_count": 0,
+          "effective_path_count": 0,
+          "paths": [],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        },
+        {
+          "source": "aidc-operator",
+          "destination": "onprem-api",
+          "expected_reachable": true,
+          "reachable": true,
+          "topology_path_count": 1,
+          "effective_path_count": 1,
+          "paths": [
+            [
+              "aidc-operator",
+              "unified-control-plane",
+              "onprem-api"
+            ]
+          ],
+          "policy_denied": false,
+          "policy_reason": null,
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ]
+}
