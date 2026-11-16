@@ -78,3 +78,16 @@ python3 mcp-regression.py
 ```
 
 마지막 명령은 시나리오별 기대값·실제값·실패 사유를 JSON으로 출력하며 일치하면 0, 불일치하면 1로 종료합니다. `401/403/400/201/200`은 모의 API의 응답 코드입니다. 목적지 검사는 예약 도메인의 단일 HTTPS 엔드포인트를 허용하는 합성 모델로 실행합니다. AWS 제품 실행, 실제 취약점 공격, DNS·리다이렉트·실제 업스트림 연결, IdP 연동 및 사용자 확인 정책은 검증 범위 밖입니다. 기존 Passport 테스트만 격리된 루프백 HTTP와 임시 파일을 사용합니다.
+
+## 2026-11-16 연구 후속 검증
+
+[guardscope 연구 기록](../../../../../docs/briefings/research-intake.md#guardscope)을 바탕으로 게이트 감사 로그를 루프백 HTTP 서버의 수신 기록과 대조합니다. `python3 run-lab.py` 출력의 `http_coverage`에서 네 가지 결과를 확인할 수 있습니다.
+
+| 시나리오 | 게이트 감사 기록 | 서버 수신 경로 |
+|---|---|---|
+| 허용된 Passport로 `/facts` 호출 | `allow` | `/facts` 1회 |
+| 읽기 전용 Passport로 같은 `/facts` 호출 | `scope_denied` | 0회 |
+| 허용된 Passport로 정책 밖 `/admin` 호출 | `network_denied` | 0회 |
+| 게이트를 통하지 않고 같은 `/facts` 직접 호출 | 0건 | `/facts` 1회 |
+
+직접 호출은 우회 관측이 가능한지 확인하는 대조군입니다. 이 검증은 Python 게이트와 루프백 서버의 수신 경로를 다룹니다. OS 수준의 우회 차단과 실제 LLM·MCP 통합 검증은 후속 실험 범위입니다.

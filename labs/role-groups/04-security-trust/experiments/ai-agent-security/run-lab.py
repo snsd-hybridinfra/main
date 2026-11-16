@@ -12,7 +12,7 @@ import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
-from urllib.request import urlopen
+from urllib.request import ProxyHandler, build_opener
 
 POLICY = json.loads(Path(__file__).with_name("policy.json").read_text(encoding="utf-8-sig"))
 TEST_SIGNING_KEY = b"local-lab-hmac-key-not-for-production"
@@ -58,6 +58,7 @@ class FactsHandler(BaseHTTPRequestHandler):
         pass
 
     def do_GET(self):
+        self.server.request_paths.append(self.path)
         if self.path != "/facts":
             self.send_error(404)
             return
@@ -67,6 +68,27 @@ class FactsHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+
+class FactsServer(ThreadingHTTPServer):
+    def __init__(self):
+        self.request_paths = []
+        super().__init__(("127.0.0.1", 0), FactsHandler)
+
+
+def get_fixture_json(url):
+    with build_opener(ProxyHandler({})).open(url, timeout=2) as response:
+        return json.load(response)
+
+
+def observe_http(server, gate, invoke):
+    audit_start = len(gate.audit)
+    request_start = len(server.request_paths)
+    result = invoke()
+    return result, {
+        "audit": gate.audit[audit_start:],
+        "received_paths": server.request_paths[request_start:],
+    }
 
 
 class Gate:
@@ -124,8 +146,7 @@ class Gate:
             if tool == "read_artifact":
                 Path(target).read_text(encoding="utf-8")
             elif tool == "http_get":
-                with urlopen(target, timeout=2) as response:
-                    json.load(response)
+                get_fixture_json(target)
             elif tool == "write_report":
                 Path(target).write_text(value, encoding="utf-8")
             self.spent += POLICY["cost_units"][tool]
@@ -144,7 +165,7 @@ def main():
         artifact = root / "facts.txt"
         artifact.write_text("synthetic source\n", encoding="utf-8")
         report = root / "report.txt"
-        server = ThreadingHTTPServer(("127.0.0.1", 0), FactsHandler)
+        server = FactsServer()
         worker = threading.Thread(target=server.serve_forever, daemon=True)
         worker.start()
         try:
@@ -155,19 +176,30 @@ def main():
             revoked_passport = issue_passport("revoked-agent-01", POLICY["allowed_tools"])
             read_only_passport = issue_passport(allowed_agent, ["read_artifact"])
             tampered_passport = full_passport[:-1] + ("0" if full_passport[-1] != "0" else "1")
+            fixture_origin = f"http://127.0.0.1:{port}"
+            http_coverage = {}
+
+            def checked_http(case, passport, path):
+                decision, observation = observe_http(
+                    server,
+                    gate,
+                    lambda: gate.execute(passport, allowed_agent, "http_get", fixture_origin + path),
+                )
+                http_coverage[case] = observation
+                return decision
 
             outcomes = {
                 "missing_passport": gate.execute(None, allowed_agent, "read_artifact", artifact),
                 "tampered_passport": gate.execute(tampered_passport, allowed_agent, "read_artifact", artifact),
                 "revoked_passport": gate.execute(revoked_passport, "revoked-agent-01", "read_artifact", artifact),
-                "scope_exceeded": gate.execute(read_only_passport, allowed_agent, "http_get", f"http://127.0.0.1:{port}/facts"),
+                "scope_exceeded": checked_http("scope_exceeded", read_only_passport, "/facts"),
                 "read": gate.execute(full_passport, allowed_agent, "read_artifact", artifact),
                 "wrong_identity": gate.execute(unknown_passport, "unknown-agent", "read_artifact", artifact),
                 "unknown_tool": gate.execute(full_passport, allowed_agent, "shell", "echo test"),
                 "path_escape": gate.execute(full_passport, allowed_agent, "read_artifact", root.parent / "outside.txt"),
                 "external_http": gate.execute(full_passport, allowed_agent, "http_get", "https://example.com/facts"),
-                "wrong_local_path": gate.execute(full_passport, allowed_agent, "http_get", f"http://127.0.0.1:{port}/admin"),
-                "local_http": gate.execute(full_passport, allowed_agent, "http_get", f"http://127.0.0.1:{port}/facts"),
+                "wrong_local_path": checked_http("wrong_local_path", full_passport, "/admin"),
+                "local_http": checked_http("local_http", full_passport, "/facts"),
                 "wrong_write_target": gate.execute(full_passport, allowed_agent, "write_report", root / "other.txt", "blocked"),
                 "write_without_approval": gate.execute(full_passport, allowed_agent, "write_report", report, "synthetic report"),
             }
@@ -199,6 +231,22 @@ def main():
                 or gate.spent != 4
             ):
                 raise AssertionError("unexpected policy enforcement result")
+            expected_requests = {
+                "scope_exceeded": [],
+                "wrong_local_path": [],
+                "local_http": ["/facts"],
+            }
+            for case, expected_paths in expected_requests.items():
+                expected_audit = [{"agent_id": allowed_agent, "tool": "http_get", "decision": expected[case]}]
+                if http_coverage[case] != {"audit": expected_audit, "received_paths": expected_paths}:
+                    raise AssertionError(f"{case}: unexpected HTTP coverage {http_coverage[case]!r}")
+
+            # Positive control for bypass detection, using only the local fixture.
+            _, direct = observe_http(server, gate, lambda: get_fixture_json(fixture_origin + "/facts"))
+            if direct != {"audit": [], "received_paths": ["/facts"]}:
+                raise AssertionError(f"direct_without_gate: unexpected HTTP coverage {direct!r}")
+            http_coverage["direct_without_gate"] = direct
+
             result = {
                 "status": "pass",
                 "source": {
@@ -211,6 +259,7 @@ def main():
                 "cost_units_spent": gate.spent,
                 "cost_units_limit": POLICY["max_cost_units"],
                 "audit": gate.audit,
+                "http_coverage": http_coverage,
                 "runtime": "deterministic local harness; no LLM or external request",
                 "not_validated": [
                     "ServiceNow AI Passport, Super Intelligence Control Tower, or NVIDIA OpenShell",
