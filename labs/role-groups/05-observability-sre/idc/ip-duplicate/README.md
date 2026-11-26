@@ -9,6 +9,8 @@
 - IP_DUPLICATE_SUSPECTED (warning): 같은 L2 도메인에서 동일 IP를 다른 MAC 2개 이상이 광고한 정황
 - GATEWAY_IP_UNEXPECTED_MAC (critical): 게이트웨이 기준 MAC 목록 외 MAC 관측. 실제 IP 충돌 **확정**이 아닌 신원 불일치 **의심** 이벤트
 - 출력: 로컬 JSON 알람 및 RFC 5424 형식의 Syslog **텍스트 미리보기**만 생성
+- 같은 IP/이벤트라도 관측 시간창보다 긴 공백 뒤 다시 감지되면 별도 사건으로 기록
+- 계획된 게이트웨이 MAC 교체는 합성 기준표의 `gateway_baselines[].allowed_macs`에 두 주소를 명시해 정상 전환 예제를 검증. 단, 이는 상시 허용 목록이며 실제 승인 절차나 전환 기간은 확인하지 않음
 - 전송 기능, 포트 차단 기능, 스위치 설정 변경 기능 없음
 
 ## 실행 (Python 3.11+, 추가 패키지 불필요)
