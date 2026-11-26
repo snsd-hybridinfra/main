@@ -24,6 +24,9 @@ jobs:
       - name: MCP policy regression
         if: ${{ !cancelled() }}
         run: python3 "$LAB/mcp-regression.py"
+      - name: Task argument and file effect regression
+        if: ${{ !cancelled() }}
+        run: python3 "$LAB/task-argument-regression.py"
       - name: Repository regression
         if: ${{ !cancelled() }}
         run: |

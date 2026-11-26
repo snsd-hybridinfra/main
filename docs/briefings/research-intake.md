@@ -12,6 +12,39 @@
 
 ### AI 에이전트 보안 연구
 
+#### GRAFT와 도구 인수 변조
+
+| 항목 | 기록 |
+|---|---|
+| 발표일 · 유형 | 2026-11-20, University of Utah, arXiv 프리프린트 v1. 11-27 확인. |
+| 제목 | Subverting Tool Arguments: Defense-Evading Metadata Poisoning in LLM Agents |
+| 발견 · 근거 | 도구 설명을 변조해 특정 도구와 공격자 지정 인수를 선택하게 합니다. 6개 일반 모델의 주결과표에서 탐지 회피와 공격 성공을 함께 만족한 평균 sASR은 MSB 93.8%, MCP-SB 81.5%, MCPTox 63.8%였습니다. |
+| 한계 · 재현 자료 | 선별된 16·18·75개 항목이며 도구 선택·인수 일치 중심의 지표입니다. 정상 작업 성능과 실제 운영 영향의 일반화는 제한됩니다. 도입부 MSB 수치 95.32%는 주결과표 93.8%와 달라 표의 값을 기록했습니다. 공개 구현·결과 다운로드 링크는 미확인입니다. |
+| 랩 적용 · 로컬 검증 | [task-argument-regression.py](../../labs/role-groups/04-security-trust/experiments/ai-agent-security/task-argument-regression.py)에서 호스트가 본문까지 확정한 단일 보고서 작업의 JSON 인수를 고정했습니다. 기존 Passport Gate와 임시 파일을 사용해 정상 쓰기·인수 교체·승인 회수·감사 스냅샷 등 19건을 확인했습니다. |
+| 원문 | [논문 v1](https://arxiv.org/html/2611.27041v1), VI절·표 I~III·부록 A 확인. |
+
+#### 타임아웃 후 복구 평가
+
+| 항목 | 기록 |
+|---|---|
+| 발표일 · 유형 | 2026-11-23, Paul Deepakraj Retinraj, Scale AI, arXiv 프리프린트 v1. 11-27 확인. |
+| 제목 | Scoring Recovery-Time Agent Security: Proposals, Effects, and Retry Instructions |
+| 발견 · 근거 | 완료된 목표만 세면 부적절한 복구 효과를 놓칩니다. 제공된 12개 기록의 재채점에서 겉보기 완료 10/12가 유효 완료 8/12로 바뀌었습니다. 합성 쓰기의 부재·진행·완료 상태와 제안·정책 판정·확정 효과를 구분합니다. |
+| 한계 · 재현 자료 | 합성 스키마·연구자 작성 공격·불변 작업 권한을 전제합니다. 재시도 안내를 바꾼 코호트는 탐색 후 수집해 맹검 복제가 아닙니다. 부록의 동반 패키지 설명은 확인했으며 공개 다운로드 주소는 미확인입니다. |
+| 랩 적용 · 설계 | 모의 쓰기 서버의 absent·pending·committed를 같은 실패 메시지와 교차합니다. 원래 키의 쓰기 1회와 정상 복구 성공을 확인하고, 새 키·바뀐 본문·진행 중 재요청의 제안 수와 실제 효과를 각각 기록합니다. 현재 인수 회귀는 제안·판정·파일 효과를 대조하며 타임아웃·멱등성 계약은 후속 후보입니다. |
+| 원문 | [논문 v1](https://arxiv.org/html/2611.31318v1), 2·3·6.5·8절과 부록 A 확인. |
+
+#### AgentBouncer의 실행 중재
+
+| 항목 | 기록 |
+|---|---|
+| 발표일 · 유형 | 2026-11-23, Pascal Joos·Michael Pradel, CISPA, arXiv 프리프린트 v1. 11-27 확인. |
+| 제목 | AgentBouncer: Defending Software Engineering Agents via Dynamic System-Call Mediation |
+| 발견 · 근거 | 도구 호출 뒤 실제 시스템 호출을 중재합니다. mini-swe-agent와 기본 GPT-5.6 Luna 설정에서 개발 환경 공격 340건의 ASR이 무감독 99.41%에서 10.59%로 감소했습니다. |
+| 한계 · 재현 자료 | 단일 에이전트·선정 공격군이며 잔여 공격이 있습니다. LLM 중재자의 주입 위험과 캐시 판정의 유효성, 학습 데이터 중복을 논의합니다. 공개 구현·결과 다운로드 링크는 미확인입니다. |
+| 랩 적용 · 설계 | 허용된 모의 도구가 하위 프로세스에서 임시 canary 읽기나 루프백 통신을 시도할 때를 비교합니다. 정상 보고서 쓰기 성공과 비인가 canary 접근·수신 0건을 OS 관측으로 확인하는 후속 후보입니다. 현재 Python Gate 검증의 범위는 아래 guardscope 기록을 따릅니다. |
+| 원문 | [논문 v1](https://arxiv.org/html/2611.30621v1), V~VII절 확인. |
+
 #### guardscope
 
 | 항목 | 기록 |
