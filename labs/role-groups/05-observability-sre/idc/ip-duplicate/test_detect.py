@@ -70,6 +70,53 @@ class DetectorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             detect(FIXTURE, 0)
 
+    def test_planned_gateway_mac_change_allowlist(self):
+        # Both MACs must be explicitly authorized for a planned transition.
+        data = deepcopy(FIXTURE)
+        data["gateway_baselines"][0]["allowed_macs"].append("02:00:00:00:ff:fe")
+        data["observations"] = [o for o in data["observations"] if o["ip"] == "192.0.2.1"]
+        self.assertEqual(detect(data), [])
+
+    def test_unknown_mac_still_alerts_during_gateway_transition(self):
+        data = deepcopy(FIXTURE)
+        data["gateway_baselines"][0]["allowed_macs"].append("02:00:00:00:ff:fe")
+        observations = [o for o in data["observations"] if o["ip"] == "192.0.2.1"]
+        observations.append({**observations[-1], "timestamp": "2026-11-13T06:00:30Z",
+                             "mac": "02:00:00:00:ff:99"})
+        data["observations"] = observations
+        alerts = detect(data)
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["event"], "GATEWAY_IP_UNEXPECTED_MAC")
+        self.assertIn("02:00:00:00:ff:99", alerts[0]["macs"])
+
+    def test_repeated_sensor_observations_do_not_duplicate_incident(self):
+        data = deepcopy(FIXTURE)
+        data["gateway_baselines"] = []
+        samples = [o for o in data["observations"] if o["ip"] == "192.0.2.10"]
+        data["observations"] = samples + [
+            {**samples[-1], "timestamp": "2026-11-13T06:00:40Z", "device": "leaf-third"}
+        ]
+        alerts = detect(data)
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["sources"], ["leaf-arista", "leaf-cisco", "leaf-third"])
+
+    def test_separated_duplicate_ip_episodes_are_not_merged(self):
+        data = deepcopy(FIXTURE)
+        data["gateway_baselines"] = []
+        samples = [o for o in data["observations"] if o["ip"] == "192.0.2.10"]
+        data["observations"] = [
+            {**samples[0], "timestamp": "2026-11-13T06:00:00Z"},
+            {**samples[1], "timestamp": "2026-11-13T06:00:10Z"},
+            {**samples[0], "timestamp": "2026-11-13T06:10:00Z"},
+            {**samples[1], "timestamp": "2026-11-13T06:10:10Z"},
+        ]
+        alerts = detect(data)
+        self.assertEqual(len(alerts), 2)
+        self.assertEqual(alerts[0]["first_seen"], "2026-11-13T06:00:00+00:00")
+        self.assertEqual(alerts[0]["last_seen"], "2026-11-13T06:00:10+00:00")
+        self.assertEqual(alerts[1]["first_seen"], "2026-11-13T06:10:00+00:00")
+        self.assertEqual(alerts[1]["last_seen"], "2026-11-13T06:10:10+00:00")
+
 
 if __name__ == "__main__":
     unittest.main()
