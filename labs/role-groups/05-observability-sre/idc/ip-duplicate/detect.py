@@ -52,7 +52,7 @@ def detect(dataset: dict, window_seconds: int = 120) -> list[dict]:
     claims = sorted((normalize_claim(raw) for raw in dataset["observations"]
                      if raw.get("type") == "arp_claim"), key=lambda item: item["timestamp"])
     recent = defaultdict(deque)
-    alerts = {}
+    episodes = defaultdict(list)
     for claim in claims:
         key = key_of(claim)
         window = recent[key]
@@ -71,21 +71,28 @@ def detect(dataset: dict, window_seconds: int = 120) -> list[dict]:
         else:
             continue
         id_key = (key, event)
-        active = alerts.get(id_key)
+        group = episodes[id_key]
+        active = group[-1] if group else None
+        # A new conflict after an alert-free gap is a separate incident.
+        if active is not None and claim["timestamp"] - datetime.fromisoformat(active["last_seen"]) > timedelta(seconds=window_seconds):
+            active = None
         observed = sorted(macs)
         if active is None:
-            alerts[id_key] = {
+            group.append({
                 "event": event, "severity": severity, "status": "suspected",
                 "site": key[0], "vrf": key[1], "segment": key[2], "ip": key[3],
                 "macs": observed, "first_seen": window[0]["timestamp"].isoformat(),
                 "last_seen": claim["timestamp"].isoformat(),
                 "sources": sorted({item["device"] for item in window}),
-            }
+            })
         else:
             active["macs"] = sorted(set(active["macs"]) | macs)
             active["last_seen"] = claim["timestamp"].isoformat()
             active["sources"] = sorted(set(active["sources"]) | {item["device"] for item in window})
-    return sorted(alerts.values(), key=lambda a: (a["site"], a["vrf"], a["segment"], a["ip"], a["event"]))
+    return sorted(
+        (item for group in episodes.values() for item in group),
+        key=lambda a: (a["site"], a["vrf"], a["segment"], a["ip"], a["event"], a["first_seen"]),
+    )
 
 
 def syslog(alert: dict) -> str:
