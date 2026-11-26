@@ -1,0 +1,115 @@
+{
+  "description": "Synthetic data only. RFC 5737 TEST-NET addresses and invented EUI-48 MACs.",
+  "gateway_baselines": [
+    {
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.1",
+      "allowed_macs": [
+        "02:00:00:00:ff:01"
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.10",
+      "mac": "02:00:00:00:00:0a",
+      "device": "leaf-cisco",
+      "vendor": "cisco-nxos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:35Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.10",
+      "mac": "02:00:00:00:00:0b",
+      "device": "leaf-arista",
+      "vendor": "arista-eos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.1",
+      "mac": "02:00:00:00:ff:01",
+      "device": "leaf-arista",
+      "vendor": "arista-eos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:20Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.1",
+      "mac": "02:00:00:00:ff:fe",
+      "device": "leaf-cisco",
+      "vendor": "cisco-nxos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD200-VNI10200",
+      "ip": "192.0.2.10",
+      "mac": "02:00:00:00:00:ee",
+      "device": "leaf-arista",
+      "vendor": "arista-eos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.20",
+      "mac": "02:00:00:00:00:20",
+      "device": "leaf-cisco",
+      "vendor": "cisco-nxos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:01:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.20",
+      "mac": "02:00:00:00:00:20",
+      "device": "leaf-arista",
+      "vendor": "arista-eos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:00:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.30",
+      "mac": "02:00:00:00:00:30",
+      "device": "leaf-cisco",
+      "vendor": "cisco-nxos"
+    },
+    {
+      "type": "arp_claim",
+      "timestamp": "2026-11-13T06:10:00Z",
+      "site": "LAB-IDC",
+      "vrf": "TENANT",
+      "segment": "BD100-VNI10100",
+      "ip": "192.0.2.30",
+      "mac": "02:00:00:00:00:31",
+      "device": "leaf-arista",
+      "vendor": "arista-eos"
+    }
+  ]
+}
