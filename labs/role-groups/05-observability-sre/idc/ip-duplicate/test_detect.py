@@ -92,7 +92,9 @@ class DetectorTests(unittest.TestCase):
     def test_repeated_sensor_observations_do_not_duplicate_incident(self):
         data = deepcopy(FIXTURE)
         data["gateway_baselines"] = []
-        samples = [o for o in data["observations"] if o["ip"] == "192.0.2.10"]
+        # The fixture also uses .10 in another L2 segment; select one domain.
+        samples = [o for o in data["observations"]
+                   if o["ip"] == "192.0.2.10" and o["segment"] == "BD100-VNI10100"]
         data["observations"] = samples + [
             {**samples[-1], "timestamp": "2026-11-13T06:00:40Z", "device": "leaf-third"}
         ]
